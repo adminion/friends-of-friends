@@ -25,5 +25,11 @@
   "bugs": {
     "url": "https://github.com/techjeffharris/friends-of-friends/issues"
   },
-  "homepage": "https://github.com/techjeffharris/friends-of-friends"
+  "homepage": "https://github.com/techjeffharris/friends-of-friends",
+  "dependencies": {
+    "mongoose": "^3.8.20"
+  },
+  "devDependencies": {
+    "debug": "^2.1.0"
+  }
 }
