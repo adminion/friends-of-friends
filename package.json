@@ -1,6 +1,6 @@
 {
   "name": "friends-of-friends",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Friendship-based Access Control System for Mongoose",
   "main": "index.js",
   "scripts": {
