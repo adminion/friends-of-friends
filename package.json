@@ -1,7 +1,7 @@
 {
   "name": "friends-of-friends",
   "version": "0.2.0",
-  "description": "mongoose friendship associations and helper methods",
+  "description": "Friendship-based Access Control System for Mongoose",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,12 +11,16 @@
     "url": "https://github.com/techjeffharris/friends-of-friends.git"
   },
   "keywords": [
+    "access", 
+    "access-control",
+    "control",
     "friend",
     "friends",
     "friendship",
     "mongoose",
-    "plugin",
     "mongoose-plugins",
+    "plugin",
+    "privacy",
     "relationship",
     "relationships"
   ],
