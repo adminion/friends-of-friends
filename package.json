@@ -1,6 +1,6 @@
 {
   "name": "friends-of-friends",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "mongoose friendship associations and helper methods",
   "main": "index.js",
   "scripts": {
