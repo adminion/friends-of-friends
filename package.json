@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/techjeffharris/friends-of-friends.git"
+    "url": "https://github.com/adminion/friends-of-friends.git"
   },
   "keywords": [
     "access",
@@ -27,9 +27,9 @@
   "author": "Jeff Harris <techjeffharris@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/techjeffharris/friends-of-friends/issues"
+    "url": "https://github.com/adminion/friends-of-friends/issues"
   },
-  "homepage": "https://github.com/techjeffharris/friends-of-friends",
+  "homepage": "https://github.com/adminion/friends-of-friends",
   "dependencies": {
     "mongoose": "^3.8.20"
   },
