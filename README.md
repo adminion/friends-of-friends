@@ -9,4 +9,5 @@ If you would like to contribute, point out errors, etc, I would be much apprecia
 
 This module started as a core component of [adminion/off-the-record](https://github.com/adminion/off-the-record) as an alternative to [mongoose-friends](https://www.npmjs.com/package/mongoose-friends).  The goal is to create a comprehensive Friendship-based Access Control System with a rich API to *dramatically* simplify managing Friend-Relationships.
 
-API coming soon, but I have made pretty thorough comments (perhaps redundant in some places.
+## API
+See [docs/api.md](https://github.com/adminion/friends-of-friends/tree/master/docs) for API Documentation.
