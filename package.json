@@ -25,7 +25,10 @@
     "relationships"
   ],
   "author": "Jeff Harris <techjeffharris@gmail.com>",
-  "license": "MIT",
+  "license": {
+    "type": "BSD-3-Clause",
+    "file:": "LICENSE"
+  },
   "bugs": {
     "url": "https://github.com/adminion/friends-of-friends/issues"
   },
