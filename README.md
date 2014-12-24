@@ -42,7 +42,7 @@ new UserSchema({ username: "Jeff" }).save(function (err, jeff) {
         jeff.friendRequest(zane._id, function (err, pendingFriendship) {
             if (err) throw err; 
 
-            console.log(pendingRequest);
+            console.log(pendingFriendship);
             // {
             //     "requester" : ObjectId("5462a8748337aa9e306b5094"),
             //     "requested" : ObjectId("548a9f64728158187fb53319"),
@@ -55,7 +55,7 @@ new UserSchema({ username: "Jeff" }).save(function (err, jeff) {
             zane.acceptRequest(jeff._id, funtion (err, acceptedFriendship) {
                 if (err) throw err;
 
-                console.log(acceptedRequest);
+                console.log(acceptedFriendship);
                 // {
                 //     "__v" : 0,
                 //     "_id" : ObjectId("548e86c96eb8f64370d90215"),
