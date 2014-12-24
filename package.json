@@ -4,7 +4,7 @@
   "description": "Friendship-based Access Control System for Mongoose",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha test/"
+    "test": "mocha test/"
   },
   "repository": {
     "type": "git",
