@@ -4,10 +4,11 @@ node_js:
   - "0.10"
   - "0.8"
   - "0.6"
-before_install:
-  - sudo apt-get update -qq
 services:
   - mongodb
+before_install:
+  - sudo apt-get update -qq
+install: 
+  - npm install -g mocha
 before_script:
-  - sleep 15
-  - mongo mydb_test --eval 'db.addUser("travis", "test");'
+  - mocha --version
