@@ -9,5 +9,6 @@ services:
 install: 
   - npm install -g mocha
   - npm install mongoose
+  - npm install techjeffharris-utils
 before_script:
   - mocha --version
