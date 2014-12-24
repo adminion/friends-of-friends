@@ -1,7 +1,6 @@
-friends-of-friends
-==================
+# friends-of-friends [![Build Status](https://travis-ci.org/adminion/friends-of-friends.svg?branch=master)](https://travis-ci.org/adminion/friends-of-friends)
 
-## Friendship Mangement System for Mongoose [![Build Status](https://travis-ci.org/adminion/friends-of-friends.svg?branch=master)](https://travis-ci.org/adminion/friends-of-friends)
+## Friendship Mangement System for Mongoose 
 
 This module is a work in progress, and may break on you because I haven't written tests to verify stuff works like I say it should.  Wanna [help out](https://github.com/adminion/friends-of-friends/labels/test)...?  I would be much appreciative!
 
