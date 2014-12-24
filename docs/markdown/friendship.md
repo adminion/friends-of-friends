@@ -141,6 +141,19 @@ get the numeric relationship of two accounts
 **done**: `function`, required callback
 
 
+### friendship.FriendshipModel.getFriendship(accountId1, accountId2, done) 
+
+get the friendship document itself
+
+**Parameters**
+
+**accountId1**: `ObjectId`, the _id of account1
+
+**accountId2**: `ObjectId`, the _id of account2
+
+**done**: `function`, required callback, passed err and a Friendship document, if found
+
+
 ### friendship.FriendshipModel.isRequester(friendshipId, accountId, done) 
 
 check to see if the given user is the requester in a given friendship

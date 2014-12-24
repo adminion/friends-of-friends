@@ -93,6 +93,19 @@ deny a friend request
 **done**: `function`, required callback, passed the denied friendship
 
 
+### plugin.AccountModel.endFriendship(accountId1, accountId2, done) 
+
+end a friendship between two accounts
+
+**Parameters**
+
+**accountId1**: `ObjectId`, the _id of account 1
+
+**accountId2**: `ObjectId`, the _id of account 2
+
+**done**: `function`, required callback
+
+
 ### plugin.AccountModel.getFriends(accountId, done) 
 
 get all friends of an account
@@ -235,6 +248,17 @@ deny a friend request received from the specified user
 **requesterId**: `ObjectId`, the _id of the account from whom the request was received
 
 **done**: `function`, required callback, passed the populated request that was denied
+
+
+### plugin.AccountDocument.endFriendship(accountId, done) 
+
+end a friendship with the specified user
+
+**Parameters**
+
+**accountId**: `ObjectId`, the _id of the account
+
+**done**: `function`, required callback
 
 
 ### plugin.AccountDocument.getFriends(done) 
