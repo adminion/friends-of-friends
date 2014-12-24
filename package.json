@@ -34,6 +34,6 @@
   },
   "homepage": "https://github.com/adminion/friends-of-friends",
   "devDependencies": {
-    "debug": "^2.1.0"
+    "debug": "2.x"
   }
 }
