@@ -10,5 +10,6 @@ before_install:
   - sudo apt-get update -qq
 install: 
   - npm install -g mocha
+  - npm install mongoose
 before_script:
   - mocha --version
