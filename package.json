@@ -4,7 +4,7 @@
   "description": "Friendship-based Access Control System for Mongoose",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,9 @@
     "url": "https://github.com/adminion/friends-of-friends/issues"
   },
   "homepage": "https://github.com/adminion/friends-of-friends",
+  "dependencies": {
+    "techjeffharris-utils": "1.x"
+  },
   "devDependencies": {
     "debug": "2.x"
   }

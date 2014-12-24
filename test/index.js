@@ -5,8 +5,8 @@ var assert = require('assert'),
 describe('FriendsOfFriends', function () {
 	describe('#options', function () {
 		it('should be an object with 2 string properties: accountName and friendshipName', function () {
-			assert.equals('string', typeof FriendsOfFriends.options.accountName)
-			assert.equals('string', typeof FriendsOfFriends.options.friendshipName)
+			assert.equal('string', typeof FriendsOfFriends.options.accountName)
+			assert.equal('string', typeof FriendsOfFriends.options.friendshipName)
 		})
 	})
 	// @TODO: more stuff
