@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: AccountModel</title>
+    <title>JSDoc: Class: AccountDocument</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: AccountModel</h1>
+    <h1 class="page-title">Class: AccountDocument</h1>
 
     
 
@@ -29,7 +29,7 @@
 <header>
     
         <h2>
-        AccountModel
+        AccountDocument
         </h2>
         
     
@@ -45,13 +45,21 @@
         <h2>Constructor</h2>
         
 
-        <h4 class="name" id="AccountModel"><span class="type-signature"></span>new AccountModel<span class="signature">()</span><span class="type-signature"></span></h4>
+        <h4 class="name" id="AccountDocument"><span class="type-signature"></span>new AccountDocument<span class="signature">()</span><span class="type-signature"></span></h4>
 
         
     
 </dt>
 <dd>
 
+    
+    <div class="description">
+        <p>Document-accessible properties and methods</p>
+<p>these instance methods are aliases of the Model statics as they apply to each document</p>
+<p>example:
+ var user = new Accounts({...});
+ user.sendRequest(requestedEmail, function (err, request) {...})</p>
+    </div>
     
 
     
@@ -94,7 +102,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line58">line 58</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line336">line 336</a>
     </li></ul></dd>
     
 
@@ -135,174 +143,6 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
-
-        <dl>
-            
-<dt>
-    <h4 class="name" id="privacy"><span class="type-signature">(static, constant) </span>privacy<span class="type-signature"> :Object</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>default privacy constants</p>
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line62">line 62</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><p><a href="module-plugin.html">Privacy</a></p></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-    
-
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="relationships"><span class="type-signature">(static, constant) </span>relationships<span class="type-signature"> :Object</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>default relationship constants</p>
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line72">line 72</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><p><a href="module-relationships.html">Relationships</a></p></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-    
-
-    
-</dd>
-
-        </dl>
-    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -313,7 +153,7 @@
     
         
 
-        <h4 class="name" id="acceptRequest"><span class="type-signature">(static) </span>acceptRequest<span class="signature">(requesterId, requestedId, done)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id="acceptRequest"><span class="type-signature">(static) </span>acceptRequest<span class="signature">(requesterId, done)</span><span class="type-signature"></span></h4>
 
         
     
@@ -322,7 +162,7 @@
 
     
     <div class="description">
-        <p>accept a friend request</p>
+        <p>accept a friend request received from the specified user</p>
     </div>
     
 
@@ -374,30 +214,7 @@
 
             
 
-            <td class="description last"><p>the _id of the requester of friendship</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>requestedId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">ObjectId</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the _id of the user whose friendship was requested</p></td>
+            <td class="description last"><p>the _id of the account from whom the request was received</p></td>
         </tr>
 
     
@@ -420,7 +237,7 @@
 
             
 
-            <td class="description last"><p>required callback, passed the populated friendship accepted</p></td>
+            <td class="description last"><p>required callback, passed the populated request that was accepted</p></td>
         </tr>
 
     
@@ -460,7 +277,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line206">line 206</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line385">line 385</a>
     </li></ul></dd>
     
 
@@ -493,7 +310,7 @@
     
         
 
-        <h4 class="name" id="denyRequest"><span class="type-signature">(static) </span>denyRequest<span class="signature">(requesterId, requestedId, done)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id="denyRequest"><span class="type-signature">(static) </span>denyRequest<span class="signature">(requesterId, done)</span><span class="type-signature"></span></h4>
 
         
     
@@ -502,7 +319,7 @@
 
     
     <div class="description">
-        <p>deny a friend request</p>
+        <p>deny a friend request received from the specified user</p>
     </div>
     
 
@@ -554,30 +371,7 @@
 
             
 
-            <td class="description last"><p>the _id of the requester of friendship</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>requestedId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">ObjectId</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the _id of the user whose friendship was requested</p></td>
+            <td class="description last"><p>the _id of the account from whom the request was received</p></td>
         </tr>
 
     
@@ -600,7 +394,7 @@
 
             
 
-            <td class="description last"><p>required callback, passed the denied friendship</p></td>
+            <td class="description last"><p>required callback, passed the populated request that was denied</p></td>
         </tr>
 
     
@@ -640,7 +434,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line235">line 235</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line395">line 395</a>
     </li></ul></dd>
     
 
@@ -673,7 +467,7 @@
     
         
 
-        <h4 class="name" id="friendRequest"><span class="type-signature">(static) </span>friendRequest<span class="signature">(requesterId, requested_Id, done)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id="friendRequest"><span class="type-signature">(static) </span>friendRequest<span class="signature">(requestedEmail, done)</span><span class="type-signature"></span></h4>
 
         
     
@@ -682,7 +476,7 @@
 
     
     <div class="description">
-        <p>sends a friend request to a another user</p>
+        <p>send a request to another account</p>
     </div>
     
 
@@ -718,7 +512,7 @@
 
         <tr>
             
-                <td class="name"><code>requesterId</code></td>
+                <td class="name"><code>requestedEmail</code></td>
             
 
             <td class="type">
@@ -734,30 +528,7 @@
 
             
 
-            <td class="description last"><p>the ObjectId of the account sending the request</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>requested_Id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">ObjectId</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the ObjectId of the account to whom the request will be sent</p></td>
+            <td class="description last"><p>the _id of the account to whom the request will be sent</p></td>
         </tr>
 
     
@@ -780,7 +551,7 @@
 
             
 
-            <td class="description last"><p>required callback, passed the populated request</p></td>
+            <td class="description last"><p>required callback, passed the populated request sent</p></td>
         </tr>
 
     
@@ -820,7 +591,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line82">line 82</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line348">line 348</a>
     </li></ul></dd>
     
 
@@ -853,7 +624,7 @@
     
         
 
-        <h4 class="name" id="getFriends"><span class="type-signature">(static) </span>getFriends<span class="signature">(accountId, done)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id="getFriends"><span class="type-signature">(static) </span>getFriends<span class="signature">(done)</span><span class="type-signature"></span></h4>
 
         
     
@@ -862,7 +633,7 @@
 
     
     <div class="description">
-        <p>get all friends of an account</p>
+        <p>get this document's friends</p>
     </div>
     
 
@@ -894,29 +665,6 @@
     </thead>
 
     <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>accountId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">ObjectId</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the _id of the account</p></td>
-        </tr>
-
     
 
         <tr>
@@ -977,7 +725,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line244">line 244</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line405">line 405</a>
     </li></ul></dd>
     
 
@@ -1010,7 +758,7 @@
     
         
 
-        <h4 class="name" id="getFriendship"><span class="type-signature">(static) </span>getFriendship<span class="signature">(accountId1, accountId2, done)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id="getFriendship"><span class="type-signature">(static) </span>getFriendship<span class="signature">(accountId, done)</span><span class="type-signature"></span></h4>
 
         
     
@@ -1019,187 +767,7 @@
 
     
     <div class="description">
-        <p>get the friendship document itself</p>
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>accountId1</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">ObjectId</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the _id of account1</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>accountId2</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">ObjectId</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the _id of account2</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>done</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>required callback, passed err and a Friendship document, if found</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line309">line 309</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<dt>
-    
-        
-
-        <h4 class="name" id="getFriendsOfFriends"><span class="type-signature">(static) </span>getFriendsOfFriends<span class="signature">(accountId, done)</span><span class="type-signature"></span></h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>get friends of this account's friends</p>
+        <p>get the friendship document of this document and the specified account</p>
     </div>
     
 
@@ -1251,9 +819,143 @@
 
             
 
-            <td class="description last"><p>the _id of the account</p></td>
+            <td class="description last"><p>the _id of the friend</p></td>
         </tr>
 
+    
+
+        <tr>
+            
+                <td class="name"><code>done</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>required callback, passed the populated friendship</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line452">line 452</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        
+
+        <h4 class="name" id="getFriendsOfFriends"><span class="type-signature">(static) </span>getFriendsOfFriends<span class="signature">(done)</span><span class="type-signature"></span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>get friends of this document's friends</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
@@ -1314,7 +1016,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line268">line 268</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line414">line 414</a>
     </li></ul></dd>
     
 
@@ -1347,7 +1049,7 @@
     
         
 
-        <h4 class="name" id="getReceivedRequests"><span class="type-signature">(static) </span>getReceivedRequests<span class="signature">(accountId, done)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id="getNonFriends"><span class="type-signature">(static) </span>getNonFriends<span class="signature">(done)</span><span class="type-signature"></span></h4>
 
         
     
@@ -1356,7 +1058,275 @@
 
     
     <div class="description">
-        <p>get requests received by the given user</p>
+        <p>get accounts which are not this document's friends</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>done</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>required callback, passed an array of friendsOfFriends</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line423">line 423</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        
+
+        <h4 class="name" id="getReceivedRequests"><span class="type-signature">(static) </span>getReceivedRequests<span class="signature">(done)</span><span class="type-signature"></span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>get friend requests the user has received</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>done</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>required callback, passed the populated requests retrieved</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line376">line 376</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        
+
+        <h4 class="name" id="getRelationship"><span class="type-signature">(static) </span>getRelationship<span class="signature">(accountId, done)</span><span class="type-signature"></span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>get the relationship of this document and the specified account</p>
     </div>
     
 
@@ -1408,7 +1378,7 @@
 
             
 
-            <td class="description last"><p>the _id of the user</p></td>
+            <td class="description last"><p>the _id of the friend</p></td>
         </tr>
 
     
@@ -1431,7 +1401,7 @@
 
             
 
-            <td class="description last"><p>required callback, passed received requests retrieved</p></td>
+            <td class="description last"><p>required callback, passed the relationship value</p></td>
         </tr>
 
     
@@ -1471,7 +1441,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line180">line 180</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line462">line 462</a>
     </li></ul></dd>
     
 
@@ -1504,7 +1474,7 @@
     
         
 
-        <h4 class="name" id="getRelationship"><span class="type-signature">(static) </span>getRelationship<span class="signature">(accountId1, accountId2, done)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id="getRequests"><span class="type-signature">(static) </span>getRequests<span class="signature">(done)</span><span class="type-signature"></span></h4>
 
         
     
@@ -1513,7 +1483,7 @@
 
     
     <div class="description">
-        <p>determine the relationship between two users</p>
+        <p>get friend requests</p>
     </div>
     
 
@@ -1549,52 +1519,6 @@
 
         <tr>
             
-                <td class="name"><code>accountId1</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">ObjectId</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the _id of account1</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>accountId2</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">ObjectId</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the _id of account2</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>done</code></td>
             
 
@@ -1611,7 +1535,7 @@
 
             
 
-            <td class="description last"><p>required callback, passed err and a Relationship value</p></td>
+            <td class="description last"><p>required callback, passed the populated requests retrieved</p></td>
         </tr>
 
     
@@ -1651,7 +1575,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line339">line 339</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line358">line 358</a>
     </li></ul></dd>
     
 
@@ -1684,7 +1608,7 @@
     
         
 
-        <h4 class="name" id="getRequests"><span class="type-signature">(static) </span>getRequests<span class="signature">(accountId, done)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id="getSentRequests"><span class="type-signature">(static) </span>getSentRequests<span class="signature">(done)</span><span class="type-signature"></span></h4>
 
         
     
@@ -1693,7 +1617,7 @@
 
     
     <div class="description">
-        <p>get all friend requests for a given user</p>
+        <p>get friend requests the user has sent</p>
     </div>
     
 
@@ -1729,29 +1653,6 @@
 
         <tr>
             
-                <td class="name"><code>accountId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">ObjectId</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the _id of the user</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>done</code></td>
             
 
@@ -1768,7 +1669,7 @@
 
             
 
-            <td class="description last"><p>required callback, passed requests retrieved</p></td>
+            <td class="description last"><p>required callback, passed the populated requests retrieved</p></td>
         </tr>
 
     
@@ -1808,7 +1709,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line129">line 129</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line367">line 367</a>
     </li></ul></dd>
     
 
@@ -1841,7 +1742,7 @@
     
         
 
-        <h4 class="name" id="getSentRequests"><span class="type-signature">(static) </span>getSentRequests<span class="signature">(accountId, done)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id="isFriend"><span class="type-signature">(static) </span>isFriend<span class="signature">(accountId, done)</span><span class="type-signature"></span></h4>
 
         
     
@@ -1850,7 +1751,7 @@
 
     
     <div class="description">
-        <p>get requests the given user has sent</p>
+        <p>determine if this document is friends with the specified account</p>
     </div>
     
 
@@ -1902,187 +1803,7 @@
 
             
 
-            <td class="description last"><p>the _id of the user</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>done</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>required callback, passed sent requests retrieved</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line154">line 154</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<dt>
-    
-        
-
-        <h4 class="name" id="isFriend"><span class="type-signature">(static) </span>isFriend<span class="signature">(accountId1, accountId2, done)</span><span class="type-signature"></span></h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>determine if accountId2 is a friend of accountId1</p>
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>accountId1</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">ObjectId</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the _id of account1</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>accountId2</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">ObjectId</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the _id of account2</p></td>
+            <td class="description last"><p>the _id of the user to check for friendship</p></td>
         </tr>
 
     
@@ -2145,7 +1866,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line291">line 291</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line432">line 432</a>
     </li></ul></dd>
     
 
@@ -2178,7 +1899,7 @@
     
         
 
-        <h4 class="name" id="isFriendOfFriends"><span class="type-signature">(static) </span>isFriendOfFriends<span class="signature">(accountId1, accountId2, done)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id="isFriendOfFriends"><span class="type-signature">(static) </span>isFriendOfFriends<span class="signature">(accountId, done)</span><span class="type-signature"></span></h4>
 
         
     
@@ -2187,7 +1908,7 @@
 
     
     <div class="description">
-        <p>determine if accountId1 and accountId2 have any common friends</p>
+        <p>determine if this document shares any friends with the specified account</p>
     </div>
     
 
@@ -2223,7 +1944,7 @@
 
         <tr>
             
-                <td class="name"><code>accountId1</code></td>
+                <td class="name"><code>accountId</code></td>
             
 
             <td class="type">
@@ -2239,30 +1960,7 @@
 
             
 
-            <td class="description last"><p>the _id of account1</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>accountId2</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">ObjectId</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the _id of account2</p></td>
+            <td class="description last"><p>the _id of the user to check for friendship</p></td>
         </tr>
 
     
@@ -2325,7 +2023,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line300">line 300</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line442">line 442</a>
     </li></ul></dd>
     
 
@@ -2368,13 +2066,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-friendship.html">friendship</a></li><li><a href="module-plugin.html">plugin</a></li><li><a href="module-privacy.html">privacy</a></li><li><a href="module-relationships.html">relationships</a></li></ul><h3>Classes</h3><ul><li><a href="AccountDocument.html">AccountDocument</a></li><li><a href="AccountModel.html">AccountModel</a></li><li><a href="FriendshipDocument.html">FriendshipDocument</a></li><li><a href="FriendshipModel.html">FriendshipModel</a></li><li><a href="FriendsOfFriends.html">FriendsOfFriends</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-friendship.html">friendship</a></li><li><a href="module-plugin.html">plugin</a></li><li><a href="module-relationships.html">relationships</a></li></ul><h3>Classes</h3><ul><li><a href="AccountDocument.html">AccountDocument</a></li><li><a href="AccountModel.html">AccountModel</a></li><li><a href="FriendshipDocument.html">FriendshipDocument</a></li><li><a href="FriendshipModel.html">FriendshipModel</a></li><li><a href="FriendsOfFriends.html">FriendsOfFriends</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha11</a> on Sun Dec 14 2014 20:08:25 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha11</a> on Tue Dec 23 2014 15:00:22 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

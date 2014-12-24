@@ -30,10 +30,10 @@
  * @module friendship
  */
 
-var debug = require('debug')('friends-of-friends:friendship'),
+var // debug = require('debug')('friends-of-friends:friendship'),
     mongoose = require('mongoose'),
-    privacy = require('./privacy'),
-    relationships = require('./relationships');
+    relationships = require('./relationships'),
+    utils = require('techjeffharris-utils');
 
 /**
  * the friendship initializer function
@@ -47,6 +47,20 @@ module.exports = friendshipInit
  * @returns {Model} - the compiled Friendship model
  */
 function friendshipInit(options) {
+
+    // debug('options', options);
+
+    var defaults = {
+        accountName:    'Account',
+        friendshipName: 'Friendship'
+    };
+
+    options = utils.extend(defaults, options);
+
+    // debug('options', options);
+
+    var ObjectId = mongoose.Schema.Types.ObjectId;
+
     var FriendshipSchema = new mongoose.Schema({
         requester: { type: ObjectId, ref: options.accountName, required: true, index: true },
         requested: { type: ObjectId, ref: options.accountName, required: true, index: true },
@@ -60,19 +74,9 @@ function friendshipInit(options) {
      */
 
     /**
-     * Default privacy constants
-     * @member      privacy
-     * @memberOf    FriendshipModel
-     * @constant
-     * @type        {Object}
-     * @see         [Privacy]{@link module:privacy}
-     */
-    FriendshipSchema.statics.privacy = privacy;
-    /**
      * default relationship constants
      * @member      relationships
      * @memberOf    FriendshipModel
-     * @constant
      * @type        {Object}
      * @see         [Relationships]{@link module:relationships}
      */
@@ -85,7 +89,7 @@ function friendshipInit(options) {
      * @param       {Function} done         - required callback, passed requests retrieved
      */
     FriendshipSchema.statics.getRequests = function (accountId, done) {
-        debug('getRequests')
+        // debug('getRequests')
 
         var self = this;
 
@@ -119,7 +123,7 @@ function friendshipInit(options) {
      * @param       {Function} done         - required callback, passed sent requests retrieved 
      */
     FriendshipSchema.statics.getSentRequests = function (accountId, done) {
-        debug('getSentRequests')
+        // debug('getSentRequests')
 
         var model = mongoose.model(options.friendshipName, FriendshipSchema);
 
@@ -127,8 +131,6 @@ function friendshipInit(options) {
             requester: accountId,
             status: 'Pending'
         };
-
-        var select = '_id created email privacy profile.displayName';
 
         model.find(conditions, function (err, sentRequests) {
             if (err) {
@@ -148,10 +150,10 @@ function friendshipInit(options) {
      * @param       {Function} done         - required callback, passed received requests retrieved
      */
     FriendshipSchema.statics.getReceivedRequests = function (accountId, done) {
-        debug('getReceivedRequests')
+        // debug('getReceivedRequests')
 
         var model = mongoose.model(options.friendshipName, FriendshipSchema);
-        
+
         var conditions = {
             requested: accountId,
             status: 'Pending'
@@ -176,10 +178,10 @@ function friendshipInit(options) {
      * @param       {Function} done         - required callback, passed the populated friendship accepted
      */
     FriendshipSchema.statics.acceptRequest = function (requesterId, requestedId, done) {
-        debug('acceptRequest')
+        // debug('acceptRequest')
 
         var model = mongoose.model(options.friendshipName, FriendshipSchema);
-        
+
         var conditions = {
             requester: requesterId, 
             requested: requestedId, 
@@ -212,7 +214,7 @@ function friendshipInit(options) {
      * @param       {Function} done         - required callback, passed the denied friendship
      */
     FriendshipSchema.statics.denyRequest = function (requesterId, requestedId, done) {
-        debug('denyRequest')
+        // debug('denyRequest')
 
         var model = mongoose.model(options.friendshipName, FriendshipSchema);
 
@@ -222,11 +224,11 @@ function friendshipInit(options) {
             status: 'Pending'
         };
 
-        Friendship.findOne(conditions, function (err, request) {
+        model.findOne(conditions, function (err, request) {
             if (err) {
                 done(err);
             } else if (request) {
-                Friendship.remove(conditions, done);
+                request.remove(done);
             } else {
                 done (new Error('Request does not exist!'));
             }
@@ -240,12 +242,11 @@ function friendshipInit(options) {
      * @param       {Function} done         - required callback, passed an array of friendIds
      */
     FriendshipSchema.statics.getFriends = function (accountId, done) {
-        debug('getFriends')
+        // debug('getFriends')
 
-        var model = mongoose.model(options.friendshipName, FriendshipSchema),
-            friendIds = [];
+        var friendIds = [];
 
-        // when looking up friendIds for a given user, we don't care who send the request
+        // when looking up friendIds for a given user, we don't care who sent the request
         var conditions = { 
             '$or': [
                 { requester: accountId },
@@ -254,11 +255,14 @@ function friendshipInit(options) {
             status: 'Accepted'
         };
 
-        model.find(conditions, function (err, friendships) {
+        var model = this.model(this.modelName);
+
+        this.find(conditions, function (err, friendships) {
             if (err) {
                 done(err);
             } else { 
                 debug('friendships', friendships);
+
                 friendships.forEach(function (friendship) {
                     debug('friendship', friendship);
                     
@@ -268,12 +272,13 @@ function friendshipInit(options) {
                         friendIds.push(friendship.requester);
                     }
 
-                    debug('friendIds', friendIds);
                 });
 
+                debug('friendIds', friendIds);
+
                 done(null, friendIds);
-            } 
-            
+            }
+
         });
     };
 
@@ -287,7 +292,7 @@ function friendshipInit(options) {
         debug('getFriendsOfFriends')
 
         var self = this, 
-            friendIdsOfFriends = [],
+            friendsOfFriendsIds = [],
             totalResults = 0,
             idsFound = [];
 
@@ -297,23 +302,23 @@ function friendshipInit(options) {
                 done(err);
             // if the user has no friends
             } else if (!friendIds.length) {
-                done(null, friendIdsOfFriends);
+                done(null, friendsOfFriendsIds);
             // if the user has friends
             } else {
                 // loop through friendIds
                 friendIds.forEach(function (friendId) {
                     // get each friend's friendIds
-                    self.getFriends(friendId, function (err, friendIdsOfFriend) {
+                    self.getFriends(friendId, function (err, friendsOfFriendIds) {
                         if (err) {
                             done(err);
                         } else {
                             
                             // loop though friends of friend
-                            friendIdsOfFriend.forEach(function (friendIdOfFriend) {
-                                if (idsFound.indexOf(friendIdOfFriend) === -1 &amp;&amp; !accountId.equals(friendIdOfFriend)) {
+                            friendsOfFriendIds.forEach(function (friendOfFriendId) {
+                                if (idsFound.indexOf(friendOfFriendId) === -1 &amp;&amp; !accountId.equals(friendOfFriendId)) {
                                     // add each friend of friend to the results
-                                    idsFound.push(friendIdsOfFriend.toString());
-                                    friendIdsOfFriends.push(friendIdOfFriend);
+                                    idsFound.push(friendsOfFriendIds.toString());
+                                    friendsOfFriendsIds.push(friendOfFriendId);
                                 } else {
                                     debug('friend already counted!');
                                 }
@@ -322,12 +327,37 @@ function friendshipInit(options) {
 
                             // if all getFriends callbacks have been called
                             if (++totalResults === friendIds.length) {
-                                done(null, friendIdsOfFriends);
+                                done(null, friendsOfFriendsIds);
                             }
                         } 
                     });
                 });
             }
+        });
+    };
+
+    FriendshipSchema.statics.getNonFriends = function (accountId, done) {
+        debug('getNonFriends');
+
+        var model = mongoose.model(options.friendshipName, FriendshipSchema),
+            self = this,
+            nonFriendIds = [];
+
+        // get ids of the account's friends
+        this.getFriends(accountId, function (err, friendIds) {
+            // get ids of the account's friendsOfFriends
+            self.getFriendsOfFriends(accountId, function (err, friendsOfFriendsIds) {
+                var conditions = {
+                    '_id': { 
+                        '$ne' : accountId,
+                        '$nin': friendIds,
+                        '$nin': friendsOfFriendsIds
+                    }
+                };
+
+                model.find(conditions, done);
+            });
+
         });
     };
 
@@ -358,6 +388,8 @@ function friendshipInit(options) {
                     // go through friendIds until we find accountId2, or we run out of friendIds
                     while (answer === false &amp;&amp; i &lt; friendIds.length) {
                         // if accountId2 matches this friends's _id
+                        
+
                         if (accountId2.equals(friendIds[i])) {
                             // then yes, accountId2 is a friend of accountId1
                             answer = true;
@@ -438,7 +470,7 @@ function friendshipInit(options) {
      * @param  {Function} done          - required callback 
      */
     FriendshipSchema.statics.getRelationship = function (accountId1, accountId2, done) {
-        debug('getRelationship')
+        debug('getRelationship');
 
         var self = this;
 
@@ -477,10 +509,7 @@ function friendshipInit(options) {
     FriendshipSchema.statics.isRequester = function (friendshipId, accountId, done) {
         debug('isRequester')
 
-        var self = this,
-            model = mongoose.model(options.friendshipName, FriendshipSchema);
-
-        model.findById(friendshipId, function (err, friendship) {
+        this.findById(friendshipId, function (err, friendship) {
             if (err) {
                 done(err);
             } else if (!friendship) {
@@ -501,10 +530,7 @@ function friendshipInit(options) {
     FriendshipSchema.statics.isRequested = function (friendshipId, accountId, done) {
         debug('isRequested')
 
-        var self = this,
-            model = mongoose.model(options.friendshipName, FriendshipSchema);
-
-        model.findById(friendshipId, function (err, friendship) {
+        this.findById(friendshipId, function (err, friendship) {
             if (err) {
                 done(err);
             } else if (!friendship) {
@@ -526,7 +552,7 @@ function friendshipInit(options) {
      * @param       {Function} done      - required callback
      */
     FriendshipSchema.methods.isRequester = function (accountId, done) {
-        this.statics.isRequester(this._id, accountId, done);
+        FriendshipSchema.statics.isRequester(this._id, accountId, done);
     };
 
     /**
@@ -536,7 +562,7 @@ function friendshipInit(options) {
      * @param       {Function} done         - required callback
      */
     FriendshipSchema.methods.isRequested = function (accountId, done) {
-        this.statics.isRequested(this._id, accountId, done);
+        FriendshipSchema.statics.isRequested(this._id, accountId, done);
     };
 
     return mongoose.model(options.friendshipName, FriendshipSchema);
@@ -551,13 +577,13 @@ function friendshipInit(options) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-friendship.html">friendship</a></li><li><a href="module-plugin.html">plugin</a></li><li><a href="module-privacy.html">privacy</a></li><li><a href="module-relationships.html">relationships</a></li></ul><h3>Classes</h3><ul><li><a href="AccountDocument.html">AccountDocument</a></li><li><a href="AccountModel.html">AccountModel</a></li><li><a href="FriendshipDocument.html">FriendshipDocument</a></li><li><a href="FriendshipModel.html">FriendshipModel</a></li><li><a href="FriendsOfFriends.html">FriendsOfFriends</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-friendship.html">friendship</a></li><li><a href="module-plugin.html">plugin</a></li><li><a href="module-relationships.html">relationships</a></li></ul><h3>Classes</h3><ul><li><a href="AccountDocument.html">AccountDocument</a></li><li><a href="AccountModel.html">AccountModel</a></li><li><a href="FriendshipDocument.html">FriendshipDocument</a></li><li><a href="FriendshipModel.html">FriendshipModel</a></li><li><a href="FriendsOfFriends.html">FriendsOfFriends</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha11</a> on Sun Dec 14 2014 20:08:25 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha11</a> on Tue Dec 23 2014 15:00:22 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

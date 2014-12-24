@@ -1,13 +1,11 @@
 friends-of-friends
 ==================
 
-## Friendship-based Access Control System for Mongoose
+## Friendship Mangement System for Mongoose
 
-This module is a work in progress, and may break on you because I haven't written tests to verify stuff works like I say it should.  Wanna [help out](https://github.com/adminion/friends-of-friends/labels/test)...?
+This module is a work in progress, and may break on you because I haven't written tests to verify stuff works like I say it should.  Wanna [help out](https://github.com/adminion/friends-of-friends/labels/test)...?  I would be much appreciative!
 
-If you would like to contribute, point out errors, etc, I would be much appreciative!
-
-This module started as a core component of [adminion/off-the-record](https://github.com/adminion/off-the-record) but quickly became big enough (and useful enough) to be its own module.  The goal is to create a comprehensive Friendship-based Access Control System with a rich API to *dramatically* simplify managing Friend-Relationships for any existing mongoose schema.
+This module started as a core component of [adminion/off-the-record](https://github.com/adminion/off-the-record) but quickly became big enough (and useful enough) to be its own module.  The goal is to create a unopinionated tool with a rich API that simplifies managing Friend-Relationships for any existing mongoose "user" schema.
 
 ## example use
 
