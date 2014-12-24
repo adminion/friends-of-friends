@@ -10,9 +10,7 @@ This module started as a core component of [adminion/off-the-record](https://git
 ## example use
 
 ```javascript
-var friendsOfFriends = require('friends-of-friends')({
-    privacyDefault: friendsOfFriends.PRIVACY.values.ANYBODY
-}),
+var friendsOfFriends = require('friends-of-friends')(),
     mongoose = require('mongoose');
     
 var UserSchema = new mongoose.Schema({
@@ -38,12 +36,6 @@ var jeff = new UserSchema({ username: "Jeff" }).save(function (err, savedJeff) {
     
                     console.log(friends); 
                     // [{
-                    //     "privacy" : {
-                    //         "search" : 0,
-                    //         "profile" : 0,
-                    //         "friendRequests" : 0,
-                    //         "chatRequests" : 0
-                    //     },
                     //     "_id" : ObjectId("548fa103db733f53454670f5"),
                     //     "username" : "elgranjeff",
                     //     "__v" : 0
