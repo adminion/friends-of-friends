@@ -16,16 +16,17 @@ var options = {
     friendshipCollection:    'bar_userRelationships',
 };
 
-var FriendsOfFriends = require('friends-of-friends')();
+var friendsOfFriends = require('friends-of-friends')();
 // or
-var FriendsOfFriends = require('friends-of-friends');
-var fof = new FriendsOfFriends(options);
+var Fof = require('friends-of-friends');
+var friendsOfFriends = new Fof(options);
 ```
 
 **defaults**: `Object` , defines default configuration options
 **friendship**: `Object` , The Friendship model
 **plugin**: `function` , mongoose plugin
 **relationships**: `Object` , relationship constants
+
 ### FriendsOfFriends.get(property) 
 
 return the value of a property of this.options

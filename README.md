@@ -19,24 +19,59 @@ var UserSchema = new mongoose.Schema({
 
 UserSchema.plugin(friendsOfFriends.plugin);
 
-var jeff = new UserSchema({ username: "Jeff" }).save(function (err, savedJeff) {
+new UserSchema({ username: "Jeff" }).save(function (err, jeff) {
     if (err) throw err;
+
+    console.log(jeff);
+    // {
+    //     "_id" : ObjectId("5462a8748337aa9e306b5094"),
+    //     "username" : "elgranjeff",
+    //     "__v" : 0
+    // }
     
-    var zane = new userSchema({ username: "Zane"}).save(function (err, savedZane) {
+    new userSchema({ username: "Zane"}).save(function (err, zane) {
         if (err) throw err;
+
+        console.log(zane);
+        // {
+        //     "_id" : ObjectId("548a9f64728158187fb53319"),
+        //     "username" : "zane",
+        //     "__v" : 0
+        // }
     
         jeff.friendRequest(zane._id, function (err, pendingFriendship) {
-            if (err) throw err;    
-    
+            if (err) throw err; 
+
+            console.log(pendingRequest);
+            // {
+            //     "requester" : ObjectId("5462a8748337aa9e306b5094"),
+            //     "requested" : ObjectId("548a9f64728158187fb53319"),
+            //     "_id" : ObjectId("548e86c96eb8f64370d90215"),
+            //     "dateSent" : ISODate("2014-12-04T05:21:29.908Z"),
+            //     "status" : "Pending",
+            //     "__v" : 0
+            // }
+            
             zane.acceptRequest(jeff._id, funtion (err, acceptedFriendship) {
                 if (err) throw err;
+
+                console.log(acceptedRequest);
+                // {
+                //     "__v" : 0,
+                //     "_id" : ObjectId("548e86c96eb8f64370d90215"),
+                //     "dateAccepted" : ISODate("2014-12-04T05:26:09.583Z"),
+                //     "dateSent" : ISODate("2014-12-04T05:21:29.908Z"),
+                //     "requested" : ObjectId("548a9f64728158187fb53319"),
+                //     "requester" : ObjectId("5462a8748337aa9e306b5094"),
+                //     "status" : "Accepted"
+                // }
     
                 zane.getFriends(function (err, friends) {
                     if (err) throw err;
     
                     console.log(friends); 
                     // [{
-                    //     "_id" : ObjectId("548fa103db733f53454670f5"),
+                    //     "_id" : ObjectId("5462a8748337aa9e306b5094"),
                     //     "username" : "elgranjeff",
                     //     "__v" : 0
                     // }]
@@ -48,4 +83,4 @@ var jeff = new UserSchema({ username: "Jeff" }).save(function (err, savedJeff) {
 ```
 
 ## API
-See [docs/api.md](https://github.com/adminion/friends-of-friends/tree/master/docs/api.md) for API Documentation.
+See [docs/](https://github.com/adminion/friends-of-friends/tree/master/docs/) for API Documentation in both rich HTML/JavaScript and Markdown.
