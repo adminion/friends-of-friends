@@ -24,7 +24,7 @@ new UserSchema({ username: "Jeff" }).save(function (err, jeff) {
     console.log(jeff);
     // {
     //     "_id" : ObjectId("5462a8748337aa9e306b5094"),
-    //     "username" : "elgranjeff",
+    //     "username" : "Jeff",
     //     "__v" : 0
     // }
     
@@ -34,7 +34,7 @@ new UserSchema({ username: "Jeff" }).save(function (err, jeff) {
         console.log(zane);
         // {
         //     "_id" : ObjectId("548a9f64728158187fb53319"),
-        //     "username" : "zane",
+        //     "username" : "Zane",
         //     "__v" : 0
         // }
     
