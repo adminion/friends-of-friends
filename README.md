@@ -71,7 +71,7 @@ new UserSchema({ username: "Jeff" }).save(function (err, jeff) {
                     console.log(friends); 
                     // [{
                     //     "_id" : ObjectId("5462a8748337aa9e306b5094"),
-                    //     "username" : "elgranjeff",
+                    //     "username" : "Jeff",
                     //     "__v" : 0
                     // }]
                 })
