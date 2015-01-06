@@ -8,6 +8,7 @@ services:
   - mongodb
 install: 
   - npm install -g mocha
+  - npm install debug
   - npm install mongoose
   - npm install techjeffharris-utils
 before_script:
