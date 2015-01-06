@@ -10,6 +10,7 @@ install:
   - npm install -g mocha
   - npm install debug
   - npm install mongoose
+  - npm install should
   - npm install techjeffharris-utils
 before_script:
   - mocha --version
