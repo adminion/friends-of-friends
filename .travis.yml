@@ -9,6 +9,7 @@ services:
 install: 
   - npm install -g mocha
   - npm install debug
+  - npm install mocha-mongoose
   - npm install mongoose
   - npm install should
   - npm install techjeffharris-utils
