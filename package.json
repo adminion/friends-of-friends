@@ -1,7 +1,7 @@
 {
   "name": "friends-of-friends",
   "version": "1.0.0-alpha",
-  "description": "Friendship-based Access Control System for Mongoose",
+  "description": "Friendship Management System for Mongoose",
   "main": "index.js",
   "scripts": {
     "test": "mocha tests/"
