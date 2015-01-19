@@ -33,10 +33,12 @@
     "techjeffharris-utils": "1.x"
   },
   "devDependencies": {
+    "coveralls": "2.x",
     "debug": "2.x",
+    "istanbul": "0.x",
     "mocha": "2.x",
-    "mocha-mongoose": "^1.0.3",
+    "mocha-mongoose": "1.x",
     "mongoose": "3.x",
-    "should": "^4.4.2"
+    "should": "4.x"
   }
 }
