@@ -38,6 +38,7 @@
     "istanbul": "0.x",
     "mocha": "2.x",
     "mocha-mongoose": "1.x",
+    "mocha-lcov-reporter": "0.x",
     "mongoose": "3.x",
     "should": "4.x"
   }
