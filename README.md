@@ -1,10 +1,13 @@
-# friends-of-friends [![Build Status](https://travis-ci.org/adminion/friends-of-friends.svg?branch=master)](https://travis-ci.org/adminion/friends-of-friends)
-
+# friends-of-friends 
 ## Friendship Mangement System for Mongoose 
 
-This module is a work in progress, and may break on you because I haven't written tests to verify stuff works like I say it should.  Wanna [help out](https://github.com/adminion/friends-of-friends/issues/)...?  I would be much appreciative!
+[![Build Status](https://travis-ci.org/adminion/friends-of-friends.svg?branch=master)](https://travis-ci.org/adminion/friends-of-friends) [![Coverage Status](https://coveralls.io/repos/adminion/friends-of-friends/badge.svg?branch=coveralls)](https://coveralls.io/r/techjeffharris/friends-of-friends?branch=coveralls)
 
-This module started as a core component of [adminion/off-the-record](https://github.com/adminion/off-the-record) but quickly became big enough (and useful enough) to be its own module.  The goal is to create a unopinionated tool with a rich API that simplifies managing Friend-Relationships for any existing mongoose "user" schema.
+This module is almost finished, but I'm still writing tests to make sure it does what I say it should do.  
+
+This module started as a core component of [adminion/off-the-record](https://github.com/adminion/off-the-record) but quickly became big enough (and useful enough) to be its own module.  The goal is to create a unopinionated tool with a rich API that simplifies managing Friend-Relationships for any existing mongoose "user" schema.  
+
+    $ npm install friends-of-friends
 
 ## example use
 
