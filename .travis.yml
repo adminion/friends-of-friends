@@ -8,6 +8,7 @@ services:
 install: 
   - npm install -g istanbul
   - npm install -g mocha
+  - npm install async
   - npm install coveralls
   - npm install debug
   - npm install mocha-mongoose
