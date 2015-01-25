@@ -1,6 +1,6 @@
 
-var async               = require('async'),
-    FriendsOfFriends    = require('../lib/')(),
+var async               = require('async'), 
+    Friendship          = require('../lib/friendship')({accountName: 'test-account'}),
     dbURI               = 'mongodb://localhost/friends-of-friends-tests',
     should              = require('should'),
     mongoose            = require('mongoose'),
@@ -15,8 +15,6 @@ try {
 catch (error) {
     Account = mongoose.model('Account')
 }
-
-var Friendship = FriendsOfFriends.friendship
 
 var jeff = new Account({username: 'Jeff'}),
     zane = new Account({username: 'Zane'})

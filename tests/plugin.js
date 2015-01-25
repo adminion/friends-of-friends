@@ -6,7 +6,7 @@ var async               = require('async'),
     plugin              = require('../lib/plugin'),
     should              = require('should')
 
-var options = { accountName: 'Plugged-in-Account'}
+var options = { accountName: 'test-account'}
 
 var AccountModel,
     AccountSchema = new mongoose.Schema({username: String})
