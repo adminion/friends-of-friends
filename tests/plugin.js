@@ -1,59 +1,279 @@
-var FriendsOfFriends = require('../lib/')(),
-	dbURI    = 'mongodb://localhost/friends-of-friends-tests',
-	should   = require('should'),
-  	mongoose = require('mongoose'),
-  	clearDB  = require('mocha-mongoose')(dbURI, { noClear: true });
+var async               = require('async'),
+    dbURI               = 'mongodb://localhost/friends-of-friends-tests',
+    debug               = require('debug')('friends-of-friends:tests:plugin')
+    clearDB             = require('mocha-mongoose')(dbURI, { noClear: true })
+    mongoose            = require('mongoose'),
+    plugin              = require('../lib/plugin'),
+    should              = require('should')
 
-var Account,
-	AccountSchema = new mongoose.Schema({username: String});
+var options = { accountName: 'Plugged-in-Account'}
 
-AccountSchema.plugin(FriendsOfFriends.plugin);
+var AccountModel,
+    AccountSchema = new mongoose.Schema({username: String})
 
-try {
-	Account = mongoose.model('Account', AccountSchema);
-}
-catch (error) {
-	Account = mongoose.model('Account')
-}
+AccountSchema.plugin(plugin, options)
 
-var jeff = new Account({username: 'Jeff'}),
-	zane = new Account({username: 'Zane'})
+AccountModel = mongoose.model(options.accountName, AccountSchema)
 
-var docDescriptor = {requester: jeff._id, requested: zane._id}
+var testUsers = {}
 
 module.exports = function () {
-	describe('model statics', function () {
-		it('relationships - default relationship constants')
-		it('friendRequest - send a friend request to a another user')
-		it('getRequests - get all friend requests for a given user')
-		it('getSentRequests - get requests the given user has sent')
-		it('getReceivedRequests - get requests received by the given user')
-		it('acceptRequest - accept a friend request ')
-		it('denyRequest - deny a friend request')
-		it('endFriendship - end a friendship between two accounts')
-		it('getFriends - get all friends of an account')
-		it('getFriendsOfFriends - get friends of this account\'s friends')
-		it('getNonFriends - get all users that are not the given user\'s friends or friendsOfFriends')
-		it('areFriends - determine if accountId2 is a friend of accountId1')
-		it('areFriendsOfFriends - determine if accountId1 and accountId2 have any common friends')
-		it('getFriendship - get the friendship document itself')
-		it('getRelationship - get the numeric relationship between two users')
-	})
+    describe('statics', function () {
 
-	describe('document methods', function () {
-		it('friendRequest - send a request to another account')
-		it('getRequests - get friend requests')
-		it('getSentRequests - get friend requests the user has sent')
-		it('getReceivedRequests - get friend requests the user has received')
-		it('acceptRequest - accept a friend request received from the specified user')
-		it('denyRequest - deny a friend request received from the specified user')
-		it('endFriendship - end a friendship with the specified user')
-		it('getFriends - get this user\'s friends')
-		it('getFriendsOfFriends - get friends of this user\'s friends')
-		it('getNonFriends - get accounts which are not this user\'s friends')
-		it('isFriend - determine if this document is friends with the specified account')
-		it('isFriendOfFriends - determine if this document shares any friends with the specified account')
-		it('getFriendship - get the friendship document of this document and the specified account')
-		it('getRelationship - get the relationship of this document and the specified account')
-	})
+        beforeEach(function (done) {
+            if (!mongoose.connection.db) {
+                mongoose.connect(dbURI, function () {
+                    insertTestUsers(done)
+                }) 
+            } else {
+                insertTestUsers(done)
+            }           
+        })
+
+        afterEach(function (done) {
+            clearDB(done)
+        })
+
+        it('friendRequest           - send a friend request to a another user', function (done) {
+
+            AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
+                if (err) return done(err)
+
+                pendingFriendship.requester.should.have.a.property('_id', testUsers.jeff._id)
+                pendingFriendship.requested.should.have.a.property('_id', testUsers.zane._id)
+                pendingFriendship.should.have.a.property('status', 'Pending')
+                pendingFriendship.dateSent.should.be.a.Date
+
+                done()
+            })
+        })
+
+        it('getRequests             - get all friend requests for a given user', function (done) {
+            AccountModel.friendRequest(testUsers.zane._id, testUsers.sam._id, function (err, pendingFriendship) {
+                if (err) done(err)
+
+                pendingFriendship.should.be.ok
+
+                AccountModel.getRequests(testUsers.jeff._id, function (err, requests) {
+                    if (err) done(err)
+
+                    requests.sent.should.be.an.empty.Array
+                    requests.received.should.be.an.empty.Array
+
+                    AccountModel.getRequests(testUsers.zane._id, function (err, requests) {
+                        if (err) return done(err)
+
+                        requests.sent.should.be.an.Array.with.length(1)
+                        requests.received.should.be.an.Array.with.length(0)
+                        done()
+                    })
+                })
+            })
+        })
+
+        it('getSentRequests         - get requests the given user has sent', function (done) {          
+            AccountModel.friendRequest(testUsers.zane._id, testUsers.sam._id, function (err, pendingFriendship) {
+                if (err) done(err)
+
+                pendingFriendship.should.be.ok
+
+                AccountModel.getSentRequests(testUsers.jeff._id, function (err, requests) {
+                    if (err) done(err)
+
+                    requests.should.be.an.empty.Array
+
+                    AccountModel.getSentRequests(testUsers.zane._id, function (err, requests) {
+                        if (err) return done(err)
+
+                        requests.should.be.an.Array.with.length(1)
+
+                        AccountModel.acceptRequest(testUsers.zane._id, testUsers.sam._id, function (err, friendship) {
+                            if (err) return done (err)
+                            
+                            AccountModel.getSentRequests(testUsers.zane._id, function (err, requests) {
+                                if (err) return done(err)
+
+                                requests.should.be.an.empty.Array
+
+                                done()
+                            })
+                        })
+                    })
+                })
+            })
+        })
+
+        it('getReceivedRequests     - get requests received by the given user', function (done) {
+            AccountModel.friendRequest(testUsers.zane._id, testUsers.sam._id, function (err, pendingFriendship) {
+                if (err) done(err)
+
+                pendingFriendship.should.be.ok
+
+                AccountModel.getReceivedRequests(testUsers.jeff._id, function (err, requests) {
+                    if (err) done(err)
+
+                    requests.should.be.an.empty.Array
+
+                    AccountModel.getReceivedRequests(testUsers.sam._id, function (err, requests) {
+                        if (err) return done(err)
+
+                        requests.should.be.an.Array.with.length(1)
+
+                        AccountModel.acceptRequest(testUsers.zane._id, testUsers.sam._id, function (err, friendship) {
+                            if (err) return done (err)
+                            
+                            AccountModel.getReceivedRequests(testUsers.sam._id, function (err, requests) {
+                                if (err) return done(err)
+
+                                requests.should.be.an.empty.Array
+
+                                done()
+                            })
+                        })
+                    })
+                })
+            })
+        })
+
+        it('acceptRequest           - accept a friend request ', function (done) {
+            AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
+                if (err) return done(err)
+
+                pendingFriendship.requester.should.have.a.property('_id', testUsers.jeff._id)
+                pendingFriendship.requested.should.have.a.property('_id', testUsers.zane._id)
+                pendingFriendship.should.have.a.property('status', 'Pending')
+                pendingFriendship.dateSent.should.be.a.Date
+
+                AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, function (err, friendship) {
+                    if (err) return done(err)
+
+                    friendship.requester.should.have.a.property('_id', testUsers.jeff._id)
+                    friendship.requested.should.have.a.property('_id', testUsers.zane._id)
+                    friendship.should.have.a.property('status', 'Accepted')
+                    friendship.dateSent.should.be.a.Date
+
+                    done()
+                })
+            })
+        })
+
+        it('denyRequest             - deny a friend request', function (done) {
+            AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
+                if (err) return done(err)
+
+                pendingFriendship.requester.should.have.a.property('_id', testUsers.jeff._id)
+                pendingFriendship.requested.should.have.a.property('_id', testUsers.zane._id)
+                pendingFriendship.should.have.a.property('status', 'Pending')
+                pendingFriendship.dateSent.should.be.a.Date
+
+                AccountModel.denyRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
+                    if (err) return done(err)
+
+                    (null === pendingFriendship).should.be.true
+
+                    done()
+                })
+            })
+        })
+
+        it('endFriendship           - end a friendship between two accounts', function (done) {
+            AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
+                if (err) return done(err)
+
+                pendingFriendship.requester.should.have.a.property('_id', testUsers.jeff._id)
+                pendingFriendship.requested.should.have.a.property('_id', testUsers.zane._id)
+                pendingFriendship.should.have.a.property('status', 'Pending')
+                pendingFriendship.dateSent.should.be.a.Date
+
+                AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, function (err, friendship) {
+                    if (err) return done(err)
+
+                    friendship.requester.should.have.a.property('_id', testUsers.jeff._id)
+                    friendship.requested.should.have.a.property('_id', testUsers.zane._id)
+                    friendship.should.have.a.property('status', 'Accepted')
+                    friendship.dateSent.should.be.a.Date
+
+                    AccountModel.endFriendship(testUsers.jeff._id, testUsers.zane._id, function (err, friendship) {
+                        if (err) return done(err)
+
+                        (null === friendship).should.be.true
+
+                        done()
+                    })
+                })
+            })
+        })
+
+        it('getFriends              - get all friends of an account')
+        it('getFriendsOfFriends     - get friends of this account\'s friends')
+        it('getNonFriends           - get all users that are not the given user\'s friends or friendsOfFriends')
+        it('areFriends              - determine if accountId2 is a friend of accountId1')
+        it('areFriendsOfFriends     - determine if accountId1 and accountId2 have any common friends')
+        it('getFriendship           - get the friendship document itself')
+        it('getRelationship         - get the numeric relationship between two users')
+    })
+
+    describe('methods', function () {
+        beforeEach(function (done) {
+            if (!mongoose.connection.db) {
+                mongoose.connect(dbURI, function () {
+                    insertTestUsers(done)
+                }) 
+            } else {
+                insertTestUsers(done)
+            }           
+        })
+
+        afterEach(function (done) {
+            clearDB(done)
+        })
+
+        it('friendRequest           - send a request to another account')
+        it('getRequests             - get friend requests')
+        it('getSentRequests         - get friend requests the user has sent')
+        it('getReceivedRequests     - get friend requests the user has received')
+        it('acceptRequest           - accept a friend request received from the specified user')
+        it('denyRequest             - deny a friend request received from the specified user')
+        it('endFriendship           - end a friendship with the specified user')
+        it('getFriends              - get this user\'s friends')
+        it('getFriendsOfFriends     - get friends of this user\'s friends')
+        it('getNonFriends           - get accounts which are not this user\'s friends')
+        it('isFriend                - determine if this document is friends with the specified account')
+        it('isFriendOfFriends       - determine if this document shares any friends with the specified account')
+        it('getFriendship           - get the friendship document of this document and the specified account')
+        it('getRelationship         - get the relationship of this document and the specified account')
+    })
 }
+
+function insertTestUsers (done) {
+    async.parallel({   
+        jeff: function (finished) {
+            new AccountModel({username: 'Jeff'}).save(function (err, jeff) {
+                finished(err, jeff)
+            })
+        },
+        zane: function (finished) {
+            new AccountModel({username: 'Zane'}).save(function (err, zane) {
+                finished(err, zane)
+            })
+        },
+        sam: function (finished) {
+            new AccountModel({username: 'Sam'}).save(function (err, sam) {
+                finished(err, sam)
+            })
+        },
+    }, function (err, accounts) {
+        if (err) return done(err)
+
+
+        accounts.jeff.should.be.ok
+        accounts.zane.should.be.ok
+        accounts.sam.should.be.ok
+
+        testUsers = accounts
+
+        done()
+        
+    })
+}
+

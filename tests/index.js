@@ -1,5 +1,6 @@
 
-var mongoose = require('mongoose'),
+var debug = require('debug')('friends-of-friends:tests'),
+	mongoose = require('mongoose'),
 	should = require('should');
 
 var FriendsOfFriends = require('../lib/')();
@@ -9,14 +10,14 @@ var friendship = require('./friendship'),
 
 describe('FriendsOfFriends', function () {
 
-	describe('.options', function () {
+	describe('#options', function () {
 		var options = FriendsOfFriends.options;
 
 		it('should be an object', function () {
 			options.should.be.an.Object;
 		});
 
-		describe('.accountName', function () {
+		describe('#accountName', function () {
 			var accountName = options.accountName;
 
 			it('should a non-empty String', function () {
@@ -24,7 +25,7 @@ describe('FriendsOfFriends', function () {
 			})
 		})
 
-		describe('.friendshipName', function () {
+		describe('#friendshipName', function () {
 			var friendshipName = options.friendshipName;
 
 			it('should be a non-empty String', function () {
@@ -34,16 +35,16 @@ describe('FriendsOfFriends', function () {
 	})
 
 	// check to see if friendship is a model
-	describe('.friendship', function () {
+	describe('#friendship', function () {
 
 		friendship()
 	})
 
-	describe('.plugin', function () {
+	describe('#plugin', function () {
 		plugin()
 	});
 
-	describe('.relationships', function () {
+	describe('#relationships', function () {
 		var relationships = FriendsOfFriends.relationships;
 
 		var test = {
