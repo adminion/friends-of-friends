@@ -34,16 +34,6 @@ describe('FriendsOfFriends', function () {
 		})
 	})
 
-	// check to see if friendship is a model
-	describe('#friendship', function () {
-
-		friendship()
-	})
-
-	describe('#plugin', function () {
-		plugin()
-	});
-
 	describe('#relationships', function () {
 		var relationships = FriendsOfFriends.relationships;
 
@@ -76,4 +66,14 @@ describe('FriendsOfFriends', function () {
 			relationships.should.eql(test);
 		});
 	})
+
+	// check to see if friendship is a model
+	describe('#friendship', function () {
+
+		friendship()
+	})
+
+	describe('#plugin', function () {
+		plugin()
+	});
 });
