@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Friends-of-friends by adminion</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Friends-of-friends</h1>
+        <p>Friendship Mangement System for Mongoose</p>
+
+        <p class="view"><a href="https://github.com/adminion/friends-of-friends">View the Project on GitHub <small>adminion/friends-of-friends</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/adminion/friends-of-friends/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/adminion/friends-of-friends/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/adminion/friends-of-friends">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="friends-of-friends" class="anchor" href="#friends-of-friends" aria-hidden="true"><span class="octicon octicon-link"></span></a>friends-of-friends</h1>
+
+<h2>
+<a id="friendship-mangement-system-for-mongoose" class="anchor" href="#friendship-mangement-system-for-mongoose" aria-hidden="true"><span class="octicon octicon-link"></span></a>Friendship Mangement System for Mongoose</h2>
+
+<p><a href="https://travis-ci.org/adminion/friends-of-friends"><img src="https://travis-ci.org/adminion/friends-of-friends.svg?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/r/adminion/friends-of-friends?branch=master"><img src="https://coveralls.io/repos/adminion/friends-of-friends/badge.svg?branch=master" alt="Coverage Status"></a></p>
+
+<p>This module is almost finished, but I'm still writing tests to make sure it does what I say it should do.  </p>
+
+<p>This module started as a core component of <a href="https://github.com/adminion/off-the-record">adminion/off-the-record</a> but quickly became big enough (and useful enough) to be its own module.  The goal is to create a unopinionated tool with a rich API that simplifies managing Friend-Relationships for any existing mongoose "user" schema.  </p>
+
+<pre><code>$ npm install friends-of-friends
+</code></pre>
+
+<h2>
+<a id="example-use" class="anchor" href="#example-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>example use</h2>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> friendsOfFriends <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>friends-of-friends<span class="pl-pds">'</span></span>)(),
+    mongoose <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>mongoose<span class="pl-pds">'</span></span>);
+
+<span class="pl-s">var</span> UserSchema <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">mongoose.Schema</span>({
+    username<span class="pl-k">:</span> { type<span class="pl-k">:</span> <span class="pl-s3">String</span>, unique<span class="pl-k">:</span> <span class="pl-c1">true</span> }
+});
+
+UserSchema.plugin(friendsOfFriends.plugin);
+
+<span class="pl-k">new</span> <span class="pl-en">UserSchema</span>({ username<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>Jeff<span class="pl-pds">"</span></span> }).save(<span class="pl-st">function</span> (<span class="pl-vpf">err</span>, <span class="pl-vpf">jeff</span>) {
+    <span class="pl-k">if</span> (err) <span class="pl-k">throw</span> err;
+
+    <span class="pl-en">console</span><span class="pl-s3">.log</span>(jeff);
+    <span class="pl-c">// {</span>
+    <span class="pl-c">//     "_id" : ObjectId("5462a8748337aa9e306b5094"),</span>
+    <span class="pl-c">//     "username" : "Jeff",</span>
+    <span class="pl-c">//     "__v" : 0</span>
+    <span class="pl-c">// }</span>
+
+    <span class="pl-k">new</span> <span class="pl-en">userSchema</span>({ username<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>Zane<span class="pl-pds">"</span></span>}).save(<span class="pl-st">function</span> (<span class="pl-vpf">err</span>, <span class="pl-vpf">zane</span>) {
+        <span class="pl-k">if</span> (err) <span class="pl-k">throw</span> err;
+
+        <span class="pl-en">console</span><span class="pl-s3">.log</span>(zane);
+        <span class="pl-c">// {</span>
+        <span class="pl-c">//     "_id" : ObjectId("548a9f64728158187fb53319"),</span>
+        <span class="pl-c">//     "username" : "Zane",</span>
+        <span class="pl-c">//     "__v" : 0</span>
+        <span class="pl-c">// }</span>
+
+        jeff.friendRequest(zane._id, <span class="pl-st">function</span> (<span class="pl-vpf">err</span>, <span class="pl-vpf">pendingFriendship</span>) {
+            <span class="pl-k">if</span> (err) <span class="pl-k">throw</span> err; 
+
+            <span class="pl-en">console</span><span class="pl-s3">.log</span>(pendingFriendship);
+            <span class="pl-c">// {</span>
+            <span class="pl-c">//     "requester" : ObjectId("5462a8748337aa9e306b5094"),</span>
+            <span class="pl-c">//     "requested" : ObjectId("548a9f64728158187fb53319"),</span>
+            <span class="pl-c">//     "_id" : ObjectId("548e86c96eb8f64370d90215"),</span>
+            <span class="pl-c">//     "dateSent" : ISODate("2014-12-04T05:21:29.908Z"),</span>
+            <span class="pl-c">//     "status" : "Pending",</span>
+            <span class="pl-c">//     "__v" : 0</span>
+            <span class="pl-c">// }</span>
+
+            zane.acceptRequest(jeff._id, funtion (err, acceptedFriendship) {
+                <span class="pl-k">if</span> (err) <span class="pl-k">throw</span> err;
+
+                <span class="pl-en">console</span><span class="pl-s3">.log</span>(acceptedFriendship);
+                <span class="pl-c">// {</span>
+                <span class="pl-c">//     "__v" : 0,</span>
+                <span class="pl-c">//     "_id" : ObjectId("548e86c96eb8f64370d90215"),</span>
+                <span class="pl-c">//     "dateAccepted" : ISODate("2014-12-04T05:26:09.583Z"),</span>
+                <span class="pl-c">//     "dateSent" : ISODate("2014-12-04T05:21:29.908Z"),</span>
+                <span class="pl-c">//     "requested" : ObjectId("548a9f64728158187fb53319"),</span>
+                <span class="pl-c">//     "requester" : ObjectId("5462a8748337aa9e306b5094"),</span>
+                <span class="pl-c">//     "status" : "Accepted"</span>
+                <span class="pl-c">// }</span>
+
+                zane.getFriends(<span class="pl-st">function</span> (<span class="pl-vpf">err</span>, <span class="pl-vpf">friends</span>) {
+                    <span class="pl-k">if</span> (err) <span class="pl-k">throw</span> err;
+
+                    <span class="pl-en">console</span><span class="pl-s3">.log</span>(friends); 
+                    <span class="pl-c">// [{</span>
+                    <span class="pl-c">//     "_id" : ObjectId("5462a8748337aa9e306b5094"),</span>
+                    <span class="pl-c">//     "username" : "Jeff",</span>
+                    <span class="pl-c">//     "__v" : 0</span>
+                    <span class="pl-c">// }]</span>
+                })
+            });
+        });
+    });
+});</pre></div>
+
+<h2>
+<a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h2>
+
+<p>See <a href="https://github.com/adminion/friends-of-friends/tree/master/docs/">docs/</a> for API Documentation in both rich HTML/JavaScript and Markdown.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/adminion">adminion</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
