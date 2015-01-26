@@ -204,9 +204,151 @@ module.exports = function () {
             })
         })
 
-        it('getFriends              - get all friends of an account')
-        it('getFriendsOfFriends     - get friends of this account\'s friends')
-        it('getNonFriends           - get all users that are not the given user\'s friends or friendsOfFriends')
+        it('getFriends              - get all friends of an account', function (done) {
+            AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
+                if (err) return done(err)
+
+                pendingFriendship.requester.should.have.a.property('_id', testUsers.jeff._id)
+                pendingFriendship.requested.should.have.a.property('_id', testUsers.zane._id)
+                pendingFriendship.should.have.a.property('status', 'Pending')
+                pendingFriendship.dateSent.should.be.a.Date
+
+                AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, function (err, friendship) {
+                    if (err) return done(err)
+
+                    friendship.requester.should.have.a.property('_id', testUsers.jeff._id)
+                    friendship.requested.should.have.a.property('_id', testUsers.zane._id)
+                    friendship.should.have.a.property('status', 'Accepted')
+                    friendship.dateSent.should.be.a.Date
+
+                    AccountModel.getFriends(testUsers.jeff._id, function (err, jeffsFriends) {
+                        if (err) return done(err)
+
+                        jeffsFriends.should.be.an.Array.with.length(1)
+                        jeffsFriends[0].should.have.a.property('_id', testUsers.zane._id)
+
+                        AccountModel.getFriends(testUsers.zane._id, function (err, zanesFriends) {
+                            if (err) return done(err)
+
+                            zanesFriends.should.be.an.Array.with.length(1)
+                            zanesFriends[0].should.have.a.property('_id', testUsers.jeff._id)
+                        
+                            done()
+                        })
+                    })
+                })
+            })
+        })
+
+        it('getFriendsOfFriends     - get friends of this account\'s friends', function (done) {
+            AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
+                if (err) return done(err)
+
+                pendingFriendship.requester.should.have.a.property('_id', testUsers.jeff._id)
+                pendingFriendship.requested.should.have.a.property('_id', testUsers.zane._id)
+                pendingFriendship.should.have.a.property('status', 'Pending')
+                pendingFriendship.dateSent.should.be.a.Date
+
+                AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, function (err, friendship) {
+                    if (err) return done(err)
+
+                    friendship.requester.should.have.a.property('_id', testUsers.jeff._id)
+                    friendship.requested.should.have.a.property('_id', testUsers.zane._id)
+                    friendship.should.have.a.property('status', 'Accepted')
+                    friendship.dateSent.should.be.a.Date
+
+                    AccountModel.friendRequest(testUsers.zane._id, testUsers.sam._id, function (err, pendingFriendship) {
+                        if (err) return done(err)
+
+                        pendingFriendship.requester.should.have.a.property('_id', testUsers.zane._id)
+                        pendingFriendship.requested.should.have.a.property('_id', testUsers.sam._id)
+                        pendingFriendship.should.have.a.property('status', 'Pending')
+                        pendingFriendship.dateSent.should.be.a.Date
+
+                        AccountModel.acceptRequest(testUsers.zane._id, testUsers.sam._id, function (err, friendship) {
+                            if (err) return done(err)
+
+                            friendship.requester.should.have.a.property('_id', testUsers.zane._id)
+                            friendship.requested.should.have.a.property('_id', testUsers.sam._id)
+                            friendship.should.have.a.property('status', 'Accepted')
+                            friendship.dateSent.should.be.a.Date
+
+                            AccountModel.getFriendsOfFriends(testUsers.jeff._id, function (err, jeffsFriendsOfFriends) {
+                                if (err) return done(err)
+
+
+
+                                jeffsFriendsOfFriends.should.be.an.Array.with.length(1)
+                                jeffsFriendsOfFriends[0].should.have.a.property('_id', testUsers.sam._id)
+
+                                AccountModel.getFriendsOfFriends(testUsers.sam._id, function (err, samsFriendsOfFriends) {
+                                    if (err) return done(err)
+
+                                    samsFriendsOfFriends.should.be.an.Array.with.length(1)
+                                    samsFriendsOfFriends[0].should.have.a.property('_id', testUsers.jeff._id)
+                                
+                                    done()
+                                })
+                            })
+                        })
+                    })
+                })
+            })
+        })
+        it('getNonFriends           - get all users that are not the given user\'s friends or friendsOfFriends', function (done) {
+            AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
+                if (err) return done(err)
+
+                pendingFriendship.requester.should.have.a.property('_id', testUsers.jeff._id)
+                pendingFriendship.requested.should.have.a.property('_id', testUsers.zane._id)
+                pendingFriendship.should.have.a.property('status', 'Pending')
+                pendingFriendship.dateSent.should.be.a.Date
+
+                AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, function (err, friendship) {
+                    if (err) return done(err)
+
+                    friendship.requester.should.have.a.property('_id', testUsers.jeff._id)
+                    friendship.requested.should.have.a.property('_id', testUsers.zane._id)
+                    friendship.should.have.a.property('status', 'Accepted')
+                    friendship.dateSent.should.be.a.Date
+
+                    AccountModel.friendRequest(testUsers.zane._id, testUsers.sam._id, function (err, pendingFriendship) {
+                        if (err) return done(err)
+
+                        pendingFriendship.requester.should.have.a.property('_id', testUsers.zane._id)
+                        pendingFriendship.requested.should.have.a.property('_id', testUsers.sam._id)
+                        pendingFriendship.should.have.a.property('status', 'Pending')
+                        pendingFriendship.dateSent.should.be.a.Date
+
+                        AccountModel.acceptRequest(testUsers.zane._id, testUsers.sam._id, function (err, friendship) {
+                            if (err) return done(err)
+
+                            friendship.requester.should.have.a.property('_id', testUsers.zane._id)
+                            friendship.requested.should.have.a.property('_id', testUsers.sam._id)
+                            friendship.should.have.a.property('status', 'Accepted')
+                            friendship.dateSent.should.be.a.Date
+
+                            AccountModel.getNonFriends(testUsers.jeff._id, function (err, jeffsNonFriends) {
+                                if (err) return done(err)
+
+                                jeffsNonFriends.should.be.an.Array.with.length(1)
+                                jeffsNonFriends[0].should.have.a.property('_id', testUsers.henry._id)
+
+                                AccountModel.getNonFriends(testUsers.henry._id, function (err, henrysNonFriends) {
+                                    if (err) return done(err)
+
+                                    henrysNonFriends.should.be.an.Array.with.length(1)
+                                    henrysNonFriends[0].should.have.a.property('_id', testUsers.jeff._id)
+                                
+                                    done()
+                                })
+                            })
+                        })
+                    })
+                })
+            })
+        })
+
         it('areFriends              - determine if accountId2 is a friend of accountId1')
         it('areFriendsOfFriends     - determine if accountId1 and accountId2 have any common friends')
         it('getFriendship           - get the friendship document itself')
@@ -262,13 +404,18 @@ function insertTestUsers (done) {
                 finished(err, sam)
             })
         },
+        henry: function (finished) {
+            new AccountModel({username: 'Henry'}).save(function (err, henry) {
+                finished(err, henry);
+            })
+        }
     }, function (err, accounts) {
         if (err) return done(err)
-
 
         accounts.jeff.should.be.ok
         accounts.zane.should.be.ok
         accounts.sam.should.be.ok
+        accounts.henry.should.be.ok
 
         testUsers = accounts
 
