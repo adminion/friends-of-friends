@@ -37,8 +37,16 @@
     "techjeffharris-utils": "1.x"
   },
   "devDependencies": {
+    "coveralls": "~2.11.2",
+    "debug": "2.x",
     "mocha": "2.x",
-    "mongoose": "3.x",
-    "debug": "2.x"
+    "mocha-lcov-reporter": "0.0.1",
+    "mongoose": "3.x" 
+  },
+  "config": {
+    "blanket": {
+      "pattern": "lib"
+    }, 
+    "travis-cov": { "threshold": 70 }
   }
 }
