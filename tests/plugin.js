@@ -37,16 +37,51 @@ module.exports = function () {
 
         it('friendRequest           - send a friend request to a another user', function (testComplete) {
             AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
-                pendingFriendship.requester.should.have.a.property('_id', testUsers.jeff._id)
-                pendingFriendship.requested.should.have.a.property('_id', testUsers.zane._id)
-                pendingFriendship.should.have.a.property('status', 'Pending')
-                pendingFriendship.dateSent.should.be.an.instanceof(Date)
+                pendingFriendship.requester.should.have.a.property('_id', testUsers.jeff._id);
+                pendingFriendship.requested.should.have.a.property('_id', testUsers.zane._id);
+                pendingFriendship.should.have.a.property('status', 'Pending');
+                pendingFriendship.dateSent.should.be.an.instanceof(Date);
 
-                testComplete()
-            })
-        })
+                AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
+                    err.should.be.an.Error;
+                    err.message.should.equal('A pending request already exists');
+
+                    pendingFriendship.requester.should.have.a.property('_id', testUsers.jeff._id);
+                    pendingFriendship.requested.should.have.a.property('_id', testUsers.zane._id);
+                    pendingFriendship.should.have.a.property('status', 'Pending');
+                    pendingFriendship.dateSent.should.be.an.instanceof(Date);
+
+                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, function (err, friendship) {
+                        if (err) return testComplete(err);
+
+                        friendship.requester.should.have.a.property('_id', testUsers.jeff._id);
+                        friendship.requested.should.have.a.property('_id', testUsers.zane._id);
+                        friendship.should.have.a.property('status', 'Accepted');
+                        friendship.dateSent.should.be.an.instanceof(Date);
+                        friendship.dateAccepted.should.be.an.instanceof(Date);
+
+                        AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
+                            err.should.be.an.Error;
+                            err.message.should.equal('Requester and requested are already friends');
+
+                            friendship.requester.should.have.a.property('_id', testUsers.jeff._id);
+                            friendship.requested.should.have.a.property('_id', testUsers.zane._id);
+                            friendship.should.have.a.property('status', 'Accepted');
+                            friendship.dateSent.should.be.an.instanceof(Date);
+                            friendship.dateAccepted.should.be.an.instanceof(Date);
+
+                            AccountModel.friendRequest(null, null, function (err, pendingFriendship) {
+                                (null !== err).should.be.true
+
+                                testComplete();
+                            });
+                        });
+                    });
+                });
+            });
+        });
 
         it('getRequests             - get all friend requests for a given user', function (testComplete) {
             async.series({

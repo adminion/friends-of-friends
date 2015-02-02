@@ -5,8 +5,10 @@ var debug = require('debug')('friends-of-friends:tests'),
 
 var FriendsOfFriends = require('../lib/')();
 
-var friendship = require('./friendship'),
-	plugin = require('./plugin');
+var tests = {
+	friendship : require('./friendship'),
+	plugin : require('./plugin')
+}
 
 describe('FriendsOfFriends', function () {
 
@@ -67,13 +69,32 @@ describe('FriendsOfFriends', function () {
 		});
 	})
 
-	// check to see if friendship is a model
-	describe('#friendship', function () {
 
-		friendship()
+	// check to see if friendship is a model
+	describe('#friendship', function (done) {
+
+		tests.friendship()
 	})
 
-	describe('#plugin', function () {
-		plugin()
-	});
+	describe('#plugin', function (done) {
+		tests.plugin()
+	})
+
+	describe('#prototype', function () {
+		describe('#get', function () {
+			it('should get the given option from FriendsOfFriends.options', function () {
+				FriendsOfFriends.get('accountName').should.equal(FriendsOfFriends.options.accountName)				
+			})
+		})
+
+		describe('#set', function () {
+
+			it('should set the given option to FriendsOfFriends.options', function () {
+				var friendshipName = 'Friend-Records';
+
+				FriendsOfFriends.set('friendshipName', friendshipName)
+				FriendsOfFriends.options.friendshipName.should.equal(friendshipName)
+			})
+		})
+	})
 });
