@@ -3,12 +3,20 @@ node_js:
   - "0.11"
   - "0.10"
   - "0.8"
-  - "0.6"
 services:
   - mongodb
 install: 
+  - npm install -g istanbul
   - npm install -g mocha
+  - npm install async
+  - npm install coveralls
+  - npm install debug
+  - npm install mocha-mongoose
+  - npm install mocha-lcov-reporter
   - npm install mongoose
+  - npm install should
   - npm install techjeffharris-utils
 before_script:
   - mocha --version
+after_script:
+  -  istanbul cover --hook-run-in-context ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec tests && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
