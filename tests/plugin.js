@@ -72,11 +72,11 @@ module.exports = function () {
                             friendship.dateSent.should.be.an.instanceof(Date);
                             friendship.dateAccepted.should.be.an.instanceof(Date);
 
-                            AccountModel.friendRequest('abc', 'def', function (err, pendingFriendship) {
+                            AccountModel.friendRequest('abc', 'def', function (err, request) {
                                 err.should.be.an.Object;
                                 err.name.should.equal('CastError');
 
-                                (undefined === pendingFriendship).should.be.true;
+                                (undefined === request).should.be.true;
 
                                 testComplete();
                             });
@@ -115,11 +115,11 @@ module.exports = function () {
                 results.requests.zane.sent.should.be.an.empty.Array;
                 results.requests.zane.received.should.be.an.Array.with.length(1);
 
-                var bogus = new AccountModel({username: 'Bogus'});
+                AccountModel.getRequests('abc', function (err, request) {
+                    err.should.be.an.Object;
+                    err.name.should.equal('CastError');
 
-                AccountModel.getRequests(bogus._id, function (err, requests) {
-                    requests.sent.should.be.an.empty.Array;
-                    requests.received.should.be.an.empty.Array;
+                    (undefined === request).should.be.true;
 
                     testComplete();
                 });
@@ -181,10 +181,11 @@ module.exports = function () {
                 results.requestsAfter.jeff.should.be.an.empty.Array;
                 results.requestsAfter.zane.should.be.an.empty.Array;
 
-                var bogus = new AccountModel({username: 'Bogus'});
+                AccountModel.getSentRequests('abc', function (err, request) {
+                    err.should.be.an.Object;
+                    err.name.should.equal('CastError');
 
-                AccountModel.getSentRequests(bogus._id, function (err, requests) {
-                    requests.should.be.an.empty.Array;
+                    (undefined === request).should.be.true;
 
                     testComplete();
                 });
@@ -260,10 +261,11 @@ module.exports = function () {
                 results.requestsAfter.sam.should.be.an.empty.Array;
                 results.requestsAfter.henry.should.be.an.empty.Array;
 
-                var bogus = new AccountModel({username: 'Bogus'});
+                AccountModel.getReceivedRequests('abc', function (err, request) {
+                    err.should.be.an.Object;
+                    err.name.should.equal('CastError');
 
-                AccountModel.getReceivedRequests(bogus._id, function (err, requests) {
-                    requests.should.be.an.empty.Array;
+                    (undefined === request).should.be.true;
 
                     testComplete();
                 });
@@ -409,12 +411,11 @@ module.exports = function () {
                 results.friends.zane.should.be.an.Array.with.length(1);
                 results.friends.zane[0].should.have.a.property('_id', testUsers.jeff._id);
 
-                var bogus = new AccountModel({username: 'Bogus'});
+                AccountModel.getFriends('abc', function (err, request) {
+                    err.should.be.an.Object;
+                    err.name.should.equal('CastError');
 
-                AccountModel.getFriends(bogus._id, function (err, friends) {
-                    debug('err', err);
-
-                    friends.should.be.an.empty.Array;
+                    (undefined === request).should.be.true;
 
                     testComplete();
                 });
@@ -490,12 +491,11 @@ module.exports = function () {
                 results.friendsOfFriends.zane.should.be.an.empty.Array;
                 results.friendsOfFriends.henry.should.be.and.empty.Array;
 
-                var bogus = new AccountModel({username: 'Bogus'});
+                AccountModel.getFriendsOfFriends('abc', function (err, request) {
+                    err.should.be.an.Object;
+                    err.name.should.equal('CastError');
 
-                AccountModel.getFriendsOfFriends(bogus._id, function (err, friendsOfFriends) {
-                    debug('err', err);
-
-                    friendsOfFriends.should.be.an.empty.Array;
+                    (undefined === request).should.be.true;
 
                     testComplete();
                 });
