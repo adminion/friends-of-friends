@@ -5,18 +5,18 @@ var async               = require('async'),
     mongoose            = require('mongoose'),
     plugin              = require('../lib/plugin'),
     relationships       = require('../lib/relationships'),
-    should              = require('should')
+    should              = require('should');
 
-var options = { accountName: 'test-account'}
+var options = { accountName: 'test-account'};
 
 var AccountModel,
-    AccountSchema = new mongoose.Schema({username: String})
+    AccountSchema = new mongoose.Schema({username: String});
 
-AccountSchema.plugin(plugin, options)
+AccountSchema.plugin(plugin, options);
 
-AccountModel = mongoose.model(options.accountName, AccountSchema)
+AccountModel = mongoose.model(options.accountName, AccountSchema);
 
-var testUsers = {}
+var testUsers = {};
 
 module.exports = function () {
     describe('statics', function () {
@@ -24,16 +24,16 @@ module.exports = function () {
         beforeEach(function (done) {
             if (!mongoose.connection.db) {
                 mongoose.connect(dbURI, function () {
-                    insertTestUsers(done)
-                }) 
+                    insertTestUsers(done);
+                });
             } else {
-                insertTestUsers(done)
+                insertTestUsers(done);
             }           
-        })
+        });
 
         afterEach(function (done) {
-            clearDB(done)
-        })
+            clearDB(done);
+        });
 
         it('friendRequest           - send a friend request to a another user', function (testComplete) {
             AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
@@ -72,8 +72,11 @@ module.exports = function () {
                             friendship.dateSent.should.be.an.instanceof(Date);
                             friendship.dateAccepted.should.be.an.instanceof(Date);
 
-                            AccountModel.friendRequest(null, null, function (err, pendingFriendship) {
-                                (null !== err).should.be.true
+                            AccountModel.friendRequest('abc', 'def', function (err, pendingFriendship) {
+                                err.should.be.an.Object;
+                                err.name.should.equal('CastError');
+
+                                (undefined === pendingFriendship).should.be.true;
 
                                 testComplete();
                             });
@@ -88,373 +91,423 @@ module.exports = function () {
                 sent: function (next) {
                     AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, sentRequest) {
                         next(err, sentRequest);
-                    })
+                    });
                 }, 
                 requests: function (next) {
                     async.parallel({
                         jeff: function (done) {
-                            AccountModel.getRequests(testUsers.jeff._id, done)
+                            AccountModel.getRequests(testUsers.jeff._id, done);
                         }, 
                         zane: function (done) {
-                            AccountModel.getRequests(testUsers.zane._id, done)
+                            AccountModel.getRequests(testUsers.zane._id, done);
                         }
                     }, function (err, results) {
-                        next(err, results)
-                    })
+                        next(err, results);
+                    });
                 }
             }, 
             function (err, results) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
-                results.sent.should.be.ok
-                results.requests.jeff.sent.should.be.an.Array.with.length(1)
-                results.requests.jeff.received.should.be.an.empty.Array
-                results.requests.zane.sent.should.be.an.empty.Array
-                results.requests.zane.received.should.be.an.Array.with.length(1)
+                results.sent.should.be.ok;
+                results.requests.jeff.sent.should.be.an.Array.with.length(1);
+                results.requests.jeff.received.should.be.an.empty.Array;
+                results.requests.zane.sent.should.be.an.empty.Array;
+                results.requests.zane.received.should.be.an.Array.with.length(1);
 
-                testComplete()
-            })
-        })
+                var bogus = new AccountModel({username: 'Bogus'});
+
+                AccountModel.getRequests(bogus._id, function (err, requests) {
+                    requests.sent.should.be.an.empty.Array;
+                    requests.received.should.be.an.empty.Array;
+
+                    testComplete();
+                });
+            });
+        });
 
         it('getSentRequests         - get requests the given user has sent', function (testComplete) {   
             async.series({
                 sent: function (next) {
                     AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, sentRequest) {
                         next(err, sentRequest);
-                    })
+                    });
                 }, 
                 requestsBefore: function (next) {
                     async.parallel({
                         jeff: function (done) {
-                            AccountModel.getSentRequests(testUsers.jeff._id, done)
+                            AccountModel.getSentRequests(testUsers.jeff._id, done);
                         },
                         zane: function (done) {
-                            AccountModel.getSentRequests(testUsers.zane._id, done)
+                            AccountModel.getSentRequests(testUsers.zane._id, done);
                         }
                     },
                     function (err, results) {
-                        next(err, results)
-                    })
+                        next(err, results);
+                    });
                 },
                 accepted: function (next) {
-                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next)
+                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next);
                 },
                 requestsAfter: function (next) {
                     async.parallel({
                         jeff: function (done) {
-                            AccountModel.getSentRequests(testUsers.jeff._id, done)
+                            AccountModel.getSentRequests(testUsers.jeff._id, done);
                         },
                         zane: function (done) {
-                            AccountModel.getSentRequests(testUsers.zane._id, done)
+                            AccountModel.getSentRequests(testUsers.zane._id, done);
                         }
                     },
                     function (err, results) {
-                        next(err, results)
-                    })
+                        next(err, results);
+                    });
                 }
             }, function (err, results) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
-                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id)
-                results.sent.requested.should.have.a.property('_id', testUsers.zane._id)
-                results.sent.should.have.a.property('status', 'Pending')
-                results.sent.dateSent.should.be.an.instanceof(Date)
+                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.sent.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.sent.should.have.a.property('status', 'Pending');
+                results.sent.dateSent.should.be.an.instanceof(Date);
 
-                results.requestsBefore.jeff.should.be.an.Array.with.length(1)
-                results.requestsBefore.zane.should.be.an.empty.Array
+                results.requestsBefore.jeff.should.be.an.Array.with.length(1);
+                results.requestsBefore.zane.should.be.an.empty.Array;
 
-                results.accepted.requester.should.have.a.property('_id', testUsers.jeff._id)
-                results.accepted.requested.should.have.a.property('_id', testUsers.zane._id)
-                results.accepted.should.have.a.property('status', 'Accepted')
-                results.accepted.dateSent.should.be.an.instanceof(Date)
+                results.accepted.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.accepted.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.accepted.should.have.a.property('status', 'Accepted');
+                results.accepted.dateSent.should.be.an.instanceof(Date);
 
-                results.requestsAfter.jeff.should.be.an.empty.Array
-                results.requestsAfter.zane.should.be.an.empty.Array
+                results.requestsAfter.jeff.should.be.an.empty.Array;
+                results.requestsAfter.zane.should.be.an.empty.Array;
 
-                testComplete()
-            })
-        })
+                var bogus = new AccountModel({username: 'Bogus'});
+
+                AccountModel.getSentRequests(bogus._id, function (err, requests) {
+                    requests.should.be.an.empty.Array;
+
+                    testComplete();
+                });
+            });
+        });
 
         it('getReceivedRequests     - get requests received by the given user', function (testComplete) {
             async.series({
                 sent: function (next) {
                     AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, sentRequest) {
                         next(err, sentRequest);
-                    })
+                    });
                 },
                 requestsBefore: function (next) {
                     async.parallel({
                         jeff: function (done) {
-                            AccountModel.getReceivedRequests(testUsers.jeff._id, done)
+                            AccountModel.getReceivedRequests(testUsers.jeff._id, done);
                         },
                         zane: function (done) {
-                            AccountModel.getReceivedRequests(testUsers.zane._id, done)
+                            AccountModel.getReceivedRequests(testUsers.zane._id, done);
                         },
                         sam: function (done) {
-                            AccountModel.getReceivedRequests(testUsers.sam._id, done)
+                            AccountModel.getReceivedRequests(testUsers.sam._id, done);
                         },
                         henry: function (done) {
-                            AccountModel.getReceivedRequests(testUsers.henry._id, done)
+                            AccountModel.getReceivedRequests(testUsers.henry._id, done);
                         }
                     }, function (err, results) {
-                        next(err, results)
-                    })
+                        next(err, results);
+                    });
                 },
                 accepted: function (next) {
-                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next)
+                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next);
                 }, 
                 requestsAfter: function (next) {
                     async.parallel({
                         jeff: function (done) {
-                            AccountModel.getReceivedRequests(testUsers.jeff._id, done)
+                            AccountModel.getReceivedRequests(testUsers.jeff._id, done);
                         },
                         zane: function (done) {
-                            AccountModel.getReceivedRequests(testUsers.zane._id, done)
+                            AccountModel.getReceivedRequests(testUsers.zane._id, done);
                         },
                         sam: function (done) {
-                            AccountModel.getReceivedRequests(testUsers.sam._id, done)
+                            AccountModel.getReceivedRequests(testUsers.sam._id, done);
                         },
                         henry: function (done) {
-                            AccountModel.getReceivedRequests(testUsers.henry._id, done)
+                            AccountModel.getReceivedRequests(testUsers.henry._id, done);
                         }
                     }, function (err, results) {
-                        next(err, results)
-                    })
+                        next(err, results);
+                    });
                 }
             }, function (err, results) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
-                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id)
-                results.sent.requested.should.have.a.property('_id', testUsers.zane._id)
-                results.sent.should.have.a.property('status', 'Pending')
-                results.sent.dateSent.should.be.an.instanceof(Date)
+                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.sent.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.sent.should.have.a.property('status', 'Pending');
+                results.sent.dateSent.should.be.an.instanceof(Date);
 
-                results.requestsBefore.jeff.should.be.an.empty.Array
-                results.requestsBefore.zane.should.be.an.Array.with.length(1)
-                results.requestsBefore.sam.should.be.an.empty.Array
-                results.requestsBefore.henry.should.be.an.empty.Array
+                results.requestsBefore.jeff.should.be.an.empty.Array;
+                results.requestsBefore.zane.should.be.an.Array.with.length(1);
+                results.requestsBefore.sam.should.be.an.empty.Array;
+                results.requestsBefore.henry.should.be.an.empty.Array;
 
-                results.accepted.requester.should.have.a.property('_id', testUsers.jeff._id)
-                results.accepted.requested.should.have.a.property('_id', testUsers.zane._id)
-                results.accepted.should.have.a.property('status', 'Accepted')
-                results.accepted.dateSent.should.be.an.instanceof(Date)
+                results.accepted.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.accepted.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.accepted.should.have.a.property('status', 'Accepted');
+                results.accepted.dateSent.should.be.an.instanceof(Date);
 
-                results.requestsAfter.jeff.should.be.an.empty.Array
-                results.requestsAfter.zane.should.be.an.empty.Array
-                results.requestsAfter.sam.should.be.an.empty.Array
-                results.requestsAfter.henry.should.be.an.empty.Array
+                results.requestsAfter.jeff.should.be.an.empty.Array;
+                results.requestsAfter.zane.should.be.an.empty.Array;
+                results.requestsAfter.sam.should.be.an.empty.Array;
+                results.requestsAfter.henry.should.be.an.empty.Array;
 
-                testComplete()
-            })
-        })
+                var bogus = new AccountModel({username: 'Bogus'});
+
+                AccountModel.getReceivedRequests(bogus._id, function (err, requests) {
+                    requests.should.be.an.empty.Array;
+
+                    testComplete();
+                });
+            });
+        });
 
         it('acceptRequest           - accept a friend request ', function (testComplete) {
             async.series({
                 sent: function (next) {
                     AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, sentRequest) {
                         next(err, sentRequest);
-                    })
+                    });
                 },
                 accepted: function (next) {
-                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next)
+                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next);
                 }
             }, function (err, results) {
-                if (err) return done(err) 
+                if (err) return done(err) ;
 
-                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id)
-                results.sent.requested.should.have.a.property('_id', testUsers.zane._id)
-                results.sent.should.have.a.property('status', 'Pending')
-                results.sent.dateSent.should.be.an.instanceof(Date)
+                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.sent.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.sent.should.have.a.property('status', 'Pending');
+                results.sent.dateSent.should.be.an.instanceof(Date);
 
-                results.accepted.requester.should.have.a.property('_id', testUsers.jeff._id)
-                results.accepted.requested.should.have.a.property('_id', testUsers.zane._id)
-                results.accepted.should.have.a.property('status', 'Accepted')
-                results.accepted.dateSent.should.be.an.instanceof(Date)
+                results.accepted.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.accepted.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.accepted.should.have.a.property('status', 'Accepted');
+                results.accepted.dateSent.should.be.an.instanceof(Date);
 
-                testComplete()
-            })
-        })
+                AccountModel.acceptRequest('abc', 'def', function (err, friendship) {
+                    err.should.be.an.Object;
+                    err.name.should.equal('CastError');
+
+                    (undefined === friendship).should.be.true;
+
+                    AccountModel.acceptRequest(testUsers.zane._id, testUsers.sam._id, function (err, friendship) {
+
+                        err.should.be.an.Error;
+                        err.message.should.equal('Cannot accept request that does not exist!');
+
+                        (undefined === friendship).should.be.true;
+
+                        testComplete();
+                    });
+                });
+            });
+        });
 
         it('denyRequest             - deny a friend request', function (testComplete) {
             async.series({
                 sent: function (next) {
                     AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, sentRequest) {
                         next(err, sentRequest);
-                    })
+                    });
                 },
                 denied: function (next) {
-                    AccountModel.denyRequest(testUsers.jeff._id, testUsers.zane._id, next)
+                    AccountModel.denyRequest(testUsers.jeff._id, testUsers.zane._id, next);
                 }
             }, function (err, results) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
-                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id)
-                results.sent.requested.should.have.a.property('_id', testUsers.zane._id)
-                results.sent.should.have.a.property('status', 'Pending')
+                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.sent.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.sent.should.have.a.property('status', 'Pending');
                 results.sent.dateSent.should.be.an.instanceof(Date);
 
-                results.denied.should.equal(1)
+                results.denied.should.equal(1);
 
-                testComplete()
-            })
-        })
+                testComplete();
+            });
+        });
 
         it('endFriendship           - end a friendship between two accounts', function (testComplete) {
             async.series({
                 sent: function (next) {
                     AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, sentRequest) {
                         next(err, sentRequest);
-                    })
+                    });
                 },
                 accepted: function (next) {
-                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next)
+                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next);
                 },
                 ended: function (next) {
-                    AccountModel.endFriendship(testUsers.jeff._id, testUsers.zane._id, next)
+                    AccountModel.endFriendship(testUsers.jeff._id, testUsers.zane._id, next);
                 }
             }, function (err, results) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
-                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id)
-                results.sent.requested.should.have.a.property('_id', testUsers.zane._id)
-                results.sent.should.have.a.property('status', 'Pending')
+                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.sent.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.sent.should.have.a.property('status', 'Pending');
                 results.sent.dateSent.should.be.an.instanceof(Date);
 
-                results.accepted.requester.should.have.a.property('_id', testUsers.jeff._id)
-                results.accepted.requested.should.have.a.property('_id', testUsers.zane._id)
-                results.accepted.should.have.a.property('status', 'Accepted')
+                results.accepted.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.accepted.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.accepted.should.have.a.property('status', 'Accepted');
                 results.accepted.dateSent.should.be.an.instanceof(Date);
 
                 results.ended.should.equal(1);
 
-                testComplete()
-            })
-        })
+                testComplete();
+            });
+        });
 
         it('getFriends              - get all friends of an account', function (testComplete) {
             async.series({
                 sent: function (next) {
                     AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, sentRequest) {
                         next(err, sentRequest);
-                    })
+                    });
                 },
                 accepted: function (next) {
-                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next)
+                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next);
                 },
                 friends: function (next) {
                     async.parallel({
                         jeff: function (done) {
-                            AccountModel.getFriends(testUsers.jeff._id, done)
+                            AccountModel.getFriends(testUsers.jeff._id, done);
                         },
                         zane: function (done) {
-                            AccountModel.getFriends(testUsers.zane._id, done)
+                            AccountModel.getFriends(testUsers.zane._id, done);
                         }
                     }, function (err, results) {
-                        next(err, results)
-                    })
+                        next(err, results);
+                    });
                 }
             }, function (err, results) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
-                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id)
-                results.sent.requested.should.have.a.property('_id', testUsers.zane._id)
-                results.sent.should.have.a.property('status', 'Pending')
-                results.sent.dateSent.should.be.an.instanceof(Date)
+                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.sent.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.sent.should.have.a.property('status', 'Pending');
+                results.sent.dateSent.should.be.an.instanceof(Date);
 
-                results.accepted.requester.should.have.a.property('_id', testUsers.jeff._id)
-                results.accepted.requested.should.have.a.property('_id', testUsers.zane._id)
-                results.accepted.should.have.a.property('status', 'Accepted')
-                results.accepted.dateSent.should.be.an.instanceof(Date)
+                results.accepted.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.accepted.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.accepted.should.have.a.property('status', 'Accepted');
+                results.accepted.dateSent.should.be.an.instanceof(Date);
 
-                results.friends.jeff.should.be.an.Array.with.length(1)
-                results.friends.jeff[0].should.have.a.property('_id', testUsers.zane._id)
+                results.friends.jeff.should.be.an.Array.with.length(1);
+                results.friends.jeff[0].should.have.a.property('_id', testUsers.zane._id);
 
-                results.friends.zane.should.be.an.Array.with.length(1)
-                results.friends.zane[0].should.have.a.property('_id', testUsers.jeff._id)
+                results.friends.zane.should.be.an.Array.with.length(1);
+                results.friends.zane[0].should.have.a.property('_id', testUsers.jeff._id);
 
-                testComplete()
-            })
-        })
+                var bogus = new AccountModel({username: 'Bogus'});
+
+                AccountModel.getFriends(bogus._id, function (err, friends) {
+                    debug('err', err);
+
+                    friends.should.be.an.empty.Array;
+
+                    testComplete();
+                });
+            });
+        });
 
         it('getFriendsOfFriends     - get friends of this account\'s friends', function (testComplete) {
 
             async.series({
                 jeffToZane: function (next) {
                     AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, request) {
-                        next(err, request)
-                    })
+                        next(err, request);
+                    });
                 },
                 jeffToZaneAccepted: function (next) {
-                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next)
+                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next);
                 },
                 zaneToSam: function (next) {
                     AccountModel.friendRequest(testUsers.zane._id, testUsers.sam._id, function (err, request) {
-                        next(err, request)
+                        next(err, request);
                     })
                 },
                 zaneToSamAccepted: function (next) {
-                    AccountModel.acceptRequest(testUsers.zane._id, testUsers.sam._id, next)
+                    AccountModel.acceptRequest(testUsers.zane._id, testUsers.sam._id, next);
                 },
                 friendsOfFriends: function (next) {
                     async.parallel({
                         jeff: function (done) {
-                            AccountModel.getFriendsOfFriends(testUsers.jeff._id, done)
+                            AccountModel.getFriendsOfFriends(testUsers.jeff._id, done);
                         }, 
                         sam: function (done) {
-                            AccountModel.getFriendsOfFriends(testUsers.sam._id, done)
+                            AccountModel.getFriendsOfFriends(testUsers.sam._id, done);
                         },
                         zane: function (done) {
-                            AccountModel.getFriendsOfFriends(testUsers.zane._id, done)
+                            AccountModel.getFriendsOfFriends(testUsers.zane._id, done);
                         },
                         henry: function (done) {
-                            AccountModel.getFriendsOfFriends(testUsers.henry._id, done)
+                            AccountModel.getFriendsOfFriends(testUsers.henry._id, done);
                         }
                     }, function (err, results) {
-                        next(err, results)
-                    })
+                        next(err, results);
+                    });
                 }
             }, function (err, results) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
-                results.jeffToZane.requester.should.have.a.property('_id', testUsers.jeff._id)
-                results.jeffToZane.requested.should.have.a.property('_id', testUsers.zane._id)
-                results.jeffToZane.should.have.a.property('status', 'Pending')
-                results.jeffToZane.dateSent.should.be.an.instanceof(Date)
+                results.jeffToZane.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.jeffToZane.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.jeffToZane.should.have.a.property('status', 'Pending');
+                results.jeffToZane.dateSent.should.be.an.instanceof(Date);
 
-                results.jeffToZaneAccepted.requester.should.have.a.property('_id', testUsers.jeff._id)
-                results.jeffToZaneAccepted.requested.should.have.a.property('_id', testUsers.zane._id)
-                results.jeffToZaneAccepted.should.have.a.property('status', 'Accepted')
-                results.jeffToZaneAccepted.dateSent.should.be.an.instanceof(Date)
+                results.jeffToZaneAccepted.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.jeffToZaneAccepted.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.jeffToZaneAccepted.should.have.a.property('status', 'Accepted');
+                results.jeffToZaneAccepted.dateSent.should.be.an.instanceof(Date);
 
-                results.zaneToSam.requester.should.have.a.property('_id', testUsers.zane._id)
-                results.zaneToSam.requested.should.have.a.property('_id', testUsers.sam._id)
-                results.zaneToSam.should.have.a.property('status', 'Pending')
-                results.zaneToSam.dateSent.should.be.an.instanceof(Date)
+                results.zaneToSam.requester.should.have.a.property('_id', testUsers.zane._id);
+                results.zaneToSam.requested.should.have.a.property('_id', testUsers.sam._id);
+                results.zaneToSam.should.have.a.property('status', 'Pending');
+                results.zaneToSam.dateSent.should.be.an.instanceof(Date);
 
-                results.zaneToSamAccepted.requester.should.have.a.property('_id', testUsers.zane._id)
-                results.zaneToSamAccepted.requested.should.have.a.property('_id', testUsers.sam._id)
-                results.zaneToSamAccepted.should.have.a.property('status', 'Accepted')
-                results.zaneToSamAccepted.dateSent.should.be.an.instanceof(Date)
+                results.zaneToSamAccepted.requester.should.have.a.property('_id', testUsers.zane._id);
+                results.zaneToSamAccepted.requested.should.have.a.property('_id', testUsers.sam._id);
+                results.zaneToSamAccepted.should.have.a.property('status', 'Accepted');
+                results.zaneToSamAccepted.dateSent.should.be.an.instanceof(Date);
 
-                results.friendsOfFriends.jeff.should.be.an.Array.with.length(1)
-                results.friendsOfFriends.jeff[0].should.have.a.property('_id', testUsers.sam._id)
+                results.friendsOfFriends.jeff.should.be.an.Array.with.length(1);
+                results.friendsOfFriends.jeff[0].should.have.a.property('_id', testUsers.sam._id);
 
-                results.friendsOfFriends.sam.should.be.an.Array.with.length(1)
-                results.friendsOfFriends.sam[0].should.have.a.property('_id', testUsers.jeff._id)
+                results.friendsOfFriends.sam.should.be.an.Array.with.length(1);
+                results.friendsOfFriends.sam[0].should.have.a.property('_id', testUsers.jeff._id);
 
-                results.friendsOfFriends.zane.should.be.an.empty.Array
-                results.friendsOfFriends.henry.should.be.and.empty.Array
+                results.friendsOfFriends.zane.should.be.an.empty.Array;
+                results.friendsOfFriends.henry.should.be.and.empty.Array;
 
-                testComplete()
-            })
-        })
+                var bogus = new AccountModel({username: 'Bogus'});
+
+                AccountModel.getFriendsOfFriends(bogus._id, function (err, friendsOfFriends) {
+                    debug('err', err);
+
+                    friendsOfFriends.should.be.an.empty.Array;
+
+                    testComplete();
+                });
+            });
+        });
 
         it('getNonFriends           - get all users that are not the given user\'s friends or friendsOfFriends', function (testComplete) {
             async.series({
                 jeffToZane: function (next) {
                     AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, request) {
-                        next(err, request)
-                    })
+                        next(err, request);
+                    });
                 },
                 jeffToZaneAccepted: function (next) {
                     AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next)
