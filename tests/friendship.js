@@ -13,66 +13,66 @@ try {
     Account = mongoose.model('Account', AccountSchema);
 }
 catch (error) {
-    Account = mongoose.model('Account')
+    Account = mongoose.model('Account');
 }
 
 var jeff = new Account({username: 'Jeff'}),
-    zane = new Account({username: 'Zane'})
+    zane = new Account({username: 'Zane'});
 
-var docDescriptor = {requester: jeff._id, requested: zane._id}
+var docDescriptor = {requester: jeff._id, requested: zane._id};
 
 module.exports = function () {
 
     describe('statics', function () {
 
         beforeEach(function (done) {
-            if (mongoose.connection.db) return done()
+            if (mongoose.connection.db) return done();
 
-            mongoose.connect(dbURI,done)
+            mongoose.connect(dbURI,done);
 
-        })
+        });
 
         afterEach(function (done) {
-            clearDB(done)
-        })
+            clearDB(done);
+        });
 
         it('getRequests             - get all requests involving a given user', function (testComplete) {
 
             new Friendship(docDescriptor).save(function (err, pendingFriendship) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
                 async.parallel({
                     jeffsRequests: function (then) {
-                        Friendship.getRequests(jeff._id, then)
+                        Friendship.getRequests(jeff._id, then);
                     },
                     zanesRequests: function (then) {
-                        Friendship.getRequests(zane._id, then)
+                        Friendship.getRequests(zane._id, then);
                     }
                 }, function (err, results) {
-                    if (err) return testComplete(err)
+                    if (err) return testComplete(err);
 
-                    pendingFriendship.should.have.a.property('requester', jeff._id)
-                    pendingFriendship.should.have.a.property('requested', zane._id)
-                    pendingFriendship.should.have.a.property('status', 'Pending')
+                    pendingFriendship.should.have.a.property('requester', jeff._id);
+                    pendingFriendship.should.have.a.property('requested', zane._id);
+                    pendingFriendship.should.have.a.property('status', 'Pending');
 
                     // jeff sent the request, and has received none
-                    results.jeffsRequests.sent.should.be.an.Array.with.length(1)
-                    results.jeffsRequests.received.should.be.an.Array.with.length(0)
+                    results.jeffsRequests.sent.should.be.an.Array.with.length(1);
+                    results.jeffsRequests.received.should.be.an.empty.Array;
 
                     // zane received jeff's request and has sent none
-                    results.zanesRequests.sent.should.be.an.Array.with.length(0)
-                    results.zanesRequests.received.should.be.an.Array.with.length(1)
+                    results.zanesRequests.sent.should.be.an.empty.Array;
+                    results.zanesRequests.received.should.be.an.Array.with.length(1);
 
-                    testComplete()
-                })
-            })
-        })
+                    testComplete();
+                });
+            });
+        });
 
         it('getSentRequests         - get requests the given user has sent', function (testComplete) {
 
             // create jeff's request for zane's frienship
             new Friendship(docDescriptor).save(function (err, friendship) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
                 async.parallel({
                     jeffsSentRequests: function (done) {
