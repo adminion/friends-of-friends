@@ -4,6 +4,7 @@
   "description": "Friendship Management for Mongoose",
   "main": "index.js",
   "scripts": {
+    "docs": "./generate_docs.sh",
     "test": "mocha tests/"
   },
   "repository": {
