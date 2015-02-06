@@ -1,7 +1,7 @@
 #!/bin/bash
 
-npm install jsdoc jsdoc2md
+npm install -g jsdoc jsdoc-to-markdown
 
-jsdoc -c jsdoc.conf.json -d ./docs/ -R ./README.md --verbose ./lib/
+./node_modules/jsdoc -c jsdoc.conf.json -d ./docs/ -R ./README.md --verbose ./lib/
 
 jsdoc2md lib/*.js > ./docs/FriendsOfFriends.md

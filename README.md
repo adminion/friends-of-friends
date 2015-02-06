@@ -44,7 +44,7 @@ UserSchema.plugin(friendsOfFriends.plugin, options);
 // compile your user model
 var User = mongoose.model(options.accountName), UserSchema);
 
-// create two users
+// create users
 var Jeff = new User({ username: "Jeff" }),
     Zane = new User({ username: "Zane"}),
     Sam = new User({ username: "Sam"});
