@@ -1,6 +1,6 @@
 {
   "name": "friends-of-friends",
-  "version": "1.0.0-alpha-2",
+  "version": "1.0.1",
   "description": "Friendship Management for Mongoose",
   "main": "index.js",
   "scripts": {
@@ -32,11 +32,11 @@
   "homepage": "https://github.com/adminion/friends-of-friends",
   "dependencies": {
     "async": "0.x",
+    "debug": "2.x",
     "techjeffharris-utils": "1.x"
   },
   "devDependencies": {
     "coveralls": "2.x",
-    "debug": "2.x",
     "istanbul": "0.x",
     "mocha": "2.x",
     "mocha-mongoose": "1.x",
