@@ -3,6 +3,9 @@ CHANGES
 
 # v1.x
 
+# v1.0.3
+* REALLY fixes #24 this time, I promise!
+
 # v1.0.2 
 
 * Fixed #24 - generate_docs.sh error
