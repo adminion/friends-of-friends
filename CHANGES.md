@@ -11,7 +11,8 @@ CHANGES
     * implemented `async` module to improve test performance and coverage
     * fixed jsdoc comments to improve html and markdown API generated
     * using jsdoc2md instead of jsdox for markdown API
-    * created "docs" npm script
+    * removed docs from repo and added `docs` to `.gitignore`
+    * created "docs" npm script to generate html and markdown APIs in `docs/`
     * fixed bad version in package.json 
 
 # v1.0.0

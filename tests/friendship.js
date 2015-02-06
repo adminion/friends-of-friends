@@ -514,78 +514,89 @@ module.exports = function () {
         });
 
         it('isRequester             - check to see if the given user is the requester in a given friendship', function (testComplete) {
-            new Friendship(docDescriptor).save(function (err, pendingFriendship) {
-                if (err) return testComplete(err)
-                pendingFriendship.should.be.ok
-
-                Friendship.isRequester(pendingFriendship._id, jeff._id, function (err, answer) {
-                    if (err) return testComplete(err)
-
-                    answer.should.be.true
-
-                    Friendship.isRequester(pendingFriendship._id, zane._id, function (err, answer) {
+            async.series({
+                request: function (next) {
+                    new Friendship(docDescriptor).save(function (err, request) {
+                        if (err) return next(err)
+                        
+                        async.parallel({
+                            jeff: function (done) {
+                                Friendship.isRequester(request._id, jeff._id, done);
+                            },
+                            zane: function (done) {
+                                Friendship.isRequester(request._id, zane._id, done);
+                            }
+                        }, next);
+                    });
+                },
+                friendship: function (next) {
+                    Friendship.acceptRequest(jeff._id, zane._id, function (err, friendship) {
                         if (err) return testComplete(err)
 
-                        answer.should.be.false
+                        async.parallel({
+                            jeff: function (done) {
+                                Friendship.isRequester(friendship._id, jeff._id, done);
+                            },
+                            zane: function (done) {
+                                Friendship.isRequester(friendship._id, zane._id, done);
+                            }
+                        }, next);
+                    });
+                }
+            }, function (err, answers) {
+                if (err) return testComplete(err);
+                
+                answers.request.jeff.should.be.true;
+                answers.request.zane.should.be.false;
 
-                        Friendship.acceptRequest(jeff._id, zane._id, function (err, acceptedFriendship) {
-                            if (err) return testComplete(err)
-                            acceptedFriendship.should.be.ok
+                answers.friendship.jeff.should.be.true;
+                answers.friendship.zane.should.be.false;
 
-                            Friendship.isRequester(acceptedFriendship, jeff._id, function (err, answer) {
-                                if (err) return testComplete(err)
-
-                                answer.should.be.true
-
-                                Friendship.isRequester(acceptedFriendship, zane._id, function (err, answer) {
-                                    if (err) return testComplete(err)
-
-                                    answer.should.be.false
-                                    
-                                    testComplete()
-                                })
-                            })
-                        })
-                    })
-                })
-            })
-        })
+                testComplete();
+            });
+        });
 
         it('isRequested             - check to see if the given user is the requested in a given friendship', function (testComplete) {
-            new Friendship(docDescriptor).save(function (err, pendingFriendship) {
-                if (err) return testComplete(err)
-
-                Friendship.isRequested(pendingFriendship._id, jeff._id, function (err, answer) {
-                    if (err) return testComplete(err)
-
-                    answer.should.be.false
-
-                    Friendship.isRequested(pendingFriendship._id, zane._id, function (err, answer) {
+            async.series({
+                request: function (next) {
+                    new Friendship(docDescriptor).save(function (err, request) {
+                        if (err) return next(err)
+                        
+                        async.parallel({
+                            jeff: function (done) {
+                                Friendship.isRequested(request._id, jeff._id, done);
+                            },
+                            zane: function (done) {
+                                Friendship.isRequested(request._id, zane._id, done);
+                            }
+                        }, next);
+                    });
+                },
+                friendship: function (next) {
+                    Friendship.acceptRequest(jeff._id, zane._id, function (err, friendship) {
                         if (err) return testComplete(err)
 
-                        answer.should.be.true
+                        async.parallel({
+                            jeff: function (done) {
+                                Friendship.isRequested(friendship._id, jeff._id, done);
+                            },
+                            zane: function (done) {
+                                Friendship.isRequested(friendship._id, zane._id, done);
+                            }
+                        }, next);
+                    });
+                }
+            }, function (err, answers) {
+                if (err) return testComplete(err);
+                
+                answers.request.jeff.should.be.false;
+                answers.request.zane.should.be.true;
 
-                        Friendship.acceptRequest(jeff._id, zane._id, function (err, acceptedFriendship) {
-                            if (err) return testComplete(err)
-                            acceptedFriendship.should.be.ok
+                answers.friendship.jeff.should.be.false;
+                answers.friendship.zane.should.be.true;
 
-                            Friendship.isRequested(acceptedFriendship, jeff._id, function (err, answer) {
-                                if (err) return testComplete(err)
-
-                                answer.should.be.false
-
-                                Friendship.isRequested(acceptedFriendship, zane._id, function (err, answer) {
-                                    if (err) return testComplete(err)
-
-                                    answer.should.be.true
-                                    
-                                    testComplete()
-                                })
-                            })
-                        })
-                    })
-                })
-            })
+                testComplete();
+            });
         })
 
     })
@@ -603,79 +614,89 @@ module.exports = function () {
         })
         
         it('isRequester             - check to see if the given user is the requester in this friendship', function (testComplete) {
-            new Friendship(docDescriptor).save(function (err, pendingFriendship) {
-                if (err) return testComplete(err)
-                pendingFriendship.should.be.ok
-
-                pendingFriendship.isRequester(jeff._id, function (err, answer) {
-                    if (err) return testComplete(err)
-
-                    answer.should.be.true
-
-                    pendingFriendship.isRequester(zane._id, function (err, answer) {
+            async.series({
+                request: function (next) {
+                    new Friendship(docDescriptor).save(function (err, request) {
+                        if (err) return next(err)
+                        
+                        async.parallel({
+                            jeff: function (done) {
+                                request.isRequester(jeff._id, done);
+                            },
+                            zane: function (done) {
+                                request.isRequester(zane._id, done);
+                            }
+                        }, next);
+                    });
+                },
+                friendship: function (next) {
+                    Friendship.acceptRequest(jeff._id, zane._id, function (err, friendship) {
                         if (err) return testComplete(err)
 
-                        answer.should.be.false
+                        async.parallel({
+                            jeff: function (done) {
+                                friendship.isRequester(jeff._id, done);
+                            },
+                            zane: function (done) {
+                                friendship.isRequester(zane._id, done);
+                            }
+                        }, next);
+                    });
+                }
+            }, function (err, answers) {
+                if (err) return testComplete(err);
+                
+                answers.request.jeff.should.be.true;
+                answers.request.zane.should.be.false;
 
-                        Friendship.acceptRequest(jeff._id, zane._id, function (err, acceptedFriendship) {
-                            if (err) return testComplete(err)
-                            acceptedFriendship.should.be.ok
-                            
-                            pendingFriendship.isRequester(jeff._id, function (err, answer) {
-                                if (err) return testComplete(err)
+                answers.friendship.jeff.should.be.true;
+                answers.friendship.zane.should.be.false;
 
-                                answer.should.be.true
-
-                                pendingFriendship.isRequester(zane._id, function (err, answer) {
-                                    if (err) return testComplete(err)
-
-                                    answer.should.be.false
-
-                                    testComplete()
-                                })
-                            })
-                        })
-                    })
-                })
-            })
-        })
+                testComplete();
+            });
+        });
 
         it('isRequested             - check to see if the given user is the requested in this friendship', function (testComplete) {
-            new Friendship(docDescriptor).save(function (err, pendingFriendship) {
-                if (err) return testComplete(err)
-                pendingFriendship.should.be.ok
-
-                pendingFriendship.isRequested(jeff._id, function (err, answer) {
-                    if (err) return testComplete(err)
-
-                    answer.should.be.false
-
-                    pendingFriendship.isRequested(zane._id, function (err, answer) {
+            async.series({
+                request: function (next) {
+                    new Friendship(docDescriptor).save(function (err, request) {
+                        if (err) return next(err)
+                        
+                        async.parallel({
+                            jeff: function (done) {
+                                request.isRequested(jeff._id, done);
+                            },
+                            zane: function (done) {
+                                request.isRequested(zane._id, done);
+                            }
+                        }, next);
+                    });
+                },
+                friendship: function (next) {
+                    Friendship.acceptRequest(jeff._id, zane._id, function (err, friendship) {
                         if (err) return testComplete(err)
 
-                        answer.should.be.true
+                        async.parallel({
+                            jeff: function (done) {
+                                friendship.isRequested(jeff._id, done);
+                            },
+                            zane: function (done) {
+                                friendship.isRequested(zane._id, done);
+                            }
+                        }, next);
+                    });
+                }
+            }, function (err, answers) {
+                if (err) return testComplete(err);
+                
+                answers.request.jeff.should.be.false;
+                answers.request.zane.should.be.true;
 
-                        Friendship.acceptRequest(jeff._id, zane._id, function (err, acceptedFriendship) {
-                            if (err) return testComplete(err)
-                            acceptedFriendship.should.be.ok
-                            
-                            pendingFriendship.isRequested(jeff._id, function (err, answer) {
-                                if (err) return testComplete(err)
+                answers.friendship.jeff.should.be.false;
+                answers.friendship.zane.should.be.true;
 
-                                answer.should.be.false
-
-                                pendingFriendship.isRequested(zane._id, function (err, answer) {
-                                    if (err) return testComplete(err)
-
-                                    answer.should.be.true
-
-                                    testComplete()
-                                })
-                            })
-                        })
-                    })
-                })
-            })
-        })
-    })
-}
+                testComplete();
+            });
+        });
+    });
+};
