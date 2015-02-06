@@ -32,95 +32,1173 @@
 <a id="friends-of-friends" class="anchor" href="#friends-of-friends" aria-hidden="true"><span class="octicon octicon-link"></span></a>friends-of-friends</h1>
 
 <h2>
-<a id="friendship-mangement-system-for-mongoose" class="anchor" href="#friendship-mangement-system-for-mongoose" aria-hidden="true"><span class="octicon octicon-link"></span></a>Friendship Mangement System for Mongoose</h2>
+<a id="friendship-mangement-for-mongoose" class="anchor" href="#friendship-mangement-for-mongoose" aria-hidden="true"><span class="octicon octicon-link"></span></a>Friendship Mangement for Mongoose</h2>
 
-<p><a href="https://travis-ci.org/adminion/friends-of-friends"><img src="https://travis-ci.org/adminion/friends-of-friends.svg?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/r/adminion/friends-of-friends?branch=master"><img src="https://coveralls.io/repos/adminion/friends-of-friends/badge.svg?branch=master" alt="Coverage Status"></a></p>
+<p><a href="https://travis-ci.org/adminion/friends-of-friends"><img src="https://travis-ci.org/adminion/friends-of-friends.svg?branch=master" alt="Build Status"></a> 
+<a href="https://coveralls.io/r/adminion/friends-of-friends?branch=master"><img src="https://coveralls.io/repos/adminion/friends-of-friends/badge.svg?branch=master" alt="Coverage Status"></a></p>
 
-<p>This module is almost finished, but I'm still writing tests to make sure it does what I say it should do.  </p>
-
-<p>This module started as a core component of <a href="https://github.com/adminion/off-the-record">adminion/off-the-record</a> but quickly became big enough (and useful enough) to be its own module.  The goal is to create a unopinionated tool with a rich API that simplifies managing Friend-Relationships for any existing mongoose "user" schema.  </p>
+<h2>
+<a id="installlation" class="anchor" href="#installlation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installlation</h2>
 
 <pre><code>$ npm install friends-of-friends
 </code></pre>
 
+<p>If you want run the tests, you should install with the <code>--dev</code> flag</p>
+
+<pre><code>$ npm install --dev friends-of-friends
+</code></pre>
+
 <h2>
-<a id="example-use" class="anchor" href="#example-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>example use</h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> friendsOfFriends <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>friends-of-friends<span class="pl-pds">'</span></span>)(),
-    mongoose <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>mongoose<span class="pl-pds">'</span></span>);
+<h3>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h3>
 
+<div class="highlight highlight-javascript"><pre>
+<span class="pl-s">var</span> options <span class="pl-k">=</span> { 
+        <span class="pl-c">// define the name for your Users model. Default: 'Account'</span>
+        accountName<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>User<span class="pl-pds">'</span></span>,
+        <span class="pl-c">// define the name for the relationships model. Default: 'Friendship'</span>
+        friendshipName<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>Buddy<span class="pl-pds">'</span></span>
+    };
+
+<span class="pl-c">// create friendsOfFriends instance using the defined options</span>
+<span class="pl-s">var</span> friendsOfFriends <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>friends-of-friends<span class="pl-pds">'</span></span>)(options),
+</pre></div>
+
+<h3>
+<a id="plugin-friends-of-friends-to-user-schema" class="anchor" href="#plugin-friends-of-friends-to-user-schema" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plugin friends-of-friends to User Schema</h3>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> mongoose <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>mongoose<span class="pl-pds">'</span></span>);
+
+<span class="pl-c">// create you User schema</span>
 <span class="pl-s">var</span> UserSchema <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">mongoose.Schema</span>({
     username<span class="pl-k">:</span> { type<span class="pl-k">:</span> <span class="pl-s3">String</span>, unique<span class="pl-k">:</span> <span class="pl-c1">true</span> }
 });
 
-UserSchema.plugin(friendsOfFriends.plugin);
+<span class="pl-c">// apply friends-of-friends plugin to your User schema</span>
+UserSchema.plugin(friendsOfFriends.plugin, options);
 
-<span class="pl-k">new</span> <span class="pl-en">UserSchema</span>({ username<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>Jeff<span class="pl-pds">"</span></span> }).save(<span class="pl-st">function</span> (<span class="pl-vpf">err</span>, <span class="pl-vpf">jeff</span>) {
+<span class="pl-c">// compile your user model</span>
+<span class="pl-s">var</span> User <span class="pl-k">=</span> mongoose.model(options.accountName), UserSchema);
+
+<span class="pl-c">// create two users</span>
+<span class="pl-s">var</span> Jeff <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">User</span>({ username<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>Jeff<span class="pl-pds">"</span></span> }),
+    Zane <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">User</span>({ username<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>Zane<span class="pl-pds">"</span></span>}),
+    Sam <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">User</span>({ username<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>Sam<span class="pl-pds">"</span></span>});
+
+<span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">'</span>Jeff<span class="pl-pds">'</span></span>, Jeff);
+<span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">'</span>Zane<span class="pl-pds">'</span></span>, Zane);
+<span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">'</span>Zane<span class="pl-pds">'</span></span>, Zane);
+
+<span class="pl-c">// Jeff: { __v: 0, username: 'Jeff', _id: 54c6eb7cf2f9fe9672b90ba2 }</span>
+<span class="pl-c">// Zane: { __v: 0, username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3 }</span>
+<span class="pl-c">// Sam: { __v: 0, username: 'Sam', _id: 54c6eb7cf2f9fe9672b90ba4 }</span>
+
+<span class="pl-c">// connect to db</span>
+mongoose.connect(<span class="pl-s1"><span class="pl-pds">'</span>mongodb://localhost/test<span class="pl-pds">'</span></span>);</pre></div>
+
+<h3>
+<a id="use-plugged-in-functionality" class="anchor" href="#use-plugged-in-functionality" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use Plugged-in functionality</h3>
+
+<h4>
+<a id="send-friend-requests" class="anchor" href="#send-friend-requests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Send Friend Requests</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-c">// Jeff can ask Zane to be friends</span>
+Jeff.friendRequest(Zane._id, <span class="pl-st">function</span> (<span class="pl-vpf">err</span>, <span class="pl-vpf">request</span>) {
     <span class="pl-k">if</span> (err) <span class="pl-k">throw</span> err;
 
-    <span class="pl-en">console</span><span class="pl-s3">.log</span>(jeff);
-    <span class="pl-c">// {</span>
-    <span class="pl-c">//     "_id" : ObjectId("5462a8748337aa9e306b5094"),</span>
-    <span class="pl-c">//     "username" : "Jeff",</span>
-    <span class="pl-c">//     "__v" : 0</span>
-    <span class="pl-c">// }</span>
+    <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">'</span>request<span class="pl-pds">'</span></span>, request);
+    <span class="pl-c">// request { __v: 0,</span>
+    <span class="pl-c">//   requester: { username: 'Jeff', _id: 54c6eb7cf2f9fe9672b90ba2, __v: 0 },</span>
+    <span class="pl-c">//   requested: { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 },</span>
+    <span class="pl-c">//   _id: 54c6eb7cf2f9fe9672b90ba4,</span>
+    <span class="pl-c">//   dateSent: Mon Jan 26 2015 17:35:56 GMT-0800 (PST),</span>
+    <span class="pl-c">//   status: 'Pending' }</span>
+});</pre></div>
 
-    <span class="pl-k">new</span> <span class="pl-en">userSchema</span>({ username<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>Zane<span class="pl-pds">"</span></span>}).save(<span class="pl-st">function</span> (<span class="pl-vpf">err</span>, <span class="pl-vpf">zane</span>) {
-        <span class="pl-k">if</span> (err) <span class="pl-k">throw</span> err;
+<h4>
+<a id="accept-friend-requests" class="anchor" href="#accept-friend-requests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Accept Friend Requests</h4>
 
-        <span class="pl-en">console</span><span class="pl-s3">.log</span>(zane);
-        <span class="pl-c">// {</span>
-        <span class="pl-c">//     "_id" : ObjectId("548a9f64728158187fb53319"),</span>
-        <span class="pl-c">//     "username" : "Zane",</span>
-        <span class="pl-c">//     "__v" : 0</span>
-        <span class="pl-c">// }</span>
+<div class="highlight highlight-javascript"><pre>Zane.acceptRequest(users.jeff._id, <span class="pl-st">function</span> (<span class="pl-vpf">err</span>, <span class="pl-vpf">friendship</span>) {
+    <span class="pl-k">if</span> (err) <span class="pl-k">throw</span> err;
 
-        jeff.friendRequest(zane._id, <span class="pl-st">function</span> (<span class="pl-vpf">err</span>, <span class="pl-vpf">pendingFriendship</span>) {
-            <span class="pl-k">if</span> (err) <span class="pl-k">throw</span> err; 
+    <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">'</span>friendship<span class="pl-pds">'</span></span>, friendship);
+        <span class="pl-c">// friendship { __v: 0,</span>
+        <span class="pl-c">//   _id: 54c6eb7cf2f9fe9672b90ba4,</span>
+        <span class="pl-c">//   dateAccepted: Mon Jan 26 2015 17:35:56 GMT-0800 (PST),</span>
+        <span class="pl-c">//   requested: { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 },</span>
+        <span class="pl-c">//   requester: { username: 'Jeff', _id: 54c6eb7cf2f9fe9672b90ba2, __v: 0 },</span>
+        <span class="pl-c">//   dateSent: Mon Jan 26 2015 17:35:56 GMT-0800 (PST),</span>
+        <span class="pl-c">//   status: 'Accepted' }</span>
+});</pre></div>
 
-            <span class="pl-en">console</span><span class="pl-s3">.log</span>(pendingFriendship);
-            <span class="pl-c">// {</span>
-            <span class="pl-c">//     "requester" : ObjectId("5462a8748337aa9e306b5094"),</span>
-            <span class="pl-c">//     "requested" : ObjectId("548a9f64728158187fb53319"),</span>
-            <span class="pl-c">//     "_id" : ObjectId("548e86c96eb8f64370d90215"),</span>
-            <span class="pl-c">//     "dateSent" : ISODate("2014-12-04T05:21:29.908Z"),</span>
-            <span class="pl-c">//     "status" : "Pending",</span>
-            <span class="pl-c">//     "__v" : 0</span>
-            <span class="pl-c">// }</span>
+<h4>
+<a id="get-friends" class="anchor" href="#get-friends" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Friends</h4>
 
-            zane.acceptRequest(jeff._id, funtion (err, acceptedFriendship) {
-                <span class="pl-k">if</span> (err) <span class="pl-k">throw</span> err;
+<div class="highlight highlight-javascript"><pre>
+<span class="pl-c">// Zane is now Jeff's friend</span>
+Jeff.getFriends(<span class="pl-st">function</span> (<span class="pl-vpf">err</span>, <span class="pl-vpf">friends</span>) {
+    <span class="pl-k">if</span> (err) <span class="pl-k">throw</span> err;
 
-                <span class="pl-en">console</span><span class="pl-s3">.log</span>(acceptedFriendship);
-                <span class="pl-c">// {</span>
-                <span class="pl-c">//     "__v" : 0,</span>
-                <span class="pl-c">//     "_id" : ObjectId("548e86c96eb8f64370d90215"),</span>
-                <span class="pl-c">//     "dateAccepted" : ISODate("2014-12-04T05:26:09.583Z"),</span>
-                <span class="pl-c">//     "dateSent" : ISODate("2014-12-04T05:21:29.908Z"),</span>
-                <span class="pl-c">//     "requested" : ObjectId("548a9f64728158187fb53319"),</span>
-                <span class="pl-c">//     "requester" : ObjectId("5462a8748337aa9e306b5094"),</span>
-                <span class="pl-c">//     "status" : "Accepted"</span>
-                <span class="pl-c">// }</span>
-
-                zane.getFriends(<span class="pl-st">function</span> (<span class="pl-vpf">err</span>, <span class="pl-vpf">friends</span>) {
-                    <span class="pl-k">if</span> (err) <span class="pl-k">throw</span> err;
-
-                    <span class="pl-en">console</span><span class="pl-s3">.log</span>(friends); 
-                    <span class="pl-c">// [{</span>
-                    <span class="pl-c">//     "_id" : ObjectId("5462a8748337aa9e306b5094"),</span>
-                    <span class="pl-c">//     "username" : "Jeff",</span>
-                    <span class="pl-c">//     "__v" : 0</span>
-                    <span class="pl-c">// }]</span>
-                })
-            });
-        });
-    });
+    <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">'</span>friends<span class="pl-pds">'</span></span>, friends);
+    <span class="pl-c">// friends [ { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 } ]</span>
 });</pre></div>
 
 <h2>
 <a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h2>
 
-<p>See <a href="https://github.com/adminion/friends-of-friends/tree/master/docs/">docs/</a> for API Documentation in both rich HTML/JavaScript and Markdown.</p>
+<p>You may generate local docs (located in <code>docs/</code>) using <code>npm</code></p>
+
+<pre><code>$ npm run docs
+</code></pre>
+
+<p><strong>Classes</strong></p>
+
+<ul>
+<li>
+<a href="#FriendshipModel">class: FriendshipModel</a>
+
+<ul>
+<li><a href="#FriendshipModel.relationships">FriendshipModel.relationships</a></li>
+<li><a href="#FriendshipModel.getRequests">FriendshipModel.getRequests(accountId, done)</a></li>
+<li><a href="#FriendshipModel.getSentRequests">FriendshipModel.getSentRequests(accountId, done)</a></li>
+<li><a href="#FriendshipModel.getReceivedRequests">FriendshipModel.getReceivedRequests(accountId, done)</a></li>
+<li><a href="#FriendshipModel.acceptRequest">FriendshipModel.acceptRequest(requesterId, requestedId, done)</a></li>
+<li><a href="#FriendshipModel.denyRequest">FriendshipModel.denyRequest(requesterId, requestedId, done)</a></li>
+<li><a href="#FriendshipModel.getFriends">FriendshipModel.getFriends(accountId, done)</a></li>
+<li><a href="#FriendshipModel.getFriendsOfFriends">FriendshipModel.getFriendsOfFriends(accountId, done)</a></li>
+<li><a href="#FriendshipModel.areFriends">FriendshipModel.areFriends(accountId1, accountId2, done)</a></li>
+<li><a href="#FriendshipModel.areFriendsOfFriends">FriendshipModel.areFriendsOfFriends(accountId1, accountId2, done)</a></li>
+<li><a href="#FriendshipModel.getRelationship">FriendshipModel.getRelationship(accountId1, accountId2, done)</a></li>
+<li><a href="#FriendshipModel.isRequester">FriendshipModel.isRequester(friendshipId, accountId, done)</a></li>
+<li><a href="#FriendshipModel.isRequested">FriendshipModel.isRequested(friendshipId, accountId, done)</a></li>
+</ul>
+</li>
+<li>
+<a href="#FriendshipDocument">class: FriendshipDocument</a>
+
+<ul>
+<li><a href="#FriendshipDocument.isRequester">FriendshipDocument.isRequester(accountId, done)</a></li>
+<li><a href="#FriendshipDocument.isRequested">FriendshipDocument.isRequested(accountId, done)</a></li>
+</ul>
+</li>
+<li>
+<a href="#FriendsOfFriends">class: FriendsOfFriends</a>
+
+<ul>
+<li><a href="#new_FriendsOfFriends">new FriendsOfFriends(options)</a></li>
+<li><a href="#FriendsOfFriends.options">FriendsOfFriends.options</a></li>
+<li><a href="#FriendsOfFriends.friendship">FriendsOfFriends.friendship</a></li>
+<li><a href="#FriendsOfFriends.relationships">FriendsOfFriends.relationships</a></li>
+<li><a href="#FriendsOfFriends.plugin">FriendsOfFriends.plugin(schema, options)</a></li>
+<li><a href="#FriendsOfFriends#get">friendsOfFriends.get(property)</a></li>
+<li><a href="#FriendsOfFriends#set">friendsOfFriends.set(property, value)</a></li>
+</ul>
+</li>
+<li>
+<a href="#AccountModel">class: AccountModel</a>
+
+<ul>
+<li><a href="#AccountModel.getFriendship">AccountModel.getFriendship(accountId1, accountId2, done)</a></li>
+<li><a href="#AccountModel.friendRequest">AccountModel.friendRequest(requesterId, requested_Id, done)</a></li>
+<li><a href="#AccountModel.getRequests">AccountModel.getRequests(accountId, done)</a></li>
+<li><a href="#AccountModel.getSentRequests">AccountModel.getSentRequests(accountId, done)</a></li>
+<li><a href="#AccountModel.getReceivedRequests">AccountModel.getReceivedRequests(accountId, done)</a></li>
+<li><a href="#AccountModel.acceptRequest">AccountModel.acceptRequest(requesterId, requestedId, done)</a></li>
+<li><a href="#AccountModel.denyRequest">AccountModel.denyRequest(requesterId, requestedId, done)</a></li>
+<li><a href="#AccountModel.endFriendship">AccountModel.endFriendship(accountId1, accountId2, done)</a></li>
+<li><a href="#AccountModel.getFriends">AccountModel.getFriends(accountId, done)</a></li>
+<li><a href="#AccountModel.getFriendsOfFriends">AccountModel.getFriendsOfFriends(accountId, done)</a></li>
+<li><a href="#AccountModel.areFriends">AccountModel.areFriends(accountId1, accountId2, done)</a></li>
+<li><a href="#AccountModel.areFriendsOfFriends">AccountModel.areFriendsOfFriends(accountId1, accountId2, done)</a></li>
+<li><a href="#AccountModel.getFriendship">AccountModel.getFriendship(accountId1, accountId2, done)</a></li>
+<li><a href="#AccountModel.getRelationship">AccountModel.getRelationship(accountId1, accountId2, done)</a></li>
+<li><a href="#AccountModel.relationships">const: AccountModel.relationships</a></li>
+</ul>
+</li>
+<li>
+<a href="#AccountDocument">class: AccountDocument</a>
+
+<ul>
+<li><a href="#new_AccountDocument">new AccountDocument()</a></li>
+<li><a href="#AccountDocument.friendRequest">AccountDocument.friendRequest(requestedId, done)</a></li>
+<li><a href="#AccountDocument.getRequests">AccountDocument.getRequests(done)</a></li>
+<li><a href="#AccountDocument.getSentRequests">AccountDocument.getSentRequests(done)</a></li>
+<li><a href="#AccountDocument.getReceivedRequests">AccountDocument.getReceivedRequests(done)</a></li>
+<li><a href="#AccountDocument.acceptRequest">AccountDocument.acceptRequest(requesterId, done)</a></li>
+<li><a href="#AccountDocument.denyRequest">AccountDocument.denyRequest(requesterId, done)</a></li>
+<li><a href="#AccountDocument.getFriends">AccountDocument.getFriends(done)</a></li>
+<li><a href="#AccountDocument.getFriendsOfFriends">AccountDocument.getFriendsOfFriends(done)</a></li>
+<li><a href="#AccountDocument.getNonFriends">AccountDocument.getNonFriends(done)</a></li>
+<li><a href="#AccountDocument.isFriend">AccountDocument.isFriend(accountId, done)</a></li>
+<li><a href="#AccountDocument.isFriendOfFriends">AccountDocument.isFriendOfFriends(accountId, done)</a></li>
+<li><a href="#AccountDocument.getFriendship">AccountDocument.getFriendship(accountId, done)</a></li>
+<li><a href="#AccountDocument.getRelationship">AccountDocument.getRelationship(accountId, done)</a></li>
+</ul>
+</li>
+</ul>
+
+<p><a name="FriendshipModel"></a></p>
+
+<h1>
+<a id="class-friendshipmodel" class="anchor" href="#class-friendshipmodel" aria-hidden="true"><span class="octicon octicon-link"></span></a>class: FriendshipModel</h1>
+
+<p><strong>Members</strong></p>
+
+<ul>
+<li>
+<a href="#FriendshipModel">class: FriendshipModel</a>
+
+<ul>
+<li><a href="#FriendshipModel.relationships">FriendshipModel.relationships</a></li>
+<li><a href="#FriendshipModel.getRequests">FriendshipModel.getRequests(accountId, done)</a></li>
+<li><a href="#FriendshipModel.getSentRequests">FriendshipModel.getSentRequests(accountId, done)</a></li>
+<li><a href="#FriendshipModel.getReceivedRequests">FriendshipModel.getReceivedRequests(accountId, done)</a></li>
+<li><a href="#FriendshipModel.acceptRequest">FriendshipModel.acceptRequest(requesterId, requestedId, done)</a></li>
+<li><a href="#FriendshipModel.denyRequest">FriendshipModel.denyRequest(requesterId, requestedId, done)</a></li>
+<li><a href="#FriendshipModel.getFriends">FriendshipModel.getFriends(accountId, done)</a></li>
+<li><a href="#FriendshipModel.getFriendsOfFriends">FriendshipModel.getFriendsOfFriends(accountId, done)</a></li>
+<li><a href="#FriendshipModel.areFriends">FriendshipModel.areFriends(accountId1, accountId2, done)</a></li>
+<li><a href="#FriendshipModel.areFriendsOfFriends">FriendshipModel.areFriendsOfFriends(accountId1, accountId2, done)</a></li>
+<li><a href="#FriendshipModel.getRelationship">FriendshipModel.getRelationship(accountId1, accountId2, done)</a></li>
+<li><a href="#FriendshipModel.isRequester">FriendshipModel.isRequester(friendshipId, accountId, done)</a></li>
+<li><a href="#FriendshipModel.isRequested">FriendshipModel.isRequested(friendshipId, accountId, done)</a></li>
+</ul>
+</li>
+</ul>
+
+<p><a name="FriendshipModel.relationships"></a></p>
+
+<h2>
+<a id="friendshipmodelrelationships" class="anchor" href="#friendshipmodelrelationships" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipModel.relationships</h2>
+
+<p>default relationship constants</p>
+
+<p><strong>Type</strong>: <code>Object</code><br>
+<a name="FriendshipModel.getRequests"></a></p>
+
+<h2>
+<a id="friendshipmodelgetrequestsaccountid-done" class="anchor" href="#friendshipmodelgetrequestsaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipModel.getRequests(accountId, done)</h2>
+
+<p>get all friend requests involving a given user</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the user<br>
+</li>
+<li>done <code>function</code> - required callback, passed requests retrieved<br>
+</li>
+</ul>
+
+<p><a name="FriendshipModel.getSentRequests"></a></p>
+
+<h2>
+<a id="friendshipmodelgetsentrequestsaccountid-done" class="anchor" href="#friendshipmodelgetsentrequestsaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipModel.getSentRequests(accountId, done)</h2>
+
+<p>get requests the given user has sent</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the user<br>
+</li>
+<li>done <code>function</code> - required callback, passed sent requests retrieved<br>
+</li>
+</ul>
+
+<p><a name="FriendshipModel.getReceivedRequests"></a></p>
+
+<h2>
+<a id="friendshipmodelgetreceivedrequestsaccountid-done" class="anchor" href="#friendshipmodelgetreceivedrequestsaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipModel.getReceivedRequests(accountId, done)</h2>
+
+<p>get requests received by the given user</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the user<br>
+</li>
+<li>done <code>function</code> - required callback, passed received requests retrieved<br>
+</li>
+</ul>
+
+<p><a name="FriendshipModel.acceptRequest"></a></p>
+
+<h2>
+<a id="friendshipmodelacceptrequestrequesterid-requestedid-done" class="anchor" href="#friendshipmodelacceptrequestrequesterid-requestedid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipModel.acceptRequest(requesterId, requestedId, done)</h2>
+
+<p>accept a friend request</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>requesterId <code>ObjectId</code> - the _id of the requester of friendship<br>
+</li>
+<li>requestedId <code>ObjectId</code> - the _id of the user whose friendship was requested<br>
+</li>
+<li>done <code>function</code> - required callback, passed the populated friendship accepted<br>
+</li>
+</ul>
+
+<p><a name="FriendshipModel.denyRequest"></a></p>
+
+<h2>
+<a id="friendshipmodeldenyrequestrequesterid-requestedid-done" class="anchor" href="#friendshipmodeldenyrequestrequesterid-requestedid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipModel.denyRequest(requesterId, requestedId, done)</h2>
+
+<p>deny a friend request</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>requesterId <code>ObjectId</code> - the _id of the requester of friendship<br>
+</li>
+<li>requestedId <code>ObjectId</code> - the _id of the user whose friendship was requested<br>
+</li>
+<li>done <code>function</code> - required callback, passed the denied friendship<br>
+</li>
+</ul>
+
+<p><a name="FriendshipModel.getFriends"></a></p>
+
+<h2>
+<a id="friendshipmodelgetfriendsaccountid-done" class="anchor" href="#friendshipmodelgetfriendsaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipModel.getFriends(accountId, done)</h2>
+
+<p>get a list ids of friends of an account</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the account<br>
+</li>
+<li>done <code>function</code> - required callback, passed an array of friendIds<br>
+</li>
+</ul>
+
+<p><a name="FriendshipModel.getFriendsOfFriends"></a></p>
+
+<h2>
+<a id="friendshipmodelgetfriendsoffriendsaccountid-done" class="anchor" href="#friendshipmodelgetfriendsoffriendsaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipModel.getFriendsOfFriends(accountId, done)</h2>
+
+<p>get friendIds of this account's friends</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the account<br>
+</li>
+<li>done <code>function</code> - required callback, passed an array of friendsOfFriends<br>
+</li>
+</ul>
+
+<p><a name="FriendshipModel.areFriends"></a></p>
+
+<h2>
+<a id="friendshipmodelarefriendsaccountid1-accountid2-done" class="anchor" href="#friendshipmodelarefriendsaccountid1-accountid2-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipModel.areFriends(accountId1, accountId2, done)</h2>
+
+<p>determine if accountId1 and accountId2 are friends</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId1 <code>ObjectId</code> - the _id of account1<br>
+</li>
+<li>accountId2 <code>ObjectId</code> - the _id of account2<br>
+</li>
+<li>done <code>function</code> - required callback, passed a boolean determination<br>
+</li>
+</ul>
+
+<p><a name="FriendshipModel.areFriendsOfFriends"></a></p>
+
+<h2>
+<a id="friendshipmodelarefriendsoffriendsaccountid1-accountid2-done" class="anchor" href="#friendshipmodelarefriendsoffriendsaccountid1-accountid2-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipModel.areFriendsOfFriends(accountId1, accountId2, done)</h2>
+
+<p>determine if accountId1 and accountId2 have any common friends</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId1 <code>ObjectId</code> - the _id of account1<br>
+</li>
+<li>accountId2 <code>ObjectId</code> - the _id of account2<br>
+</li>
+<li>done <code>function</code> - required callback, passed a boolean determination<br>
+</li>
+</ul>
+
+<p><a name="FriendshipModel.getRelationship"></a></p>
+
+<h2>
+<a id="friendshipmodelgetrelationshipaccountid1-accountid2-done" class="anchor" href="#friendshipmodelgetrelationshipaccountid1-accountid2-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipModel.getRelationship(accountId1, accountId2, done)</h2>
+
+<p>get the numeric relationship of two accounts</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId1 <code>ObjectId</code> - the _id of account 1<br>
+</li>
+<li>accountId2 <code>ObjectId</code> - the _id of account 2<br>
+</li>
+<li>done <code>function</code> - required callback<br>
+</li>
+</ul>
+
+<p><a name="FriendshipModel.isRequester"></a></p>
+
+<h2>
+<a id="friendshipmodelisrequesterfriendshipid-accountid-done" class="anchor" href="#friendshipmodelisrequesterfriendshipid-accountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipModel.isRequester(friendshipId, accountId, done)</h2>
+
+<p>check to see if the given user is the requester in a given friendship</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>friendshipId <code>ObjectId</code> - the _id of the friendship document<br>
+</li>
+<li>accountId <code>ObjectId</code> - the _id of the account<br>
+</li>
+<li>done <code>function</code> - required callback<br>
+</li>
+</ul>
+
+<p><a name="FriendshipModel.isRequested"></a></p>
+
+<h2>
+<a id="friendshipmodelisrequestedfriendshipid-accountid-done" class="anchor" href="#friendshipmodelisrequestedfriendshipid-accountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipModel.isRequested(friendshipId, accountId, done)</h2>
+
+<p>check to see if the given user is the requested in a given friendship</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>friendshipId <code>ObjectId</code> - the _id of the friendship<br>
+</li>
+<li>accountId <code>ObjectId</code> - the _id of the account<br>
+</li>
+<li>done <code>function</code> - required callback<br>
+</li>
+</ul>
+
+<p><a name="FriendshipDocument"></a></p>
+
+<h1>
+<a id="class-friendshipdocument" class="anchor" href="#class-friendshipdocument" aria-hidden="true"><span class="octicon octicon-link"></span></a>class: FriendshipDocument</h1>
+
+<p><strong>Members</strong></p>
+
+<ul>
+<li>
+<a href="#FriendshipDocument">class: FriendshipDocument</a>
+
+<ul>
+<li><a href="#FriendshipDocument.isRequester">FriendshipDocument.isRequester(accountId, done)</a></li>
+<li><a href="#FriendshipDocument.isRequested">FriendshipDocument.isRequested(accountId, done)</a></li>
+</ul>
+</li>
+</ul>
+
+<p><a name="FriendshipDocument.isRequester"></a></p>
+
+<h2>
+<a id="friendshipdocumentisrequesteraccountid-done" class="anchor" href="#friendshipdocumentisrequesteraccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipDocument.isRequester(accountId, done)</h2>
+
+<p>check to see if the given user is the requester in this relationship</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the account<br>
+</li>
+<li>done <code>function</code> - required callback<br>
+</li>
+</ul>
+
+<p><a name="FriendshipDocument.isRequested"></a></p>
+
+<h2>
+<a id="friendshipdocumentisrequestedaccountid-done" class="anchor" href="#friendshipdocumentisrequestedaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendshipDocument.isRequested(accountId, done)</h2>
+
+<p>check to see if the given user is the requested in this relationship</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the account<br>
+</li>
+<li>done <code>function</code> - required callback<br>
+</li>
+</ul>
+
+<p><a name="FriendsOfFriends"></a></p>
+
+<h1>
+<a id="class-friendsoffriends" class="anchor" href="#class-friendsoffriends" aria-hidden="true"><span class="octicon octicon-link"></span></a>class: FriendsOfFriends</h1>
+
+<p><strong>Members</strong></p>
+
+<ul>
+<li>
+<a href="#FriendsOfFriends">class: FriendsOfFriends</a>
+
+<ul>
+<li><a href="#new_FriendsOfFriends">new FriendsOfFriends(options)</a></li>
+<li><a href="#FriendsOfFriends.options">FriendsOfFriends.options</a></li>
+<li><a href="#FriendsOfFriends.friendship">FriendsOfFriends.friendship</a></li>
+<li><a href="#FriendsOfFriends.relationships">FriendsOfFriends.relationships</a></li>
+<li><a href="#FriendsOfFriends.plugin">FriendsOfFriends.plugin(schema, options)</a></li>
+<li><a href="#FriendsOfFriends#get">friendsOfFriends.get(property)</a></li>
+<li><a href="#FriendsOfFriends#set">friendsOfFriends.set(property, value)</a></li>
+</ul>
+</li>
+</ul>
+
+<p><a name="new_FriendsOfFriends"></a></p>
+
+<h2>
+<a id="new-friendsoffriendsoptions" class="anchor" href="#new-friendsoffriendsoptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>new FriendsOfFriends(options)</h2>
+
+<p>Creates a new FriendsOfFriends Object with or without new</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> options <span class="pl-k">=</span> { 
+    accountName<span class="pl-k">:</span>             <span class="pl-s1"><span class="pl-pds">'</span>Player<span class="pl-pds">'</span></span>,
+    accountCollection<span class="pl-k">:</span>       <span class="pl-s1"><span class="pl-pds">'</span>foo_userAccounts<span class="pl-pds">'</span></span>,
+    friendshipName<span class="pl-k">:</span>          <span class="pl-s1"><span class="pl-pds">'</span>Friend_Relationships<span class="pl-pds">'</span></span>, 
+    friendshipCollection<span class="pl-k">:</span>    <span class="pl-s1"><span class="pl-pds">'</span>bar_userRelationships<span class="pl-pds">'</span></span>,
+};
+
+<span class="pl-s">var</span> FriendsOfFriends <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>friends-of-friends<span class="pl-pds">'</span></span>)();
+<span class="pl-c">// or</span>
+<span class="pl-s">var</span> FriendsOfFriends <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>friends-of-friends<span class="pl-pds">'</span></span>);
+<span class="pl-s">var</span> fof <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">FriendsOfFriends</span>(options);</pre></div>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>options <code>Object</code> - optional object containing configurable options<br>
+</li>
+</ul>
+
+<p><a name="FriendsOfFriends.options"></a></p>
+
+<h2>
+<a id="friendsoffriendsoptions" class="anchor" href="#friendsoffriendsoptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendsOfFriends.options</h2>
+
+<p>The options defined for the module instance</p>
+
+<p><strong>Properties</strong></p>
+
+<ul>
+<li>accountName <code>String</code> - The name to call the model to be compiled from the Account Schema. Default: <code>'Account'</code><br>
+</li>
+<li>FriendshipName <code>String</code> - The name to call the model to be compiled from the Friendship Schema. Default: <code>'Friendship'</code><br>
+</li>
+</ul>
+
+<p><strong>Type</strong>: <code>Object</code><br>
+<a name="FriendsOfFriends.friendship"></a></p>
+
+<h2>
+<a id="friendsoffriendsfriendship" class="anchor" href="#friendsoffriendsfriendship" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendsOfFriends.friendship</h2>
+
+<p>The Friendship model</p>
+
+<p><strong>Type</strong>: <code>Model</code><br>
+<a name="FriendsOfFriends.relationships"></a></p>
+
+<h2>
+<a id="friendsoffriendsrelationships" class="anchor" href="#friendsoffriendsrelationships" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendsOfFriends.relationships</h2>
+
+<p>Relationship constants</p>
+
+<p><strong>Properties</strong></p>
+
+<ul>
+<li>0 <code>String</code> - Value: <code>'NOT_FRIENDS'</code><br>
+</li>
+<li>1 <code>String</code> - Value: <code>'FRIENDS_OF_FRIENDS'</code><br>
+</li>
+<li>2 <code>String</code> - Value: <code>'FRIENDS'</code><br>
+</li>
+<li>NOT_FRIENDS <code>Number</code> - Value: <code>0</code><br>
+</li>
+<li>FRIENDS_OF_FRIENDS <code>Number</code> - Value: <code>1</code><br>
+</li>
+<li>FRIENDS <code>Number</code> - Value: <code>2</code><br>
+</li>
+</ul>
+
+<p><strong>Type</strong>: <code>Object</code><br>
+<a name="FriendsOfFriends.plugin"></a></p>
+
+<h2>
+<a id="friendsoffriendspluginschema-options" class="anchor" href="#friendsoffriendspluginschema-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>FriendsOfFriends.plugin(schema, options)</h2>
+
+<p>Adds friends-of-friends functionality to an existing Schema</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>schema <code>Schema</code> - The mongoose Schema that gets plugged<br>
+</li>
+<li>options <code>Object</code> - Options passed to the plugin<br>
+</li>
+</ul>
+
+<p><a name="FriendsOfFriends#get"></a></p>
+
+<h2>
+<a id="friendsoffriendsgetproperty" class="anchor" href="#friendsoffriendsgetproperty" aria-hidden="true"><span class="octicon octicon-link"></span></a>friendsOfFriends.get(property)</h2>
+
+<p>Return the value of a property of <code>this.options</code></p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>property <code>String</code> - The property to get<br>
+</li>
+</ul>
+
+<p><strong>Returns</strong>: <code>Mixed</code><br>
+<a name="FriendsOfFriends#set"></a></p>
+
+<h2>
+<a id="friendsoffriendssetproperty-value" class="anchor" href="#friendsoffriendssetproperty-value" aria-hidden="true"><span class="octicon octicon-link"></span></a>friendsOfFriends.set(property, value)</h2>
+
+<p>Set the value of a property of <code>this.options</code></p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>property <code>String</code> - The name of the Property<br>
+</li>
+<li>value <code>Mixed</code> - The new value of the property<br>
+</li>
+</ul>
+
+<p><strong>Returns</strong>: <code>Mixed</code><br>
+<a name="AccountModel"></a></p>
+
+<h1>
+<a id="class-accountmodel" class="anchor" href="#class-accountmodel" aria-hidden="true"><span class="octicon octicon-link"></span></a>class: AccountModel</h1>
+
+<p><strong>Members</strong></p>
+
+<ul>
+<li>
+<a href="#AccountModel">class: AccountModel</a>
+
+<ul>
+<li><a href="#AccountModel.getFriendship">AccountModel.getFriendship(accountId1, accountId2, done)</a></li>
+<li><a href="#AccountModel.friendRequest">AccountModel.friendRequest(requesterId, requested_Id, done)</a></li>
+<li><a href="#AccountModel.getRequests">AccountModel.getRequests(accountId, done)</a></li>
+<li><a href="#AccountModel.getSentRequests">AccountModel.getSentRequests(accountId, done)</a></li>
+<li><a href="#AccountModel.getReceivedRequests">AccountModel.getReceivedRequests(accountId, done)</a></li>
+<li><a href="#AccountModel.acceptRequest">AccountModel.acceptRequest(requesterId, requestedId, done)</a></li>
+<li><a href="#AccountModel.denyRequest">AccountModel.denyRequest(requesterId, requestedId, done)</a></li>
+<li><a href="#AccountModel.endFriendship">AccountModel.endFriendship(accountId1, accountId2, done)</a></li>
+<li><a href="#AccountModel.getFriends">AccountModel.getFriends(accountId, done)</a></li>
+<li><a href="#AccountModel.getFriendsOfFriends">AccountModel.getFriendsOfFriends(accountId, done)</a></li>
+<li><a href="#AccountModel.areFriends">AccountModel.areFriends(accountId1, accountId2, done)</a></li>
+<li><a href="#AccountModel.areFriendsOfFriends">AccountModel.areFriendsOfFriends(accountId1, accountId2, done)</a></li>
+<li><a href="#AccountModel.getFriendship">AccountModel.getFriendship(accountId1, accountId2, done)</a></li>
+<li><a href="#AccountModel.getRelationship">AccountModel.getRelationship(accountId1, accountId2, done)</a></li>
+<li><a href="#AccountModel.relationships">const: AccountModel.relationships</a></li>
+</ul>
+</li>
+</ul>
+
+<p><a name="AccountModel.getFriendship"></a></p>
+
+<h2>
+<a id="accountmodelgetfriendshipaccountid1-accountid2-done" class="anchor" href="#accountmodelgetfriendshipaccountid1-accountid2-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.getFriendship(accountId1, accountId2, done)</h2>
+
+<p>get the friendship document of two accounts</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId1 <code>ObjectId</code> - the _id of account1<br>
+</li>
+<li>accountId2 <code>ObjectId</code> - the _id of account2<br>
+</li>
+<li>done <code>function</code> - required callback, passed err and a Friendship document, if found<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.friendRequest"></a></p>
+
+<h2>
+<a id="accountmodelfriendrequestrequesterid-requested_id-done" class="anchor" href="#accountmodelfriendrequestrequesterid-requested_id-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.friendRequest(requesterId, requested_Id, done)</h2>
+
+<p>sends a friend request to a another user</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>requesterId <code>ObjectId</code> - the ObjectId of the account sending the request<br>
+</li>
+<li>requested_Id <code>ObjectId</code> - the ObjectId of the account to whom the request will be sent<br>
+</li>
+<li>done <code>function</code> - required callback, passed the populated request<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.getRequests"></a></p>
+
+<h2>
+<a id="accountmodelgetrequestsaccountid-done" class="anchor" href="#accountmodelgetrequestsaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.getRequests(accountId, done)</h2>
+
+<p>get all friend requests for a given user</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the user<br>
+</li>
+<li>done <code>function</code> - required callback, passed requests retrieved<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.getSentRequests"></a></p>
+
+<h2>
+<a id="accountmodelgetsentrequestsaccountid-done" class="anchor" href="#accountmodelgetsentrequestsaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.getSentRequests(accountId, done)</h2>
+
+<p>get requests the given user has sent</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the user<br>
+</li>
+<li>done <code>function</code> - required callback, passed sent requests retrieved<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.getReceivedRequests"></a></p>
+
+<h2>
+<a id="accountmodelgetreceivedrequestsaccountid-done" class="anchor" href="#accountmodelgetreceivedrequestsaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.getReceivedRequests(accountId, done)</h2>
+
+<p>get requests received by the given user</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the user<br>
+</li>
+<li>done <code>function</code> - required callback, passed received requests retrieved<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.acceptRequest"></a></p>
+
+<h2>
+<a id="accountmodelacceptrequestrequesterid-requestedid-done" class="anchor" href="#accountmodelacceptrequestrequesterid-requestedid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.acceptRequest(requesterId, requestedId, done)</h2>
+
+<p>accept a friend request</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>requesterId <code>ObjectId</code> - the _id of the requester of friendship<br>
+</li>
+<li>requestedId <code>ObjectId</code> - the _id of the user whose friendship was requested<br>
+</li>
+<li>done <code>function</code> - required callback, passed the populated friendship accepted<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.denyRequest"></a></p>
+
+<h2>
+<a id="accountmodeldenyrequestrequesterid-requestedid-done" class="anchor" href="#accountmodeldenyrequestrequesterid-requestedid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.denyRequest(requesterId, requestedId, done)</h2>
+
+<p>deny a friend request</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>requesterId <code>ObjectId</code> - the _id of the requester of friendship<br>
+</li>
+<li>requestedId <code>ObjectId</code> - the _id of the user whose friendship was requested<br>
+</li>
+<li>done <code>function</code> - required callback, passed the denied friendship<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.endFriendship"></a></p>
+
+<h2>
+<a id="accountmodelendfriendshipaccountid1-accountid2-done" class="anchor" href="#accountmodelendfriendshipaccountid1-accountid2-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.endFriendship(accountId1, accountId2, done)</h2>
+
+<p>end a friendship between two accounts</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId1 <code>ObjectId</code> - the _id of account 1<br>
+</li>
+<li>accountId2 <code>ObjectId</code> - the _id of account 2<br>
+</li>
+<li>done <code>function</code> - required callback<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.getFriends"></a></p>
+
+<h2>
+<a id="accountmodelgetfriendsaccountid-done" class="anchor" href="#accountmodelgetfriendsaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.getFriends(accountId, done)</h2>
+
+<p>get all friends of an account</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the account<br>
+</li>
+<li>done <code>function</code> - required callback, passed an array of friends<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.getFriendsOfFriends"></a></p>
+
+<h2>
+<a id="accountmodelgetfriendsoffriendsaccountid-done" class="anchor" href="#accountmodelgetfriendsoffriendsaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.getFriendsOfFriends(accountId, done)</h2>
+
+<p>get friends of this account's friends</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the account<br>
+</li>
+<li>done <code>function</code> - required callback, passed an array of friendsOfFriends<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.areFriends"></a></p>
+
+<h2>
+<a id="accountmodelarefriendsaccountid1-accountid2-done" class="anchor" href="#accountmodelarefriendsaccountid1-accountid2-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.areFriends(accountId1, accountId2, done)</h2>
+
+<p>determine if accountId1 and accountId2 are friends</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId1 <code>ObjectId</code> - the _id of account1<br>
+</li>
+<li>accountId2 <code>ObjectId</code> - the _id of account2<br>
+</li>
+<li>done <code>function</code> - required callback, passed a boolean determination<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.areFriendsOfFriends"></a></p>
+
+<h2>
+<a id="accountmodelarefriendsoffriendsaccountid1-accountid2-done" class="anchor" href="#accountmodelarefriendsoffriendsaccountid1-accountid2-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.areFriendsOfFriends(accountId1, accountId2, done)</h2>
+
+<p>determine if accountId1 and accountId2 have any common friends</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId1 <code>ObjectId</code> - the _id of account1<br>
+</li>
+<li>accountId2 <code>ObjectId</code> - the _id of account2<br>
+</li>
+<li>done <code>function</code> - required callback, passed a boolean determination<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.getFriendship"></a></p>
+
+<h2>
+<a id="accountmodelgetfriendshipaccountid1-accountid2-done-1" class="anchor" href="#accountmodelgetfriendshipaccountid1-accountid2-done-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.getFriendship(accountId1, accountId2, done)</h2>
+
+<p>get the friendship document itself</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId1 <code>ObjectId</code> - the _id of account1<br>
+</li>
+<li>accountId2 <code>ObjectId</code> - the _id of account2<br>
+</li>
+<li>done <code>function</code> - required callback, passed err and a Friendship document, if found<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.getRelationship"></a></p>
+
+<h2>
+<a id="accountmodelgetrelationshipaccountid1-accountid2-done" class="anchor" href="#accountmodelgetrelationshipaccountid1-accountid2-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountModel.getRelationship(accountId1, accountId2, done)</h2>
+
+<p>get the numeric relationship between two users</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId1 <code>ObjectId</code> - the _id of account1<br>
+</li>
+<li>accountId2 <code>ObjectId</code> - the _id of account2<br>
+</li>
+<li>done <code>function</code> - required callback, passed err and a Relationship value<br>
+</li>
+</ul>
+
+<p><a name="AccountModel.relationships"></a></p>
+
+<h2>
+<a id="const-accountmodelrelationships" class="anchor" href="#const-accountmodelrelationships" aria-hidden="true"><span class="octicon octicon-link"></span></a>const: AccountModel.relationships</h2>
+
+<p>default relationship constants</p>
+
+<p><strong>Type</strong>: <code>Object</code><br>
+<a name="AccountDocument"></a></p>
+
+<h1>
+<a id="class-accountdocument" class="anchor" href="#class-accountdocument" aria-hidden="true"><span class="octicon octicon-link"></span></a>class: AccountDocument</h1>
+
+<p><strong>Members</strong></p>
+
+<ul>
+<li>
+<a href="#AccountDocument">class: AccountDocument</a>
+
+<ul>
+<li><a href="#new_AccountDocument">new AccountDocument()</a></li>
+<li><a href="#AccountDocument.friendRequest">AccountDocument.friendRequest(requestedId, done)</a></li>
+<li><a href="#AccountDocument.getRequests">AccountDocument.getRequests(done)</a></li>
+<li><a href="#AccountDocument.getSentRequests">AccountDocument.getSentRequests(done)</a></li>
+<li><a href="#AccountDocument.getReceivedRequests">AccountDocument.getReceivedRequests(done)</a></li>
+<li><a href="#AccountDocument.acceptRequest">AccountDocument.acceptRequest(requesterId, done)</a></li>
+<li><a href="#AccountDocument.denyRequest">AccountDocument.denyRequest(requesterId, done)</a></li>
+<li><a href="#AccountDocument.getFriends">AccountDocument.getFriends(done)</a></li>
+<li><a href="#AccountDocument.getFriendsOfFriends">AccountDocument.getFriendsOfFriends(done)</a></li>
+<li><a href="#AccountDocument.getNonFriends">AccountDocument.getNonFriends(done)</a></li>
+<li><a href="#AccountDocument.isFriend">AccountDocument.isFriend(accountId, done)</a></li>
+<li><a href="#AccountDocument.isFriendOfFriends">AccountDocument.isFriendOfFriends(accountId, done)</a></li>
+<li><a href="#AccountDocument.getFriendship">AccountDocument.getFriendship(accountId, done)</a></li>
+<li><a href="#AccountDocument.getRelationship">AccountDocument.getRelationship(accountId, done)</a></li>
+</ul>
+</li>
+</ul>
+
+<p><a name="new_AccountDocument"></a></p>
+
+<h2>
+<a id="new-accountdocument" class="anchor" href="#new-accountdocument" aria-hidden="true"><span class="octicon octicon-link"></span></a>new AccountDocument()</h2>
+
+<p>Document-accessible properties and methods</p>
+
+<p>these instance methods are aliases of the Model statics as they apply to each document</p>
+
+<p>example:</p>
+
+<div class="highlight highlight-javascript"><pre> <span class="pl-s">var</span> jeff <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">User</span>({ username<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>Jeff<span class="pl-pds">"</span></span> });
+ user.sendRequest(requestedEmail, <span class="pl-st">function</span> (<span class="pl-vpf">err</span>, <span class="pl-vpf">request</span>) {...})</pre></div>
+
+<p><a name="AccountDocument.friendRequest"></a></p>
+
+<h2>
+<a id="accountdocumentfriendrequestrequestedid-done" class="anchor" href="#accountdocumentfriendrequestrequestedid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountDocument.friendRequest(requestedId, done)</h2>
+
+<p>send a request to another account</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>requestedId <code>ObjectId</code> - the _id of the account to whom the request will be sent<br>
+</li>
+<li>done <code>function</code> - required callback, passed the populated request sent<br>
+</li>
+</ul>
+
+<p><a name="AccountDocument.getRequests"></a></p>
+
+<h2>
+<a id="accountdocumentgetrequestsdone" class="anchor" href="#accountdocumentgetrequestsdone" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountDocument.getRequests(done)</h2>
+
+<p>get friend requests</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>done <code>function</code> - required callback, passed the populated requests retrieved<br>
+</li>
+</ul>
+
+<p><a name="AccountDocument.getSentRequests"></a></p>
+
+<h2>
+<a id="accountdocumentgetsentrequestsdone" class="anchor" href="#accountdocumentgetsentrequestsdone" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountDocument.getSentRequests(done)</h2>
+
+<p>get friend requests the user has sent</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>done <code>function</code> - required callback, passed the populated requests retrieved<br>
+</li>
+</ul>
+
+<p><a name="AccountDocument.getReceivedRequests"></a></p>
+
+<h2>
+<a id="accountdocumentgetreceivedrequestsdone" class="anchor" href="#accountdocumentgetreceivedrequestsdone" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountDocument.getReceivedRequests(done)</h2>
+
+<p>get friend requests the user has received</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>done <code>function</code> - required callback, passed the populated requests retrieved<br>
+</li>
+</ul>
+
+<p><a name="AccountDocument.acceptRequest"></a></p>
+
+<h2>
+<a id="accountdocumentacceptrequestrequesterid-done" class="anchor" href="#accountdocumentacceptrequestrequesterid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountDocument.acceptRequest(requesterId, done)</h2>
+
+<p>accept a friend request received from the specified user</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>requesterId <code>ObjectId</code> - the _id of the account from whom the request was received<br>
+</li>
+<li>done <code>function</code> - required callback, passed the populated request that was accepted<br>
+</li>
+</ul>
+
+<p><a name="AccountDocument.denyRequest"></a></p>
+
+<h2>
+<a id="accountdocumentdenyrequestrequesterid-done" class="anchor" href="#accountdocumentdenyrequestrequesterid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountDocument.denyRequest(requesterId, done)</h2>
+
+<p>deny a friend request received from the specified user</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>requesterId <code>ObjectId</code> - the _id of the account from whom the request was received<br>
+</li>
+<li>done <code>function</code> - required callback, passed the populated request that was denied<br>
+</li>
+</ul>
+
+<p><a name="AccountDocument.getFriends"></a></p>
+
+<h2>
+<a id="accountdocumentgetfriendsdone" class="anchor" href="#accountdocumentgetfriendsdone" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountDocument.getFriends(done)</h2>
+
+<p>get this document's friends</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>done <code>function</code> - required callback, passed an array of friends<br>
+</li>
+</ul>
+
+<p><a name="AccountDocument.getFriendsOfFriends"></a></p>
+
+<h2>
+<a id="accountdocumentgetfriendsoffriendsdone" class="anchor" href="#accountdocumentgetfriendsoffriendsdone" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountDocument.getFriendsOfFriends(done)</h2>
+
+<p>get friends of this document's friends</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>done <code>function</code> - required callback, passed an array of friendsOfFriends<br>
+</li>
+</ul>
+
+<p><a name="AccountDocument.getNonFriends"></a></p>
+
+<h2>
+<a id="accountdocumentgetnonfriendsdone" class="anchor" href="#accountdocumentgetnonfriendsdone" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountDocument.getNonFriends(done)</h2>
+
+<p>get accounts which are not this document's friends</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>done <code>function</code> - required callback, passed an array of friendsOfFriends<br>
+</li>
+</ul>
+
+<p><a name="AccountDocument.isFriend"></a></p>
+
+<h2>
+<a id="accountdocumentisfriendaccountid-done" class="anchor" href="#accountdocumentisfriendaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountDocument.isFriend(accountId, done)</h2>
+
+<p>determine if this document is friends with the specified account</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the user to check for friendship<br>
+</li>
+<li>done <code>function</code> - required callback, passed a boolean determination<br>
+</li>
+</ul>
+
+<p><a name="AccountDocument.isFriendOfFriends"></a></p>
+
+<h2>
+<a id="accountdocumentisfriendoffriendsaccountid-done" class="anchor" href="#accountdocumentisfriendoffriendsaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountDocument.isFriendOfFriends(accountId, done)</h2>
+
+<p>determine if this document shares any friends with the specified account</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the user to check for friendship<br>
+</li>
+<li>done <code>function</code> - required callback, passed a boolean determination<br>
+</li>
+</ul>
+
+<p><a name="AccountDocument.getFriendship"></a></p>
+
+<h2>
+<a id="accountdocumentgetfriendshipaccountid-done" class="anchor" href="#accountdocumentgetfriendshipaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountDocument.getFriendship(accountId, done)</h2>
+
+<p>get the friendship document of this document and the specified account</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the friend<br>
+</li>
+<li>done <code>function</code> - required callback, passed the populated friendship<br>
+</li>
+</ul>
+
+<p><a name="AccountDocument.getRelationship"></a></p>
+
+<h2>
+<a id="accountdocumentgetrelationshipaccountid-done" class="anchor" href="#accountdocumentgetrelationshipaccountid-done" aria-hidden="true"><span class="octicon octicon-link"></span></a>AccountDocument.getRelationship(accountId, done)</h2>
+
+<p>get the relationship of this document and the specified account</p>
+
+<p><strong>Params</strong></p>
+
+<ul>
+<li>accountId <code>ObjectId</code> - the _id of the friend<br>
+</li>
+<li>done <code>function</code> - required callback, passed the relationship value<br>
+</li>
+</ul>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/adminion">adminion</a></p>
