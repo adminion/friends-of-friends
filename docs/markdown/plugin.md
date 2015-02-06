@@ -1,4 +1,4 @@
-# plugin
+# Global
 
 
 
@@ -6,22 +6,10 @@
 
 * * *
 
-### plugin.friendshipPlugin(schema, options) 
-
-adds friends-of-friends functionality to an existing Schema
-
-**Parameters**
-
-**schema**: `Schema`, The mongoose Schema that gets plugged
-
-**options**: `Object`, Options passed to the plugin
-
-
-
 ## Class: AccountModel
 
 
-### plugin.AccountModel.friendRequest(requesterId, requested_Id, done) 
+### AccountModel.friendRequest(requesterId, requested_Id, done) 
 
 sends a friend request to a another user
 
@@ -34,7 +22,7 @@ sends a friend request to a another user
 **done**: `function`, required callback, passed the populated request
 
 
-### plugin.AccountModel.getRequests(accountId, done) 
+### AccountModel.getRequests(accountId, done) 
 
 get all friend requests for a given user
 
@@ -45,7 +33,7 @@ get all friend requests for a given user
 **done**: `function`, required callback, passed requests retrieved
 
 
-### plugin.AccountModel.getSentRequests(accountId, done) 
+### AccountModel.getSentRequests(accountId, done) 
 
 get requests the given user has sent
 
@@ -56,7 +44,7 @@ get requests the given user has sent
 **done**: `function`, required callback, passed sent requests retrieved
 
 
-### plugin.AccountModel.getReceivedRequests(accountId, done) 
+### AccountModel.getReceivedRequests(accountId, done) 
 
 get requests received by the given user
 
@@ -67,7 +55,7 @@ get requests received by the given user
 **done**: `function`, required callback, passed received requests retrieved
 
 
-### plugin.AccountModel.acceptRequest(requesterId, requestedId, done) 
+### AccountModel.acceptRequest(requesterId, requestedId, done) 
 
 accept a friend request
 
@@ -80,7 +68,7 @@ accept a friend request
 **done**: `function`, required callback, passed the populated friendship accepted
 
 
-### plugin.AccountModel.denyRequest(requesterId, requestedId, done) 
+### AccountModel.denyRequest(requesterId, requestedId, done) 
 
 deny a friend request
 
@@ -93,7 +81,7 @@ deny a friend request
 **done**: `function`, required callback, passed the denied friendship
 
 
-### plugin.AccountModel.endFriendship(accountId1, accountId2, done) 
+### AccountModel.endFriendship(accountId1, accountId2, done) 
 
 end a friendship between two accounts
 
@@ -106,7 +94,7 @@ end a friendship between two accounts
 **done**: `function`, required callback
 
 
-### plugin.AccountModel.getFriends(accountId, done) 
+### AccountModel.getFriends(accountId, done) 
 
 get all friends of an account
 
@@ -117,7 +105,7 @@ get all friends of an account
 **done**: `function`, required callback, passed an array of friends
 
 
-### plugin.AccountModel.getFriendsOfFriends(accountId, done) 
+### AccountModel.getFriendsOfFriends(accountId, done) 
 
 get friends of this account's friends
 
@@ -128,9 +116,20 @@ get friends of this account's friends
 **done**: `function`, required callback, passed an array of friendsOfFriends
 
 
-### plugin.AccountModel.isFriend(accountId1, accountId2, done) 
+### AccountModel.getNonFriends(accountId, done) 
 
-determine if accountId2 is a friend of accountId1
+get all users that are not the given user's friends or friendsOfFriends
+
+**Parameters**
+
+**accountId**: `ObjectId`, the _id of the user
+
+**done**: `function`, required callback
+
+
+### AccountModel.areFriends(accountId1, accountId2, done) 
+
+determine if accountId1 and accountId2 are friends
 
 **Parameters**
 
@@ -141,7 +140,7 @@ determine if accountId2 is a friend of accountId1
 **done**: `function`, required callback, passed a boolean determination
 
 
-### plugin.AccountModel.isFriendOfFriends(accountId1, accountId2, done) 
+### AccountModel.areFriendsOfFriends(accountId1, accountId2, done) 
 
 determine if accountId1 and accountId2 have any common friends
 
@@ -154,7 +153,7 @@ determine if accountId1 and accountId2 have any common friends
 **done**: `function`, required callback, passed a boolean determination
 
 
-### plugin.AccountModel.getFriendship(accountId1, accountId2, done) 
+### AccountModel.getFriendship(accountId1, accountId2, done) 
 
 get the friendship document itself
 
@@ -167,9 +166,9 @@ get the friendship document itself
 **done**: `function`, required callback, passed err and a Friendship document, if found
 
 
-### plugin.AccountModel.getRelationship(accountId1, accountId2, done) 
+### AccountModel.getRelationship(accountId1, accountId2, done) 
 
-determine the relationship between two users
+get the numeric relationship between two users
 
 **Parameters**
 
@@ -187,21 +186,23 @@ Document-accessible properties and methods
 these instance methods are aliases of the Model statics as they apply to each document
 
 example:
- var user = new Accounts({...});
+```javascript
+ var jeff = new User({ username: "Jeff" });
  user.sendRequest(requestedEmail, function (err, request) {...})
+```
 
-### plugin.AccountDocument.friendRequest(requestedEmail, done) 
+### AccountDocument.friendRequest(requestedId, done) 
 
 send a request to another account
 
 **Parameters**
 
-**requestedEmail**: `ObjectId`, the _id of the account to whom the request will be sent
+**requestedId**: `ObjectId`, the _id of the account to whom the request will be sent
 
 **done**: `function`, required callback, passed the populated request sent
 
 
-### plugin.AccountDocument.getRequests(done) 
+### AccountDocument.getRequests(done) 
 
 get friend requests
 
@@ -210,7 +211,7 @@ get friend requests
 **done**: `function`, required callback, passed the populated requests retrieved
 
 
-### plugin.AccountDocument.getSentRequests(done) 
+### AccountDocument.getSentRequests(done) 
 
 get friend requests the user has sent
 
@@ -219,7 +220,7 @@ get friend requests the user has sent
 **done**: `function`, required callback, passed the populated requests retrieved
 
 
-### plugin.AccountDocument.getReceivedRequests(done) 
+### AccountDocument.getReceivedRequests(done) 
 
 get friend requests the user has received
 
@@ -228,7 +229,7 @@ get friend requests the user has received
 **done**: `function`, required callback, passed the populated requests retrieved
 
 
-### plugin.AccountDocument.acceptRequest(requesterId, done) 
+### AccountDocument.acceptRequest(requesterId, done) 
 
 accept a friend request received from the specified user
 
@@ -239,7 +240,7 @@ accept a friend request received from the specified user
 **done**: `function`, required callback, passed the populated request that was accepted
 
 
-### plugin.AccountDocument.denyRequest(requesterId, done) 
+### AccountDocument.denyRequest(requesterId, done) 
 
 deny a friend request received from the specified user
 
@@ -250,7 +251,7 @@ deny a friend request received from the specified user
 **done**: `function`, required callback, passed the populated request that was denied
 
 
-### plugin.AccountDocument.endFriendship(accountId, done) 
+### AccountDocument.endFriendship(accountId, done) 
 
 end a friendship with the specified user
 
@@ -261,7 +262,7 @@ end a friendship with the specified user
 **done**: `function`, required callback
 
 
-### plugin.AccountDocument.getFriends(done) 
+### AccountDocument.getFriends(done) 
 
 get this document's friends
 
@@ -270,7 +271,7 @@ get this document's friends
 **done**: `function`, required callback, passed an array of friends
 
 
-### plugin.AccountDocument.getFriendsOfFriends(done) 
+### AccountDocument.getFriendsOfFriends(done) 
 
 get friends of this document's friends
 
@@ -279,7 +280,7 @@ get friends of this document's friends
 **done**: `function`, required callback, passed an array of friendsOfFriends
 
 
-### plugin.AccountDocument.getNonFriends(done) 
+### AccountDocument.getNonFriends(done) 
 
 get accounts which are not this document's friends
 
@@ -288,7 +289,7 @@ get accounts which are not this document's friends
 **done**: `function`, required callback, passed an array of friendsOfFriends
 
 
-### plugin.AccountDocument.isFriend(accountId, done) 
+### AccountDocument.isFriend(accountId, done) 
 
 determine if this document is friends with the specified account
 
@@ -299,7 +300,7 @@ determine if this document is friends with the specified account
 **done**: `function`, required callback, passed a boolean determination
 
 
-### plugin.AccountDocument.isFriendOfFriends(accountId, done) 
+### AccountDocument.isFriendOfFriends(accountId, done) 
 
 determine if this document shares any friends with the specified account
 
@@ -310,7 +311,7 @@ determine if this document shares any friends with the specified account
 **done**: `function`, required callback, passed a boolean determination
 
 
-### plugin.AccountDocument.getFriendship(accountId, done) 
+### AccountDocument.getFriendship(accountId, done) 
 
 get the friendship document of this document and the specified account
 
@@ -321,7 +322,7 @@ get the friendship document of this document and the specified account
 **done**: `function`, required callback, passed the populated friendship
 
 
-### plugin.AccountDocument.getRelationship(accountId, done) 
+### AccountDocument.getRelationship(accountId, done) 
 
 get the relationship of this document and the specified account
 

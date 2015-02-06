@@ -7,7 +7,7 @@
 * * *
 
 ## Class: FriendsOfFriends
-Creates a new FriendsOfFriends Object
+Creates a new FriendsOfFriends Object with or without new
 ```javascript
 var options = { 
     accountName:             'Player',
@@ -22,29 +22,41 @@ var FriendsOfFriends = require('friends-of-friends');
 var fof = new FriendsOfFriends(options);
 ```
 
-**options**: `Object` , the options defined for the module instance
+**options**: `Object` , The options defined for the module instance
 **friendship**: `Model` , The Friendship model
-**plugin**: `function` , the mongoose plugin to add friendship methods
-**relationships**: `Object` , relationship constants
+**relationships**: `Object` , Relationship constants
+### FriendsOfFriends.plugin(schema, options) 
+
+Adds friends-of-friends functionality to an existing Schema
+
+**Parameters**
+
+**schema**: `Schema`, The mongoose Schema that gets plugged
+
+**options**: `Object`, Options passed to the plugin
+
+
 ### FriendsOfFriends.get(property) 
 
-return the value of a property of this.options
+Return the value of a property of `this.options`
 
 **Parameters**
 
-**property**: `String`, the property to get
+**property**: `String`, The property to get
 
+**Returns**: `Mixed`
 
-### FriendsOfFriends.set(property, value) 
+### FriendsOfFriends.set(Property, value) 
 
-set the value of a property of `this.options`
+Set the value of a property of `this.options`
 
 **Parameters**
 
-**property**: `String`, The name of the Property
+**Property**: `String`, The name of the Property
 
-**value**: , The new value of the property
+**value**: `Mixed`, The new value of the property
 
+**Returns**: `Mixed`
 
 
 

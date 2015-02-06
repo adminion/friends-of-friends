@@ -1,4 +1,4 @@
-# friendship
+# Global
 
 
 
@@ -6,7 +6,7 @@
 
 * * *
 
-### friendship.friendshipInit(options) 
+### exports(options) 
 
 Configure then compile Friendship model
 
@@ -21,9 +21,9 @@ Configure then compile Friendship model
 
 
 **relationships**: `Object` , default relationship constants
-### friendship.FriendshipModel.getRequests(accountId, done) 
+### FriendshipModel.getRequests(accountId, done) 
 
-get all friend requests for a given user
+get all friend requests involving a given user
 
 **Parameters**
 
@@ -32,7 +32,7 @@ get all friend requests for a given user
 **done**: `function`, required callback, passed requests retrieved
 
 
-### friendship.FriendshipModel.getSentRequests(accountId, done) 
+### FriendshipModel.getSentRequests(accountId, done) 
 
 get requests the given user has sent
 
@@ -43,7 +43,7 @@ get requests the given user has sent
 **done**: `function`, required callback, passed sent requests retrieved
 
 
-### friendship.FriendshipModel.getReceivedRequests(accountId, done) 
+### FriendshipModel.getReceivedRequests(accountId, done) 
 
 get requests received by the given user
 
@@ -54,7 +54,7 @@ get requests received by the given user
 **done**: `function`, required callback, passed received requests retrieved
 
 
-### friendship.FriendshipModel.acceptRequest(requesterId, requestedId, done) 
+### FriendshipModel.acceptRequest(requesterId, requestedId, done) 
 
 accept a friend request
 
@@ -67,7 +67,7 @@ accept a friend request
 **done**: `function`, required callback, passed the populated friendship accepted
 
 
-### friendship.FriendshipModel.denyRequest(requesterId, requestedId, done) 
+### FriendshipModel.denyRequest(requesterId, requestedId, done) 
 
 deny a friend request
 
@@ -80,7 +80,7 @@ deny a friend request
 **done**: `function`, required callback, passed the denied friendship
 
 
-### friendship.FriendshipModel.getFriends(accountId, done) 
+### FriendshipModel.getFriends(accountId, done) 
 
 get a list ids of friends of an account
 
@@ -91,7 +91,7 @@ get a list ids of friends of an account
 **done**: `function`, required callback, passed an array of friendIds
 
 
-### friendship.FriendshipModel.getFriendsOfFriends(accountId, done) 
+### FriendshipModel.getFriendsOfFriends(accountId, done) 
 
 get friendIds of this account's friends
 
@@ -102,9 +102,9 @@ get friendIds of this account's friends
 **done**: `function`, required callback, passed an array of friendsOfFriends
 
 
-### friendship.FriendshipModel.isFriend(accountId1, accountId2, done) 
+### FriendshipModel.areFriends(accountId1, accountId2, done) 
 
-determine if accountId2 is a friend of accountId1
+determine if accountId1 and accountId2 are friends
 
 **Parameters**
 
@@ -115,7 +115,7 @@ determine if accountId2 is a friend of accountId1
 **done**: `function`, required callback, passed a boolean determination
 
 
-### friendship.FriendshipModel.isFriendOfFriends(accountId1, accountId2, done) 
+### FriendshipModel.areFriendsOfFriends(accountId1, accountId2, done) 
 
 determine if accountId1 and accountId2 have any common friends
 
@@ -128,7 +128,7 @@ determine if accountId1 and accountId2 have any common friends
 **done**: `function`, required callback, passed a boolean determination
 
 
-### friendship.FriendshipModel.getRelationship(accountId1, accountId2, done) 
+### FriendshipModel.getRelationship(accountId1, accountId2, done) 
 
 get the numeric relationship of two accounts
 
@@ -141,9 +141,9 @@ get the numeric relationship of two accounts
 **done**: `function`, required callback
 
 
-### friendship.FriendshipModel.getFriendship(accountId1, accountId2, done) 
+### FriendshipModel.getFriendship(accountId1, accountId2, done) 
 
-get the friendship document itself
+get the friendship document of two accounts
 
 **Parameters**
 
@@ -154,7 +154,7 @@ get the friendship document itself
 **done**: `function`, required callback, passed err and a Friendship document, if found
 
 
-### friendship.FriendshipModel.isRequester(friendshipId, accountId, done) 
+### FriendshipModel.isRequester(friendshipId, accountId, done) 
 
 check to see if the given user is the requester in a given friendship
 
@@ -167,9 +167,9 @@ check to see if the given user is the requester in a given friendship
 **done**: `function`, required callback
 
 
-### friendship.FriendshipModel.isRequested(friendshipId, accountId, done) 
+### FriendshipModel.isRequested(friendshipId, accountId, done) 
 
-check to see if the given user is requested in a given friendship
+check to see if the given user is the requested in a given friendship
 
 **Parameters**
 
@@ -184,7 +184,7 @@ check to see if the given user is requested in a given friendship
 ## Class: FriendshipDocument
 
 
-### friendship.FriendshipDocument.isRequester(accountId, done) 
+### FriendshipDocument.isRequester(accountId, done) 
 
 check to see if the given user is the requester in this relationship
 
@@ -195,7 +195,7 @@ check to see if the given user is the requester in this relationship
 **done**: `function`, required callback
 
 
-### friendship.FriendshipDocument.isRequested(accountId, done) 
+### FriendshipDocument.isRequested(accountId, done) 
 
 check to see if the given user is the requested in this relationship
 
