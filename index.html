@@ -82,7 +82,7 @@ UserSchema.plugin(friendsOfFriends.plugin, options);
 <span class="pl-c">// compile your user model</span>
 <span class="pl-s">var</span> User <span class="pl-k">=</span> mongoose.model(options.accountName), UserSchema);
 
-<span class="pl-c">// create two users</span>
+<span class="pl-c">// create users</span>
 <span class="pl-s">var</span> Jeff <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">User</span>({ username<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>Jeff<span class="pl-pds">"</span></span> }),
     Zane <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">User</span>({ username<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>Zane<span class="pl-pds">"</span></span>}),
     Sam <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">User</span>({ username<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>Sam<span class="pl-pds">"</span></span>});
