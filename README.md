@@ -13,23 +13,47 @@ If you want run the tests, you should install with the `--dev` flag
     $ npm install --dev friends-of-friends
 
 ## Usage
-### Configuration
+
+### Default Configuration
+```javascript
+
+var FriendsOfFriends = require('friends-of-friends');
+var fof = new FriendsOfFriends();
+// works with or without 'new'
+var FriendsOfFriends = require('friends-of-friends')();
+```
+
+#### Defaults
+```javascript
+var defaults = {
+    // define the name for your Users model.
+    accountName: 'Account',
+    // define the name of the Users colletion. See: http://mongoosejs.com/docs/guide.html#collection
+    accountCollection: undefined,
+    // define the name for the Friendship model
+    friendshipName: 'Friendship',
+    // define the name of the Friendship collection.
+    friendshipCollection: undefined
+}
+```
+
+### Specifying Configuration Options
 ```javascript
 
 var options = { 
-        // define the name for your Users model. Default: 'Account'
-        accountName: 'User',
-        // define the name for the relationships model. Default: 'Friendship'
-        friendshipName: 'Buddy'
-    };
-
-// create friendsOfFriends instance using the defined options
-var friendsOfFriends = require('friends-of-friends')(options),
-
+     accountName:             'Player',
+     accountCollection:       'foo_userAccounts',
+     friendshipName:          'Friend_Relationships', 
+     friendshipCollection:    'bar_userRelationships',
+ };
+ 
+var FriendsOfFriends = require('friends-of-friends');
+var fof = new FriendsOfFriends(options);
+// again, works with or without 'new'
+var FriendsOfFriends = require('friends-of-friends')(options);
 ```
 
 ### Plugin friends-of-friends to User Schema
-
 ```javascript
 var mongoose = require('mongoose');
 
@@ -64,8 +88,8 @@ mongoose.connect('mongodb://localhost/test');
 ### Use Plugged-in functionality
 
 #### Send Friend Requests 
+Jeff can ask Zane to be friends
 ```javascript
-// Jeff can ask Zane to be friends
 Jeff.friendRequest(Zane._id, function (err, request) {
     if (err) throw err;
 
@@ -79,15 +103,27 @@ Jeff.friendRequest(Zane._id, function (err, request) {
 });
 ```
 
-#### Accept Friend Requests
+#### Deny Friend Requests
+Zane could deny Jeff's Request...
 ```javascript
-Zane.acceptRequest(users.jeff._id, function (err, friendship) {
+Zane.denyRequest(Jeff._id, function (err, denied) {
+    if (err) throw err;
+
+    console.log('denied', denied);
+    // denied 1
+});
+```
+
+#### Accept Friend Requests
+... or Zane could accept Jeff's Request
+```javascript
+Zane.acceptRequest(Jeff._id, function (err, friendship) {
     if (err) throw err;
 
     console.log('friendship', friendship);
         // friendship { __v: 0,
         //   _id: 54c6eb7cf2f9fe9672b90ba4,
-        //   dateAccepted: Mon Jan 26 2015 17:35:56 GMT-0800 (PST),
+        //   dateAccepted: Mon Jan 26 2015 17:35:57 GMT-0800 (PST),
         //   requested: { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 },
         //   requester: { username: 'Jeff', _id: 54c6eb7cf2f9fe9672b90ba2, __v: 0 },
         //   dateSent: Mon Jan 26 2015 17:35:56 GMT-0800 (PST),
@@ -96,6 +132,7 @@ Zane.acceptRequest(users.jeff._id, function (err, friendship) {
 ```
 
 #### Get Friends
+Now Jeff can get a list of his friends
 ```javascript
 
 // Zane is now Jeff's friend
@@ -104,6 +141,43 @@ Jeff.getFriends(function (err, friends) {
 
     console.log('friends', friends);
     // friends [ { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 } ]
+});
+```
+
+#### Get Friends Of Friends
+When two users are not friends, but have at least one friend in common, they are friends-of-friends
+```javascript
+// 
+Zane.friendRequest(Sam._id, function (err, request) {
+    if (err) throw err;
+
+    console.log('request', request);
+    // request { __v: 0,
+    //   requester: { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 },
+    //   requested: { username: 'Sam', _id: 54c6eb7cf2f9fe9672b90ba4, __v: 0 },
+    //   _id: 54c6eb7cf2f9fe9672b90ba5,
+    //   dateSent: Mon Jan 26 2015 17:35:58 GMT-0800 (PST),
+    //   status: 'Pending' }
+    
+    Sam.acceptRequest(Zane._id, function (err, friendship) {
+        if (err) throw err;
+
+        console.log('friendship', friendship);
+        // friendship { __v: 0,
+        //   _id: 54c6eb7cf2f9fe9672b90ba5,
+        //   dateAccepted: Mon Jan 26 2015 17:35:59 GMT-0800 (PST),
+        //   requested: { username: 'Sam', _id: 54c6eb7cf2f9fe9672b90ba4, __v: 0 },
+        //   requester: { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 },
+        //   dateSent: Mon Jan 26 2015 17:35:58 GMT-0800 (PST),
+        //   status: 'Accepted' }
+    
+        Jeff.getFriendsOfFriends(function (err, friendsOfJeffsFriends) {
+            if (err) throw (err)
+
+            console.log('friendsOfJeffsFriends', friendsOfJeffsFriends);
+            // friendsOfJeffsFriends [ { username: 'Sam', _id: 54c6eb7cf2f9fe9672b90ba4, __v: 0 } ]
+        });
+    });
 });
 ```
 

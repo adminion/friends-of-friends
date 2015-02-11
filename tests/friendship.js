@@ -7,6 +7,8 @@ var async               = require('async'),
     mongoose            = require('mongoose'),
     clearDB             = require('mocha-mongoose')(dbURI, { noClear: true });
 
+var ObjectId = mongoose.Schema.Types.ObjectId;
+
 var Account,
     AccountSchema = new mongoose.Schema({username: String});
 
@@ -77,199 +79,201 @@ module.exports = function () {
 
                 async.parallel({
                     jeffsSentRequests: function (done) {
-                        Friendship.getSentRequests(jeff._id, done)
+                        Friendship.getSentRequests(jeff._id, done);
                         
                     },
                     zanesSentRequests: function (done) {
-                        Friendship.getSentRequests(zane._id, done)
+                        Friendship.getSentRequests(zane._id, done);
                     }
 
                 }, function (err, results) {
-                    if (err) return testComplete(err)
+                    if (err) return testComplete(err);
 
-                    friendship.should.be.ok
+                    friendship.should.be.ok;
 
                     // jeff sent one to zane
-                    results.jeffsSentRequests.should.be.an.Array.with.length(1)
+                    results.jeffsSentRequests.should.be.an.Array.with.length(1);
 
                     // zane has sent none
-                    results.zanesSentRequests.should.be.an.Array.with.length(0)
+                    results.zanesSentRequests.should.be.an.Array.with.length(0);
 
-                    testComplete()
+                    testComplete();
                 });
-            })
-        })
+            });
+        });
 
         it('getReceivedRequests     - get requests received by the given user', function (testComplete) {
 
             // create jeff's request for zane's frienship
             new Friendship(docDescriptor).save(function (err, friendship) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
                 async.parallel({
                     jeff: function (done) {
-                        Friendship.getReceivedRequests(jeff._id, done)
+                        Friendship.getReceivedRequests(jeff._id, done);
                     },
                     zane: function (done) {
-                        Friendship.getReceivedRequests(zane._id, done)
+                        Friendship.getReceivedRequests(zane._id, done);
                     }
                 }, function (err, receivedRequests) {
-                    if (err) return testComplete(err)
+                    if (err) return testComplete(err);
 
-                    friendship.should.be.ok
+                    friendship.should.be.ok;
 
                     // jeff sent one to zane
-                    receivedRequests.jeff.should.be.an.Array.with.length(0)
+                    receivedRequests.jeff.should.be.an.Array.with.length(0);
 
                     // zane has sent none
-                    receivedRequests.zane.should.be.an.Array.with.length(1)
+                    receivedRequests.zane.should.be.an.Array.with.length(1);
 
-                    testComplete()
+                    testComplete();
                 });
-            })          
-        })
+            });
+        });
 
         it('acceptRequest           - accept a friend request', function (testComplete) {
 
             async.series({
                 send: function (next) {
                     new Friendship(docDescriptor).save(function (err, friendship) {
-                        next(err, friendship)
-                    })
+                        next(err, friendship);
+                    });
                 },
                 accept: function (next) {
-                    Friendship.acceptRequest(jeff._id, zane._id, next)
+                    Friendship.acceptRequest(jeff._id, zane._id, next);
                 }
             }, function (err, results) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
-                results .send.should.be.ok  
-                results.accept.should.have.a.property('status', 'Accepted')
+                results .send.should.be.ok;
+                results.accept.should.have.a.property('status', 'Accepted');
 
-                testComplete()
-            })
-        })
+                testComplete();
+            });
+        });
 
         it('denyRequest             - deny a friend request', function (testComplete) {
 
             async.series({
                 send: function (next) {
                     new Friendship(docDescriptor).save(function (err, friendship) {
-                        next(err, friendship)
+                        next(err, friendship);
                     })
                 },
                 deny: function (next) {
-                    Friendship.denyRequest(jeff._id, zane._id, next)
+                    Friendship.denyRequest(jeff._id, zane._id, next);
                 }
             }, function (err, results) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
-                (null === friendship).should.equal.true
+                results.send.should.be.ok
 
-                testComplete()
-            })          
-        })
+                results.deny.should.equal(1)
+
+                testComplete();
+            });
+        });
 
         it('getFriends              - get a list of ids of friends of an account', function (testComplete) {
 
             async.series({
                 send: function (next) {
                     new Friendship(docDescriptor).save(function (err, friendship) {
-                        next(err, friendship)
+                        next(err, friendship);
                     })
                 },
                 accept: function (next) {
-                    Friendship.acceptRequest(jeff._id, zane._id, next)
+                    Friendship.acceptRequest(jeff._id, zane._id, next);
                 },
                 friends: function (next) {
                     async.parallel({
                         jeff: function (finished) {
-                            Friendship.getFriends(jeff._id, finished)
+                            Friendship.getFriends(jeff._id, finished);
                         },
                         zane: function (finished) {
-                            Friendship.getFriends(zane._id, finished)
+                            Friendship.getFriends(zane._id, finished);
                         }
-                    }, next)
+                    }, next);
                 }
             }, function (err, results) {
-                if (err) return testComplete(err) 
+                if (err) return testComplete(err) ;
 
-                results.send.should.be.ok
-                results.send.should.have.property('status', 'Pending')
+                results.send.should.be.ok;
+                results.send.should.have.property('status', 'Pending');
 
-                results.accept.should.be.ok
-                results.accept.should.have.property('status', 'Accepted')
+                results.accept.should.be.ok;
+                results.accept.should.have.property('status', 'Accepted');
 
-                results.friends.jeff.should.be.an.Array.with.length(1)
-                results.friends.jeff[0].toString().should.equal(zane._id.toString())
+                results.friends.jeff.should.be.an.Array.with.length(1);
+                results.friends.jeff[0].toString().should.equal(zane._id.toString());
 
-                results.friends.zane.should.be.an.Array.with.length(1)
-                results.friends.zane[0].toString().should.equal(jeff._id.toString())
+                results.friends.zane.should.be.an.Array.with.length(1);
+                results.friends.zane[0].toString().should.equal(jeff._id.toString());
                             
-                testComplete()  
-            })
-        })
+                testComplete();
+            });
+        });
 
         it('getFriendsOfFriends     - get a list of ids of this account\'s friends', function (testComplete) {
 
-            var sam = new Account({username: 'Sam'})
+            var sam = new Account({username: 'Sam'});
 
             async.parallel({
                 jeffAndZane: function (done) {
                     async.series({
                         sent: function (next) {
-                            new Friendship(docDescriptor).save(next)        
+                            new Friendship(docDescriptor).save(next);    
                         },
                         accepted: function (next) {
-                            Friendship.acceptRequest(jeff._id, zane._id, next)
+                            Friendship.acceptRequest(jeff._id, zane._id, next);
                         }
-                    }, done)
+                    }, done);
                 },
                 zaneAndSam: function (done) {
                     async.series({
                         sent: function (next) {
-                            new Friendship({requester: zane._id, requested: sam._id}).save(next)        
+                            new Friendship({requester: zane._id, requested: sam._id}).save(next);
                         },
                         accepted: function (next) {
-                            Friendship.acceptRequest(zane._id, sam._id, next)
+                            Friendship.acceptRequest(zane._id, sam._id, next);
                         }
-                    }, done)  
+                    }, done);
                 }
             },
             function (err, results) {
-                if (err) return testComplete(err)
+                if (err) return testComplete(err);
 
-                results.jeffAndZane.sent.should.be.ok
-                results.jeffAndZane.accepted.should.be.ok
-                results.zaneAndSam.sent.should.be.ok
-                results.zaneAndSam.accepted.should.be.ok
+                results.jeffAndZane.sent.should.be.ok;
+                results.jeffAndZane.accepted.should.be.ok;
+                results.zaneAndSam.sent.should.be.ok;
+                results.zaneAndSam.accepted.should.be.ok;
 
                 async.parallel({
                     jeff: function (done) {
-                        Friendship.getFriendsOfFriends(jeff._id, done)
+                        Friendship.getFriendsOfFriends(jeff._id, done);
                     },
                     zane: function (done) {
-                        Friendship.getFriendsOfFriends(zane._id, done)
+                        Friendship.getFriendsOfFriends(zane._id, done);
                     },
                     sam: function (done) {
-                        Friendship.getFriendsOfFriends(sam._id, done)
+                        Friendship.getFriendsOfFriends(sam._id, done);
                     }
                 }, 
                 function (err, results) {
-                    if (err) return testComplete(err)
+                    if (err) return testComplete(err);
 
                     results.jeff.should.be.an.Array.with.length(1);
-                    results.jeff[0].toString().should.equal(sam._id.toString())
+                    results.jeff[0].toString().should.equal(sam._id.toString());
 
                     results.sam.should.be.an.Array.with.length(1);
-                    results.sam[0].toString().should.equal(jeff._id.toString())
+                    results.sam[0].toString().should.equal(jeff._id.toString());
 
                     results.zane.should.be.an.Array.with.length(0);
                     
                     testComplete();
                 });
             });
-        })
+        });
 
         it('areFriends              - determine if accountId1 and accountId2 are friends', function (testComplete) {
             var sam = new Account({username: 'Sam'})
@@ -310,9 +314,15 @@ module.exports = function () {
                 results.tests.jeffAndSam.should.be.false;
                 results.tests.zaneAndSam.should.be.false;
 
-                testComplete()
+                Friendship.areFriends(1234, sam._id, function (err, answer) {
+                    err.should.be.an.Error;
+
+                    (undefined === answer).should.be.true;
+
+                    testComplete();
+                });
             });
-        })
+        });
 
         it('areFriendsOfFriends     - determine if accountId1 and accountId2 have any common friends', function (testComplete) {
             var sam = new Account({username: 'Sam'})
@@ -322,27 +332,27 @@ module.exports = function () {
                     async.parallel({
                         jeffToZane: function (done) {
                             async.series({
-                                sent: function (next) {
-                                    new Friendship(docDescriptor).save(next);
+                                sent: function (then) {
+                                    new Friendship(docDescriptor).save(then);
                                 },
-                                accepted: function (next) {
-                                    Friendship.acceptRequest(jeff._id, zane._id, next);
+                                accepted: function (then) {
+                                    Friendship.acceptRequest(jeff._id, zane._id, then);
                                 }
                             }, done);
                         },
                         zaneToSam: function (done) {
                             async.series({
-                                sent: function (next) {
-                                    new Friendship({requester: zane._id, requested: sam._id}).save(next);
+                                sent: function (then) {
+                                    new Friendship({requester: zane._id, requested: sam._id}).save(then);
                                 },
-                                accepted: function (next) {
-                                    Friendship.acceptRequest(zane._id, sam._id, next);
+                                accepted: function (then) {
+                                    Friendship.acceptRequest(zane._id, sam._id, then);
                                 }
                             }, done);
                         }
                     }, next);
                 },
-                areFriends: function (next) {
+                areFriendsOfFriends: function (next) {
                     async.parallel({
                         jeffAndZane: function (done) {
                             Friendship.areFriendsOfFriends(jeff._id, zane._id, done);
@@ -367,18 +377,28 @@ module.exports = function () {
                 results.requests.zaneToSam.sent.should.be.ok;
                 results.requests.zaneToSam.accepted.should.be.ok;
 
-                results.areFriends.jeffAndZane.should.be.false;
-                results.areFriends.zaneAndSam.should.be.false;
-                results.areFriends.jeffAndSam.should.be.true;
-                results.areFriends.samAndJeff.should.be.true;
+                results.areFriendsOfFriends.jeffAndZane.should.be.false;
+                results.areFriendsOfFriends.zaneAndSam.should.be.false;
+                results.areFriendsOfFriends.jeffAndSam.should.be.true;
+                results.areFriendsOfFriends.samAndJeff.should.be.true;
 
-                testComplete();
+                Friendship.areFriendsOfFriends(1234, sam._id, function (err, answer) {
+                    err.should.be.an.Error;
+                    (answer === undefined).should.be.true;
+
+                    Friendship.areFriendsOfFriends(zane._id, 1234, function (err, answer) {
+                        err.should.be.an.Error;
+                        (answer === undefined).should.be.true;
+
+                        testComplete();
+                    });
+                });
             });         
         })
 
         it('getRelationship         - get the numeric relationship of two accounts', function (testComplete) {
 
-            var sam = new Account({username: "Sam"})
+            var sam = new Account({username: "Sam"});
 
             async.series({
                 jeffAndZane: function (next) {
@@ -404,12 +424,12 @@ module.exports = function () {
                             async.series({
                                 sent: function (next) {
                                     new Friendship({requester: zane._id, requested: sam._id}).save(function (err, sentRequest) {
-                                        next(err, sentRequest)
+                                        next(err, sentRequest);
                                     });
                                 },
                                 accepted: function (next) {
                                     Friendship.acceptRequest(zane._id, sam._id, function (err, acceptedFriendship) {
-                                        next(err, acceptedFriendship)
+                                        next(err, acceptedFriendship);
                                     });
                                 }
                             }, done);
@@ -434,29 +454,34 @@ module.exports = function () {
                 if (err) return testComplete(err)
 
                 // they should have been NOT_FRIENDS at the beginning
-                results.jeffAndZane.should.equal(Friendship.relationships.NOT_FRIENDS)
+                results.jeffAndZane.should.equal(Friendship.relationships.NOT_FRIENDS);
 
                 debug('results.requests', results.requests);
 
-                results.requests.jeffAndZane.sent.should.be.ok
-                results.requests.jeffAndZane.accepted.should.be.ok
+                results.requests.jeffAndZane.sent.should.be.ok;
+                results.requests.jeffAndZane.accepted.should.be.ok;
 
-                results.requests.zaneAndSam.sent.should.be.ok
-                results.requests.zaneAndSam.accepted.should.be.ok
-
-                // they should now be FRIENDS
-                results.relationships.jeffAndZane.should.equal(Friendship.relationships.FRIENDS)
+                results.requests.zaneAndSam.sent.should.be.ok;
+                results.requests.zaneAndSam.accepted.should.be.ok;
 
                 // they should now be FRIENDS
-                results.relationships.zaneAndSam.should.equal(Friendship.relationships.FRIENDS)
+                results.relationships.jeffAndZane.should.equal(Friendship.relationships.FRIENDS);
+
+                // they should now be FRIENDS
+                results.relationships.zaneAndSam.should.equal(Friendship.relationships.FRIENDS);
 
                 // they should now be FRIENDS_OF_FRIENDS
-                results.relationships.jeffAndSam.should.equal(Friendship.relationships.FRIENDS_OF_FRIENDS)
+                results.relationships.jeffAndSam.should.equal(Friendship.relationships.FRIENDS_OF_FRIENDS);
 
-                testComplete();
+                Friendship.getRelationship(1234, 5678, function (err, relationship) {
+                    err.should.be.an.Error;
 
+                    (relationship === undefined).should.be.true;
+
+                    testComplete();
+                });
             });
-        })
+        });
         
         it('getFriendship           - get the friendship document of two accounts', function (testComplete) {
 
@@ -517,7 +542,7 @@ module.exports = function () {
             async.series({
                 request: function (next) {
                     new Friendship(docDescriptor).save(function (err, request) {
-                        if (err) return next(err)
+                        if (err) return next(err);
                         
                         async.parallel({
                             jeff: function (done) {
@@ -531,7 +556,7 @@ module.exports = function () {
                 },
                 friendship: function (next) {
                     Friendship.acceptRequest(jeff._id, zane._id, function (err, friendship) {
-                        if (err) return testComplete(err)
+                        if (err) return testComplete(err);
 
                         async.parallel({
                             jeff: function (done) {
@@ -552,7 +577,18 @@ module.exports = function () {
                 answers.friendship.jeff.should.be.true;
                 answers.friendship.zane.should.be.false;
 
-                testComplete();
+                Friendship.isRequester(1234, jeff._id, function (err, answer) {
+                    err.should.be.an.Error;
+                    (answer === undefined).should.be.true;
+
+                    Friendship.isRequester(zane._id, jeff._id, function (err, answer) {
+
+                        err.should.be.an.Error;
+                        (answer === undefined).should.be.true;
+
+                        testComplete();
+                    });                  
+                });
             });
         });
 
@@ -560,7 +596,7 @@ module.exports = function () {
             async.series({
                 request: function (next) {
                     new Friendship(docDescriptor).save(function (err, request) {
-                        if (err) return next(err)
+                        if (err) return next(err);
                         
                         async.parallel({
                             jeff: function (done) {
@@ -574,7 +610,7 @@ module.exports = function () {
                 },
                 friendship: function (next) {
                     Friendship.acceptRequest(jeff._id, zane._id, function (err, friendship) {
-                        if (err) return testComplete(err)
+                        if (err) return testComplete(err);
 
                         async.parallel({
                             jeff: function (done) {
@@ -595,23 +631,33 @@ module.exports = function () {
                 answers.friendship.jeff.should.be.false;
                 answers.friendship.zane.should.be.true;
 
-                testComplete();
-            });
-        })
+                Friendship.isRequested(1234, jeff._id, function (err, answer) {
+                    err.should.be.an.Error;
+                    (answer === undefined).should.be.true;
 
-    })
+                    Friendship.isRequested(zane._id, jeff._id, function (err, answer) {
+
+                        err.should.be.an.Error;
+                        (answer === undefined).should.be.true;
+
+                        testComplete();
+                    });                  
+                });
+            });
+        });
+    });
 
     describe('methods', function () {
         beforeEach(function (done) {
-            if (mongoose.connection.db) return done()
+            if (mongoose.connection.db) return done();
 
-            mongoose.connect(dbURI,done)
+            mongoose.connect(dbURI,done);
 
-        })
+        });
 
         afterEach(function (done) {
-            clearDB(done)
-        })
+            clearDB(done);
+        });
         
         it('isRequester             - check to see if the given user is the requester in this friendship', function (testComplete) {
             async.series({

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "docs": "./generate_docs.sh",
-    "test": "mocha tests/"
+    "test": "mocha tests/",
+    "coverage": "istanbul cover --hook-run-in-context ./node_modules/mocha/bin/_mocha --report html -- -R spec tests"
   },
   "repository": {
     "type": "git",
