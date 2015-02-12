@@ -8,10 +8,6 @@
 
     $ npm install friends-of-friends
 
-If you want run the tests, you should install with the `--dev` flag
-
-    $ npm install --dev friends-of-friends
-
 ## Usage
 
 ### Default Configuration
@@ -28,7 +24,7 @@ var FriendsOfFriends = require('friends-of-friends')();
 var defaults = {
     // define the name for your Users model.
     accountName: 'Account',
-    // define the name of the Users colletion. See: http://mongoosejs.com/docs/guide.html#collection
+    // define the name of the Users colletion. 
     accountCollection: undefined,
     // define the name for the Friendship model
     friendshipName: 'Friendship',
@@ -147,7 +143,6 @@ Jeff.getFriends(function (err, friends) {
 #### Get Friends Of Friends
 When two users are not friends, but have at least one friend in common, they are friends-of-friends
 ```javascript
-// 
 Zane.friendRequest(Sam._id, function (err, request) {
     if (err) throw err;
 
@@ -181,11 +176,23 @@ Zane.friendRequest(Sam._id, function (err, request) {
 });
 ```
 
+## Tests
+
+If you want run the tests, you should install with the `--dev` flag
+
+    $ npm install --dev friends-of-friends
+
+Then you can run the tests with `npm`
+
+    $ npm test
+
 ## API
 
-You may generate local docs (located in `docs/`) using `npm`
+You can generate docs using `npm`
 
     $ npm run docs
+
+You can find them in `docs/`
 
 **Classes**
 
@@ -806,3 +813,18 @@ get the relationship of this document and the specified account
 - accountId `ObjectId` - the _id of the friend  
 - done `function` - required callback, passed the relationship value  
 
+## License
+
+Copyright (c) 2014 Jeff Harris
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

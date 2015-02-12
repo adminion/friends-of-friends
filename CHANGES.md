@@ -5,6 +5,7 @@ CHANGES
 
 ## v1.0.4 
 * Added/fixed examples in README.md
+* Added/fixed API links
 * Added npm script `coverage` to generate html coverage info
 * Improved coverage in `lib/friendship.js`
 
