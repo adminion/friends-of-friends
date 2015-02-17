@@ -3,6 +3,9 @@ CHANGES
 
 # v1.x
 
+## v1.1.0
+* `lib/relationships.js` now includes relationship state `PENDING_FRIENDS` with value `1.5` for backward compatibility
+
 ## v1.0.4 
 * Added/fixed examples in README.md
 * Added/fixed API links
