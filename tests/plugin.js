@@ -1469,7 +1469,7 @@ module.exports = function () {
             });
         });
 
-        it('isPendingFriend       - determine if this document has a pending friendship with the specified account', function (testComplete) {
+        it('isPendingFriend         - determine if this document has a pending friendship with the specified account', function (testComplete) {
              async.series({
                 pre: function (next) {
                     testUsers.jeff.isPendingFriend(testUsers.zane._id, next);

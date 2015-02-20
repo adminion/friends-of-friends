@@ -7,6 +7,7 @@ CHANGES
 * `Friendship.getRelationship` now checks for `PENDING_FRIENDS`.
 * Added `arePendingFriends` and `isPendingFriend `to Model and Document Classes
 * updated tests for above additions
+* `acceptRequest` and `denyRequest` now accept two accounts `_ids` in either order instead of requester then requested
 
 ## v1.1.0
 * `lib/relationships.js` now includes relationship state `PENDING_FRIENDS` with value `1.5` for backward compatibility
