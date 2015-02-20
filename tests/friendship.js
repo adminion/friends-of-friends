@@ -394,11 +394,51 @@ module.exports = function () {
                     });
                 });
             });         
-        })
+        });
+
+        it('arePendingFriends       - determine if accountId1 and accountId2 have a pending friendship', function (testComplete) {
+
+            async.series({
+                pre: function (next) {
+                    Friendship.arePendingFriends(jeff._id, zane._id, next);
+                },
+                request: function (next) {
+                    new Friendship(docDescriptor).save(function (err, pendingFriendship) {
+                        next(err, pendingFriendship);
+                    });
+                },
+                post: function (next) {
+                    Friendship.arePendingFriends(jeff._id, zane._id, next);
+                },
+                friendship: function (next) {
+                    Friendship.acceptRequest(jeff._id, zane._id, next);
+                },
+                accepted: function (next) {
+                    Friendship.arePendingFriends(jeff._id, zane._id, next);
+                }
+            }, 
+            function (err, results) {
+                if (err) return done(err);
+
+                results.pre.should.be.false;
+                results.request.should.be.ok;
+                results.post.should.be.ok;
+                results.friendship.should.be.ok;
+                results.accepted.should.be.false;
+
+                Friendship.arePendingFriends(1234, 5678, function (err, answer) {
+                    err.should.be.an.Error;
+                    (answer === undefined).should.be.true;
+
+                    testComplete();
+                });
+            });
+        });
 
         it('getRelationship         - get the numeric relationship of two accounts', function (testComplete) {
 
-            var sam = new Account({username: "Sam"});
+            var sam = new Account({username: "Sam"}),
+                henry = new Account({username: "Henry"});
 
             async.series({
                 jeffAndZane: function (next) {
@@ -433,6 +473,11 @@ module.exports = function () {
                                     });
                                 }
                             }, done);
+                        }, 
+                        jeffAndHenry: function (done) {
+                            new Friendship({requester: jeff._id, requested: henry._id}).save(function (err, sentRequest) {
+                                done(err, sentRequest);
+                            });
                         }
                     }, next);
                 },
@@ -446,6 +491,9 @@ module.exports = function () {
                         },
                         jeffAndSam: function (done) {
                             Friendship.getRelationship(jeff._id, sam._id, done);
+                        }, 
+                        jeffAndHenry: function (done) {
+                            Friendship.getRelationship(jeff._id, henry._id, done);
                         }
                     }, next);
                 }
@@ -453,7 +501,6 @@ module.exports = function () {
             function (err, results) {
                 if (err) return testComplete(err)
 
-                // they should have been NOT_FRIENDS at the beginning
                 results.jeffAndZane.should.equal(Friendship.relationships.NOT_FRIENDS);
 
                 debug('results.requests', results.requests);
@@ -464,14 +511,12 @@ module.exports = function () {
                 results.requests.zaneAndSam.sent.should.be.ok;
                 results.requests.zaneAndSam.accepted.should.be.ok;
 
-                // they should now be FRIENDS
+                results.requests.jeffAndHenry.should.be.ok;
+
                 results.relationships.jeffAndZane.should.equal(Friendship.relationships.FRIENDS);
-
-                // they should now be FRIENDS
                 results.relationships.zaneAndSam.should.equal(Friendship.relationships.FRIENDS);
-
-                // they should now be FRIENDS_OF_FRIENDS
                 results.relationships.jeffAndSam.should.equal(Friendship.relationships.FRIENDS_OF_FRIENDS);
+                results.relationships.jeffAndHenry.should.equal(Friendship.relationships.PENDING_FRIENDS);
 
                 Friendship.getRelationship(1234, 5678, function (err, relationship) {
                     err.should.be.an.Error;

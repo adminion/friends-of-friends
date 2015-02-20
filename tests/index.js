@@ -57,7 +57,7 @@ describe('FriendsOfFriends', function () {
 		for (value in test) {
 			testStr += value + ': ' + test[value];
 			
-			if (whichValue < 5) {
+			if (whichValue < 7) {
 				testStr += ', '
 			}
 

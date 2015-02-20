@@ -711,6 +711,44 @@ module.exports = function () {
             })
         })
 
+        it('arePendingFriends       - determine if the two accounts have a pending friendship', function (testComplete) {
+             async.series({
+                pre: function (next) {
+                    AccountModel.arePendingFriends(testUsers.jeff._id, testUsers.zane._id, next);
+                },
+                request: function (next) {
+                    AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
+                        next(err, pendingFriendship);
+                    });
+                },
+                post: function (next) {
+                    AccountModel.arePendingFriends(testUsers.jeff._id, testUsers.zane._id, next);
+                },
+                friendship: function (next) {
+                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, next);
+                },
+                accepted: function (next) {
+                    AccountModel.arePendingFriends(testUsers.jeff._id, testUsers.zane._id, next);
+                }
+            }, 
+            function (err, results) {
+                if (err) return testComplete(err);
+
+                results.pre.should.be.false;
+                results.request.should.be.ok;
+                results.post.should.be.ok;
+                results.friendship.should.be.ok;
+                results.accepted.should.be.false;
+
+                AccountModel.arePendingFriends(1234, 5678, function (err, answer) {
+                    err.should.be.an.Error;
+                    (answer === undefined).should.be.true;
+
+                    testComplete();
+                });
+            });
+        });
+
         it('getFriendship           - get the friendship document itself', function (testComplete) {
             async.series({
                 sent: function (next) {
@@ -1427,9 +1465,47 @@ module.exports = function () {
                 results.areFriendsOfFriends.zaneAndHenry.should.be.false;
                 results.areFriendsOfFriends.samAndHenry.should.be.false;
                 
-                testComplete()
-            })
-        })
+                testComplete();
+            });
+        });
+
+        it('isPendingFriend       - determine if this document has a pending friendship with the specified account', function (testComplete) {
+             async.series({
+                pre: function (next) {
+                    testUsers.jeff.isPendingFriend(testUsers.zane._id, next);
+                },
+                request: function (next) {
+                    testUsers.jeff.friendRequest(testUsers.zane._id, function (err, pendingFriendship) {
+                        next(err, pendingFriendship);
+                    });
+                },
+                post: function (next) {
+                    testUsers.jeff.isPendingFriend(testUsers.zane._id, next);
+                },
+                friendship: function (next) {
+                    testUsers.jeff.acceptRequest(testUsers.zane._id, next);
+                },
+                accepted: function (next) {
+                    testUsers.jeff.isPendingFriend(testUsers.zane._id, next);
+                }
+            }, 
+            function (err, results) {
+                if (err) return testComplete(err);
+
+                results.pre.should.be.false;
+                results.request.should.be.ok;
+                results.post.should.be.ok;
+                results.friendship.should.be.ok;
+                results.accepted.should.be.false;
+
+                AccountModel.arePendingFriends(1234, 5678, function (err, answer) {
+                    err.should.be.an.Error;
+                    (answer === undefined).should.be.true;
+
+                    testComplete();
+                });
+            });
+        });
 
         it('getFriendship           - get the friendship document of this document and the specified account', function (testComplete) {
             async.series({

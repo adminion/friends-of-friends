@@ -3,6 +3,11 @@ CHANGES
 
 # v1.x
 
+## v1.2.0
+* `Friendship.getRelationship` now checks for `PENDING_FRIENDS`.
+* Added `arePendingFriends` and `isPendingFriend `to Model and Document Classes
+* updated tests for above additions
+
 ## v1.1.0
 * `lib/relationships.js` now includes relationship state `PENDING_FRIENDS` with value `1.5` for backward compatibility
 
