@@ -1,6 +1,16 @@
 #!/bin/bash
 
-npm install jsdoc jsdoc-to-markdown
+prefix='./node_modules'
+
+if [ ! -d "$prefix/jsdoc" ]
+then 
+	npm install jsdoc
+fi
+
+if [ ! -d "$prefix/jsdoc-to-markdown" ]
+then 
+ 	npm install jsdoc-to-markdown
+fi
 
 jsdoc -c jsdoc.conf.json -d ./docs/ -R ./README.md --verbose ./lib/
 
