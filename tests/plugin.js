@@ -859,7 +859,116 @@ module.exports = function () {
                 testComplete()
             })
         })
-    })
+
+        it('isRequester             - check to see if the given user is the requester in a given friendship', function (testComplete) {
+            async.series({
+                request: function (next) {
+                    AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, request) {
+                        if (err) return next(err);
+                        
+                        async.parallel({
+                            jeff: function (done) {
+                                AccountModel.isRequester(request._id, testUsers.jeff._id, done);
+                            },
+                            zane: function (done) {
+                                AccountModel.isRequester(request._id, testUsers.zane._id, done);
+                            }
+                        }, next);
+                    });
+                },
+                friendship: function (next) {
+                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, function (err, friendship) {
+                        if (err) return testComplete(err);
+
+                        async.parallel({
+                            jeff: function (done) {
+                                AccountModel.isRequester(friendship._id, testUsers.jeff._id, done);
+                            },
+                            zane: function (done) {
+                                AccountModel.isRequester(friendship._id, testUsers.zane._id, done);
+                            }
+                        }, next);
+                    });
+                }
+            }, function (err, answers) {
+                if (err) return testComplete(err);
+                
+                answers.request.jeff.should.be.true;
+                answers.request.zane.should.be.false;
+
+                answers.friendship.jeff.should.be.true;
+                answers.friendship.zane.should.be.false;
+
+                AccountModel.isRequester(1234, testUsers.jeff._id, function (err, answer) {
+                    err.should.be.an.Error;
+                    (answer === undefined).should.be.true;
+
+                    AccountModel.isRequester(testUsers.zane._id, testUsers.jeff._id, function (err, answer) {
+
+                        err.should.be.an.Error;
+                        (answer === undefined).should.be.true;
+
+                        testComplete();
+                    });                  
+                });
+            });
+        });
+
+        it('isRequested             - check to see if the given user is the requested in a given friendship', function (testComplete) {
+            async.series({
+                request: function (next) {
+                    AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, request) {
+                        if (err) return next(err);
+                        
+                        async.parallel({
+                            jeff: function (done) {
+                                AccountModel.isRequested(request._id, testUsers.jeff._id, done);
+                            },
+                            zane: function (done) {
+                                AccountModel.isRequested(request._id, testUsers.zane._id, done);
+                            }
+                        }, next);
+                    });
+                },
+                friendship: function (next) {
+                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, function (err, friendship) {
+                        if (err) return testComplete(err);
+
+                        async.parallel({
+                            jeff: function (done) {
+                                AccountModel.isRequested(friendship._id, testUsers.jeff._id, done);
+                            },
+                            zane: function (done) {
+                                AccountModel.isRequested(friendship._id, testUsers.zane._id, done);
+                            }
+                        }, next);
+                    });
+                }
+            }, function (err, answers) {
+                if (err) return testComplete(err);
+                
+                answers.request.jeff.should.be.false;
+                answers.request.zane.should.be.true;
+
+                answers.friendship.jeff.should.be.false;
+                answers.friendship.zane.should.be.true;
+
+                AccountModel.isRequested(1234, testUsers.jeff._id, function (err, answer) {
+                    err.should.be.an.Error;
+                    (answer === undefined).should.be.true;
+
+                    AccountModel.isRequested(testUsers. zane._id, testUsers.jeff._id, function (err, answer) {
+
+                        err.should.be.an.Error;
+                        (answer === undefined).should.be.true;
+
+                        testComplete();
+                    });                  
+                });
+            });
+        });
+        
+    });
 
     describe('methods', function () {
         beforeEach(function (done) {
@@ -1617,6 +1726,115 @@ module.exports = function () {
                 testComplete()
             })
         })
+
+        it('isRequester             - check to see if the given user is the requester in a given friendship', function (testComplete) {
+            async.series({
+                request: function (next) {
+                    AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, request) {
+                        if (err) return next(err);
+                        
+                        async.parallel({
+                            jeff: function (done) {
+                                testUsers.jeff.isRequester(request._id, done);
+                            },
+                            zane: function (done) {
+                                testUsers.zane.isRequester(request._id, done);
+                            }
+                        }, next);
+                    });
+                },
+                friendship: function (next) {
+                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, function (err, friendship) {
+                        if (err) return testComplete(err);
+
+                        async.parallel({
+                            jeff: function (done) {
+                                testUsers.jeff.isRequester(friendship._id, done);
+                            },
+                            zane: function (done) {
+                                testUsers.zane.isRequester(friendship._id, done);
+                            }
+                        }, next);
+                    });
+                }
+            }, function (err, answers) {
+                if (err) return testComplete(err);
+                
+                answers.request.jeff.should.be.true;
+                answers.request.zane.should.be.false;
+
+                answers.friendship.jeff.should.be.true;
+                answers.friendship.zane.should.be.false;
+
+                testUsers.jeff.isRequester(1234, function (err, answer) {
+                    err.should.be.an.Error;
+                    (answer === undefined).should.be.true;
+
+                    testUsers.zane.isRequester(testUsers.jeff._id, function (err, answer) {
+
+                        err.should.be.an.Error;
+                        (answer === undefined).should.be.true;
+
+                        testComplete();
+                    });                  
+                });
+            });
+        });
+
+        it('isRequested             - check to see if the given user is the requested in a given friendship', function (testComplete) {
+            async.series({
+                request: function (next) {
+                    AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, request) {
+                        if (err) return next(err);
+                        
+                        async.parallel({
+                            jeff: function (done) {
+                                testUsers.jeff.isRequested(request._id, done);
+                            },
+                            zane: function (done) {
+                                testUsers.zane.isRequested(request._id, done);
+                            }
+                        }, next);
+                    });
+                },
+                friendship: function (next) {
+                    AccountModel.acceptRequest(testUsers.jeff._id, testUsers.zane._id, function (err, friendship) {
+                        if (err) return testComplete(err);
+
+                        async.parallel({
+                            jeff: function (done) {
+                                testUsers.jeff.isRequested(friendship._id, done);
+                            },
+                            zane: function (done) {
+                                testUsers.zane.isRequested(friendship._id, done);
+                            }
+                        }, next);
+                    });
+                }
+            }, function (err, answers) {
+                if (err) return testComplete(err);
+                
+                answers.request.jeff.should.be.false;
+                answers.request.zane.should.be.true;
+
+                answers.friendship.jeff.should.be.false;
+                answers.friendship.zane.should.be.true;
+
+                testUsers.jeff.isRequested(1234, function (err, answer) {
+                    err.should.be.an.Error;
+                    (answer === undefined).should.be.true;
+
+                    testUsers.zane.isRequested(testUsers.jeff._id, function (err, answer) {
+
+                        err.should.be.an.Error;
+                        (answer === undefined).should.be.true;
+
+                        testComplete();
+                    });                  
+                });
+            });
+        });
+        
     })
 }
 
