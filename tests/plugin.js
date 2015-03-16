@@ -502,6 +502,50 @@ module.exports = function () {
             });
         });
 
+        it('getPendingFriends       - get all friends of an account', function (testComplete) {
+            async.series({
+                sent: function (next) {
+                    AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, sentRequest) {
+                        next(err, sentRequest);
+                    });
+                },
+                pendingFriends: function (next) {
+                    async.parallel({
+                        jeff: function (done) {
+                            AccountModel.getPendingFriends(testUsers.jeff._id, done);
+                        },
+                        zane: function (done) {
+                            AccountModel.getPendingFriends(testUsers.zane._id, done);
+                        }
+                    }, function (err, results) {
+                        next(err, results);
+                    });
+                }
+            }, function (err, results) {
+                if (err) return testComplete(err);
+
+                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.sent.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.sent.should.have.a.property('status', 'Pending');
+                results.sent.dateSent.should.be.an.instanceof(Date);
+
+                results.pendingFriends.jeff.should.be.an.Array.with.length(1);
+                results.pendingFriends.jeff[0].should.have.a.property('_id', testUsers.zane._id);
+
+                results.pendingFriends.zane.should.be.an.Array.with.length(1);
+                results.pendingFriends.zane[0].should.have.a.property('_id', testUsers.jeff._id);
+
+                AccountModel.getPendingFriends('abc', function (err, request) {
+                    err.should.be.an.Object;
+                    err.name.should.equal('CastError');
+
+                    (undefined === request).should.be.true;
+
+                    testComplete();
+                });
+            });
+        });
+
         it('getNonFriends           - get all users that are not the given user\'s friends or friendsOfFriends', function (testComplete) {
             async.series({
                 jeffToZane: function (next) {
@@ -1364,6 +1408,44 @@ module.exports = function () {
 
                 results.friendsOfFriends.zane.should.be.an.empty.Array
                 results.friendsOfFriends.henry.should.be.and.empty.Array
+
+                testComplete()
+            })
+        })
+
+        it('getPendingFriends       - get this user\'s friends', function (testComplete) {
+            async.series({
+                sent: function (next) {
+                    testUsers.jeff.friendRequest(testUsers.zane._id, function (err, sentRequest) {
+                        next(err, sentRequest);
+                    })
+                },
+                pendingFriends: function (next) {
+                    async.parallel({
+                        jeff: function (done) {
+                            testUsers.jeff.getPendingFriends(done)
+                        },
+                        zane: function (done) {
+                            testUsers.zane.getPendingFriends(done)
+                        }
+                    }, function (err, results) {
+                        next(err, results)
+                    })
+                }
+            }, 
+            function (err, results) {
+                if (err) return testComplete(err)
+
+                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id)
+                results.sent.requested.should.have.a.property('_id', testUsers.zane._id)
+                results.sent.should.have.a.property('status', 'Pending')
+                results.sent.dateSent.should.be.an.instanceof(Date)
+
+                results.pendingFriends.jeff.should.be.an.Array.with.length(1)
+                results.pendingFriends.jeff[0].should.have.a.property('_id', testUsers.zane._id)
+
+                results.pendingFriends.zane.should.be.an.Array.with.length(1)
+                results.pendingFriends.zane[0].should.have.a.property('_id', testUsers.jeff._id)
 
                 testComplete()
             })

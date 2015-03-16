@@ -3,6 +3,9 @@ CHANGES
 
 # v1.x
 
+## v1.3.0
+* added `getPendingFriends` to `FriendshipDocument`, `AccountModel`, and `AccountDocument`
+
 ## v1.2.0
 * `Friendship.getRelationship` now checks for `PENDING_FRIENDS`.
 * Added `arePendingFriends` and `isPendingFriend `to Model and Document Classes

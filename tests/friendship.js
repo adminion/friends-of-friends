@@ -275,6 +275,40 @@ module.exports = function () {
             });
         });
 
+        it('getPendingFriends       - get a list of ids of pending friends of an account', function (testComplete) {
+
+            async.series({
+                send: function (next) {
+                    new Friendship(docDescriptor).save(function (err, friendship) {
+                        next(err, friendship);
+                    })
+                },
+                pendingFriends: function (next) {
+                    async.parallel({
+                        jeff: function (finished) {
+                            Friendship.getPendingFriends(jeff._id, finished);
+                        },
+                        zane: function (finished) {
+                            Friendship.getPendingFriends(zane._id, finished);
+                        }
+                    }, next);
+                }
+            }, function (err, results) {
+                if (err) return testComplete(err) ;
+
+                results.send.should.be.ok;
+                results.send.should.have.property('status', 'Pending');
+
+                results.pendingFriends.jeff.should.be.an.Array.with.length(1);
+                results.pendingFriends.jeff[0].toString().should.equal(zane._id.toString());
+
+                results.pendingFriends.zane.should.be.an.Array.with.length(1);
+                results.pendingFriends.zane[0].toString().should.equal(jeff._id.toString());
+                            
+                testComplete();
+            });
+        });
+
         it('areFriends              - determine if accountId1 and accountId2 are friends', function (testComplete) {
             var sam = new Account({username: 'Sam'})
 
