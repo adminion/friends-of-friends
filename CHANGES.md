@@ -5,6 +5,8 @@ CHANGES
 
 ## v1.3.0
 * added `getPendingFriends` to `FriendshipDocument`, `AccountModel`, and `AccountDocument`
+* added travis-ci build support for node v0.12 and iojs latest
+* removed travis-ci build support for node v0.11
 
 ## v1.2.0
 * `Friendship.getRelationship` now checks for `PENDING_FRIENDS`.
