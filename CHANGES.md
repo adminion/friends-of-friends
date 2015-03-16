@@ -3,6 +3,9 @@ CHANGES
 
 # v1.x
 
+## v1.3.1
+* updated `AccountModel.getNonFriends` to filter for pending Friends
+
 ## v1.3.0
 * added `getPendingFriends` to `FriendshipDocument`, `AccountModel`, and `AccountDocument`
 * added travis-ci build support for node v0.12 and iojs latest
