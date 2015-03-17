@@ -1,6 +1,6 @@
 {
   "name": "friends-of-friends",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "Friendship Management for Mongoose",
   "main": "index.js",
   "scripts": {
