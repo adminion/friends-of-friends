@@ -152,6 +152,28 @@ module.exports = function () {
             });
         });
 
+        it('cancelRequest           - cancel a friend request', function (testComplete) {
+
+            async.series({
+                send: function (next) {
+                    new Friendship(docDescriptor).save(function (err, friendship) {
+                        next(err, friendship);
+                    })
+                },
+                cancel: function (next) {
+                    Friendship.cancelRequest(jeff._id, zane._id, next);
+                }
+            }, function (err, results) {
+                if (err) return testComplete(err);
+
+                results.send.should.be.ok
+
+                results.cancel.should.equal(1)
+
+                testComplete();
+            });
+        });
+
         it('denyRequest             - deny a friend request', function (testComplete) {
 
             async.series({

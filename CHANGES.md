@@ -3,11 +3,14 @@ CHANGES
 
 # v1.x
 
+## v1.4.0
+* added `cancelRequest()` to `FriendshipModel`, `AccountModel`, and `AccountDocument`
+
 ## v1.3.1
 * updated `AccountModel.getNonFriends` to filter for pending Friends
 
 ## v1.3.0
-* added `getPendingFriends` to `FriendshipDocument`, `AccountModel`, and `AccountDocument`
+* added `getPendingFriends()` to `FriendshipDocument`, `AccountModel`, and `AccountDocument`
 * added travis-ci build support for node v0.12 and iojs latest
 * removed travis-ci build support for node v0.11
 

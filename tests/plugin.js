@@ -314,6 +314,30 @@ module.exports = function () {
             });
         });
 
+        it('cancelRequest           - cancel a friend request', function (testComplete) {
+            async.series({
+                sent: function (next) {
+                    AccountModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, sentRequest) {
+                        next(err, sentRequest);
+                    });
+                },
+                canceled: function (next) {
+                    AccountModel.cancelRequest(testUsers.jeff._id, testUsers.zane._id, next);
+                }
+            }, function (err, results) {
+                if (err) return testComplete(err);
+
+                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id);
+                results.sent.requested.should.have.a.property('_id', testUsers.zane._id);
+                results.sent.should.have.a.property('status', 'Pending');
+                results.sent.dateSent.should.be.an.instanceof(Date);
+
+                results.canceled.should.equal(1);
+
+                testComplete();
+            });
+        });
+
         it('denyRequest             - deny a friend request', function (testComplete) {
             async.series({
                 sent: function (next) {
@@ -1232,6 +1256,31 @@ module.exports = function () {
                 results.accepted.requested.should.have.a.property('_id', testUsers.zane._id)
                 results.accepted.should.have.a.property('status', 'Accepted')
                 results.accepted.dateSent.should.be.an.instanceof(Date)
+
+                testComplete()
+            })
+        })
+
+        it('cancelRequest           - cancel a friend request received from the specified user', function (testComplete) {
+            async.series({
+                sent: function (next) {
+                    testUsers.jeff.friendRequest(testUsers.zane._id, function (err, sentRequest) {
+                        next(err, sentRequest);
+                    })
+                },
+                canceled: function (next) {
+                    testUsers.zane.cancelRequest(testUsers.jeff._id, next)
+                }
+            }, 
+            function (err, results) {
+                if (err) return testComplete(err)
+
+                results.sent.requester.should.have.a.property('_id', testUsers.jeff._id)
+                results.sent.requested.should.have.a.property('_id', testUsers.zane._id)
+                results.sent.should.have.a.property('status', 'Pending')
+                results.sent.dateSent.should.be.an.instanceof(Date);
+
+                results.canceled.should.equal(1)
 
                 testComplete()
             })
