@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3>friends-of-friends 1.4.0</h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>friends-of-friends</h1><h2>Friendship Mangement for Mongoose</h2><p><a href="https://travis-ci.org/adminion/friends-of-friends"><img src="https://travis-ci.org/adminion/friends-of-friends.svg?branch=master" alt="Build Status"></a> 
+<a href="https://coveralls.io/r/adminion/friends-of-friends?branch=master"><img src="https://coveralls.io/repos/adminion/friends-of-friends/badge.svg?branch=master" alt="Coverage Status"></a></p>
+<h2>Installlation</h2><pre class="prettyprint source"><code>$ npm install friends-of-friends</code></pre><h2>Usage</h2><h3>Default Configuration</h3><pre class="prettyprint source lang-javascript"><code>
+var FriendsOfFriends = require('friends-of-friends');
+var fof = new FriendsOfFriends();
+// works with or without 'new'
+var FriendsOfFriends = require('friends-of-friends')();</code></pre><h4>Defaults</h4><pre class="prettyprint source lang-javascript"><code>var defaults = {
+    // define the name for your Users model.
+    accountName: 'Account',
+    // define the name of the Users colletion. 
+    accountCollection: undefined,
+    // define the name for the Friendship model
+    friendshipName: 'Friendship',
+    // define the name of the Friendship collection.
+    friendshipCollection: undefined
+}</code></pre><h3>Specifying Configuration Options</h3><pre class="prettyprint source lang-javascript"><code>
+var options = { 
+     accountName:             'Player',
+     accountCollection:       'foo_userAccounts',
+     friendshipName:          'Friend_Relationships', 
+     friendshipCollection:    'bar_userRelationships',
+ };
+
+var FriendsOfFriends = require('friends-of-friends');
+var fof = new FriendsOfFriends(options);
+// again, works with or without 'new'
+var FriendsOfFriends = require('friends-of-friends')(options);</code></pre><h3>Plugin friends-of-friends to User Schema</h3><pre class="prettyprint source lang-javascript"><code>var mongoose = require('mongoose');
+
+// create you User schema
+var UserSchema = new mongoose.Schema({
+    username: { type: String, unique: true }
+});
+
+// apply friends-of-friends plugin to your User schema
+UserSchema.plugin(friendsOfFriends.plugin, options);
+
+// compile your user model
+var User = mongoose.model(options.accountName), UserSchema);
+
+// create users
+var Jeff = new User({ username: &quot;Jeff&quot; }),
+    Zane = new User({ username: &quot;Zane&quot;}),
+    Sam = new User({ username: &quot;Sam&quot;});
+
+console.log('Jeff', Jeff);
+console.log('Zane', Zane);
+console.log('Zane', Zane);
+
+// Jeff: { __v: 0, username: 'Jeff', _id: 54c6eb7cf2f9fe9672b90ba2 }
+// Zane: { __v: 0, username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3 }
+// Sam: { __v: 0, username: 'Sam', _id: 54c6eb7cf2f9fe9672b90ba4 }
+
+// connect to db
+mongoose.connect('mongodb://localhost/test');</code></pre><h3>Use Plugged-in functionality</h3><h4>Send Friend Requests</h4><p>Jeff can ask Zane to be friends</p>
+<pre class="prettyprint source lang-javascript"><code>Jeff.friendRequest(Zane._id, function (err, request) {
+    if (err) throw err;
+
+    console.log('request', request);
+    // request { __v: 0,
+    //   requester: { username: 'Jeff', _id: 54c6eb7cf2f9fe9672b90ba2, __v: 0 },
+    //   requested: { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 },
+    //   _id: 54c6eb7cf2f9fe9672b90ba4,
+    //   dateSent: Mon Jan 26 2015 17:35:56 GMT-0800 (PST),
+    //   status: 'Pending' }
+});</code></pre><h4>Deny Friend Requests</h4><p>Zane could deny Jeff's Request...</p>
+<pre class="prettyprint source lang-javascript"><code>Zane.denyRequest(Jeff._id, function (err, denied) {
+    if (err) throw err;
+
+    console.log('denied', denied);
+    // denied 1
+});</code></pre><h4>Accept Friend Requests</h4><p>... or Zane could accept Jeff's Request</p>
+<pre class="prettyprint source lang-javascript"><code>Zane.acceptRequest(Jeff._id, function (err, friendship) {
+    if (err) throw err;
+
+    console.log('friendship', friendship);
+        // friendship { __v: 0,
+        //   _id: 54c6eb7cf2f9fe9672b90ba4,
+        //   dateAccepted: Mon Jan 26 2015 17:35:57 GMT-0800 (PST),
+        //   requested: { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 },
+        //   requester: { username: 'Jeff', _id: 54c6eb7cf2f9fe9672b90ba2, __v: 0 },
+        //   dateSent: Mon Jan 26 2015 17:35:56 GMT-0800 (PST),
+        //   status: 'Accepted' }
+});</code></pre><h4>Get Friends</h4><p>Now Jeff can get a list of his friends</p>
+<pre class="prettyprint source lang-javascript"><code>
+// Zane is now Jeff's friend
+Jeff.getFriends(function (err, friends) {
+    if (err) throw err;
+
+    console.log('friends', friends);
+    // friends [ { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 } ]
+});</code></pre><h4>Get Friends Of Friends</h4><p>When two users are not friends, but have at least one friend in common, they are friends-of-friends</p>
+<pre class="prettyprint source lang-javascript"><code>Zane.friendRequest(Sam._id, function (err, request) {
+    if (err) throw err;
+
+    console.log('request', request);
+    // request { __v: 0,
+    //   requester: { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 },
+    //   requested: { username: 'Sam', _id: 54c6eb7cf2f9fe9672b90ba4, __v: 0 },
+    //   _id: 54c6eb7cf2f9fe9672b90ba5,
+    //   dateSent: Mon Jan 26 2015 17:35:58 GMT-0800 (PST),
+    //   status: 'Pending' }
+
+    Sam.acceptRequest(Zane._id, function (err, friendship) {
+        if (err) throw err;
+
+        console.log('friendship', friendship);
+        // friendship { __v: 0,
+        //   _id: 54c6eb7cf2f9fe9672b90ba5,
+        //   dateAccepted: Mon Jan 26 2015 17:35:59 GMT-0800 (PST),
+        //   requested: { username: 'Sam', _id: 54c6eb7cf2f9fe9672b90ba4, __v: 0 },
+        //   requester: { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 },
+        //   dateSent: Mon Jan 26 2015 17:35:58 GMT-0800 (PST),
+        //   status: 'Accepted' }
+
+        Jeff.getFriendsOfFriends(function (err, friendsOfJeffsFriends) {
+            if (err) throw (err)
+
+            console.log('friendsOfJeffsFriends', friendsOfJeffsFriends);
+            // friendsOfJeffsFriends [ { username: 'Sam', _id: 54c6eb7cf2f9fe9672b90ba4, __v: 0 } ]
+        });
+    });
+});</code></pre><h2>Tests</h2><p>You can run the tests with <code>npm test</code></p>
+<pre class="prettyprint source"><code>$ npm test</code></pre><h2>API</h2><p>API documentation is located in <code>doc/</code></p>
+<h2>License</h2><p>Copyright (c) 2014-2015 Jeff Harris</p>
+<p>All rights reserved.</p>
+<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
+<ol>
+<li><p>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p>
+</li>
+<li><p>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p>
+</li>
+<li><p>Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.</p>
+</li>
+</ol>
+<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountDocument.html">AccountDocument</a></li><li><a href="AccountModel.html">AccountModel</a></li><li><a href="FriendshipDocument.html">FriendshipDocument</a></li><li><a href="FriendshipModel.html">FriendshipModel</a></li><li><a href="FriendsOfFriends.html">FriendsOfFriends</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue Apr 14 2015 22:42:13 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

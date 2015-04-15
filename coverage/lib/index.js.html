@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for lib/index.js</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../prettify.css">
+
+    <link rel="stylesheet" href="../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header high">
+    <h1>Code coverage report for <span class="entity">lib/index.js</span></h1>
+    <h2>
+        
+        Statements: <span class="metric">100% <small>(16 / 16)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Branches: <span class="metric">100% <small>(2 / 2)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Functions: <span class="metric">100% <small>(3 / 3)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Lines: <span class="metric">100% <small>(16 / 16)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">lib/</a> &#187; index.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
+/**
+ * @author  Jeff Harris
+ * @ignore
+ */
+&nbsp;
+var debug = require('debug')('friends-of-friends'),
+    relationships = require('./relationships'),
+    utils = require('techjeffharris-utils');
+&nbsp;
+module.exports = FriendsOfFriends
+&nbsp;
+/**
+ * Creates a new FriendsOfFriends Object with or without new
+ * ```javascript
+ * 
+ * var FriendsOfFriends = require('friends-of-friends');
+ * var fof = new FriendsOfFriends();
+ * // works with or without 'new'
+ * var FriendsOfFriends = require('friends-of-friends')();
+ * ```
+ * 
+ *  Default Configuration 
+ * ```javascript
+ * var defaults = {
+ *     // define the name for your Users model.
+ *     accountName: 'Account',
+ *     // define the name of the Users colletion. 
+ *     accountCollection: undefined,
+ *     // define the name for the Friendship model
+ *     friendshipName: 'Friendship',
+ *     // define the name of the Friendship collection.
+ *     friendshipCollection: undefined
+ * }
+ * ```
+ * 
+ *  Specifying Configuration Options
+ * ```javascript
+ * 
+ * var options = { 
+ *      accountName:             'Player',
+ *      accountCollection:       'foo_userAccounts',
+ *      friendshipName:          'Friend_Relationships', 
+ *      friendshipCollection:    'bar_userRelationships',
+ *  };
+ *  
+ * var FriendsOfFriends = require('friends-of-friends');
+ * var fof = new FriendsOfFriends(options);
+ * // again, works with or without 'new'
+ * var FriendsOfFriends = require('friends-of-friends')(options);
+ * ```
+ * @class FriendsOfFriends
+ * @param {Object} options - optional object containing configurable options
+ */
+function FriendsOfFriends(options) {
+&nbsp;
+    debug('options', options)
+&nbsp;
+    if (!(this instanceof FriendsOfFriends)) {
+      return new FriendsOfFriends(options);
+    } 
+&nbsp;
+    var friendship = require('./friendship'),
+        plugin = require('./plugin');
+&nbsp;
+    var defaults = {
+        accountName:    'Account',
+        friendshipName: 'Friendship',
+    };
+&nbsp;
+    /**
+     * The options defined for the module instance
+     * @member      {Object} options
+     * @memberOf    FriendsOfFriends
+     * @property    {String} accountName            - The name to call the model to be compiled from the Account Schema. Default: `'Account'`
+     * @property    {String} accountCollection      - The name to use for the Account Collection. Default: `undefined`.
+     * @property    {String} friendshipName         - The name to call the model to be compiled from the Friendship Schema. Default: `'Friendship'`
+     * @property    {String} friendshipCollection   - The name to use for the Account Collection. Default: `undefined`.
+     */
+    this.options = utils.extend(defaults, options);
+&nbsp;
+    /**
+     * The Friendship model 
+     * @member      {Model}     friendship
+     * @memberOf    FriendsOfFriends
+     * @see         {@link FriendshipModel}
+     * @see         [moongoose models]{@link http://mongoosejs.com/docs/models.html}
+     */
+    this.friendship = friendship(this.options);
+&nbsp;
+    /**
+     * Adds friends-of-friends functionality to an existing Schema
+     * @function    FriendsOfFriends.plugin
+     * @param       {Schema} schema     - The mongoose Schema that gets plugged
+     * @param       {Object} options    - Options passed to the plugin
+     * @see         {@link AccountModel}
+     */
+    this.plugin = plugin;
+&nbsp;
+};
+&nbsp;
+/** 
+ * Relationship constants
+ * @constant
+ * @member      {Object} relationships
+ * @memberOf    FriendsOfFriends
+ * @property    {String}    '0'                 - Value: `'NOT_FRIENDS'`
+ * @property    {String}    '1'                 - Value: `'FRIENDS_OF_FRIENDS'`
+ * @property    {String}    '1.5'               - Value: `'PENDING_FRIENDS'`
+ * @property    {String}    '2'                 - Value: `'FRIENDS'`
+ * @property    {Number}    NOT_FRIENDS         - Value: `0`
+ * @property    {Number}    FRIENDS_OF_FRIENDS  - Value: `1`
+ * @property    {Number}    PENDING_FRIENDS     - Value: `1.5`
+ * @property    {Number}    FRIENDS             - Value: `2`
+ */
+FriendsOfFriends.prototype.relationships = relationships;
+&nbsp;
+/**
+ * Return the value of a property of `this.options`
+ * @param   {String} property - The property to get
+ * @return  {Mixed} 
+ * @see     {@link FriendsOfFriends.options}
+ */
+FriendsOfFriends.prototype.get = function (property) {
+    return this.options[property];
+};
+&nbsp;
+/**
+ * Set the value of a property of `this.options`
+ * @param   {String}    property    - The name of the Property
+ * @param   {Mixed}     value       - The new value of the property
+ * @return  {Mixed}
+ * @see     {@link FriendsOfFriends.options}
+ */
+FriendsOfFriends.prototype.set = function (property, value) {
+    return this.options[property] = value;
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Apr 14 2015 22:35:19 GMT-0700 (PDT)</div>
+</div>
+
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+
+<script src="../sorter.js"></script>
+</body>
+</html>

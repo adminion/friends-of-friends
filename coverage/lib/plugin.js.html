@@ -1,0 +1,1992 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for lib/plugin.js</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../prettify.css">
+
+    <link rel="stylesheet" href="../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header high">
+    <h1>Code coverage report for <span class="entity">lib/plugin.js</span></h1>
+    <h2>
+        
+        Statements: <span class="metric">99.4% <small>(167 / 168)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Branches: <span class="metric">95.45% <small>(21 / 22)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Functions: <span class="metric">100% <small>(54 / 54)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Lines: <span class="metric">100% <small>(167 / 167)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">lib/</a> &#187; plugin.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586
+587
+588
+589
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601
+602
+603
+604
+605
+606
+607
+608
+609
+610
+611
+612
+613
+614
+615
+616
+617
+618
+619
+620
+621
+622
+623
+624
+625
+626
+627
+628
+629
+630
+631
+632
+633
+634
+635
+636
+637
+638
+639
+640
+641
+642
+643
+644
+645
+646</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">49</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">49</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">49</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">49</span>
+<span class="cline-any cline-yes">49</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">48</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46</span>
+<span class="cline-any cline-yes">46</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">17</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17</span>
+<span class="cline-any cline-yes">17</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">39</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">39</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">39</span>
+<span class="cline-any cline-yes">39</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">37</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">21</span>
+<span class="cline-any cline-yes">21</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">16</span>
+<span class="cline-any cline-yes">16</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
+var async = require('async'),
+    debug = require('debug')('friends-of-friends:plugin'),
+    mongoose = require('mongoose'),
+    relationships = require('./relationships'),
+    utils = require('techjeffharris-utils');
+&nbsp;
+module.exports = function friendshipPlugin (schema, options) {
+&nbsp;
+    // debug('schema', schema)
+&nbsp;
+    debug('options', options)
+&nbsp;
+    var defaults = {
+        accountName:    'Account',
+        friendshipName: 'Friendship'
+    };
+&nbsp;
+    options = utils.extend(defaults, options);
+&nbsp;
+    debug('options', options)
+&nbsp;
+    Friendship = require('./friendship')(options)
+&nbsp;
+    /**
+     *  Functions called on the Account Model itself
+     * 
+     * example:
+     * ```javascript
+     * Model.getFriends(Jeff._id, function (err, friends) {
+     *      
+     *     console.log('friends', friends);
+     *  
+     * });
+     * ```
+     *  
+     * @class AccountModel
+     */
+    
+    /**
+     * default relationship constants 
+     * @member      relationships
+     * @memberOf    AccountModel
+     * @constant
+     * @type        {Object}
+     * @see         [FriendsOfFriends.relationships]{@link FriendsOfFriends.relationships}
+     */
+    schema.statics.relationships = relationships;
+&nbsp;
+    /**
+     * sends a friend request to a another user
+     * @function    AccountModel.friendRequest
+     * @param       {ObjectId} requesterId    - the ObjectId of the account sending the request
+     * @param       {ObjectId} requested_Id   - the ObjectId of the account to whom the request will be sent
+     * @param       {Function} done           - required callback
+     */
+    schema.statics.friendRequest = function (requesterId, requestedId, done) {
+        debug('AccountModel.friendRequest');
+&nbsp;
+        var accountModel = mongoose.model(options.accountName);
+&nbsp;
+        var conditions = { 
+            requester: requesterId, 
+            requested: requestedId 
+        };
+&nbsp;
+        // check for existing friendship or request
+        Friendship.findOne(conditions, function (err, friendship) {
+            if (err) {
+                done(err);
+            } else if (friendship) {
+                var error = new Error( (friendship.status === 'Pending')
+                    ? 'A pending request already exists'
+                    : 'Requester and requested are already friends'
+                );
+&nbsp;
+                accountModel.populate(friendship, 'requester requested', function (err, populatedFriendship) {
+                    <span class="missing-if-branch" title="if path not taken" >I</span>if (err) <span class="cstat-no" title="statement not covered" >return done (err)</span>
+&nbsp;
+                    done(error, populatedFriendship)
+                })
+            } else {
+                new Friendship(conditions).save(function (err, pendingFriendship) {
+                    accountModel.populate(pendingFriendship, 'requester requested', done);
+                })
+            }
+        });
+    };
+&nbsp;
+    /**
+     *  get all friend requests for a given user
+     * @function    AccountModel.getRequests
+     * @param       {ObjectId} accountId  - the _id of the user
+     * @param       {Function} done       - required callback, passed requests retrieved
+     * @see         [FriendshipModel.getRequests]{@link FriendshipModel.getRequests}
+     */
+    schema.statics.getRequests = function (accountId, done) {
+        debug('AccountModel.getRequests')
+        var accountModel = mongoose.model(options.accountName);
+&nbsp;
+        Friendship.getRequests(accountId, function (err, requests) {
+            if (err) {
+                done(err)
+            } else {
+                accountModel.populate(requests, 'sent.requester sent.requested received.requester received.requested', done);
+            }
+        });
+    };
+&nbsp;
+    /**
+     *  get requests the given user has sent
+     * @function    AccountModel.getSentRequests
+     * @param       {ObjectId} accountId    - the _id of the user
+     * @param       {Function} done         - required callback, passed sent requests retrieved 
+     * @see         [FriendshipModel.getSentRequests]{@link FriendshipModel.getSentRequests}
+     */
+    schema.statics.getSentRequests = function (accountId, done) {
+        debug('AccountModel.getSentRequests')
+&nbsp;
+        var accountModel = mongoose.model(options.accountName);
+&nbsp;
+        Friendship.getSentRequests(accountId, function (err, sentRequests) {
+            if (err) {
+                done(err)
+            } else {
+                accountModel.populate(sentRequests, 'requester requested', done);
+            }
+        })
+    };
+&nbsp;
+    /**
+     *  get requests received by the given user
+     * @function    AccountModel.getReceivedRequests
+     * @param       {ObjectId} accountId - the _id of the user
+     * @param       {Function} done - required callback, passed received requests retrieved
+     * @see         [FriendshipModel.getReceivedRequests]{@link FriendshipModel.getReceivedRequests}
+     */
+    schema.statics.getReceivedRequests = function (accountId, done) {
+        debug('AccountModel.getReceivedRequests')
+&nbsp;
+        var accountModel = mongoose.model(options.accountName);
+&nbsp;
+        Friendship.getReceivedRequests(accountId, function (err, receivedRequests) {
+            if (err) {
+                done(err);
+            } else {
+                accountModel.populate(receivedRequests, 'requester requested', done);
+            } 
+        });
+    };
+&nbsp;
+    /**
+     *  accept a friend request 
+     * @function    AccountModel.acceptRequest
+     * @param       {ObjectId} requesterId  - the _id of the requester of friendship
+     * @param       {ObjectId} requestedId  - the _id of the user whose friendship was requested
+     * @param       {Function} done         - required callback, passed the populated friendship
+     * @see         [FriendshipModel.acceptRequest]{@link FriendshipModel.acceptRequest}
+     */
+    schema.statics.acceptRequest = function (requesterId, requestedId, done) {
+        debug('AccountModel.acceptRequest')
+&nbsp;
+        var accountModel = mongoose.model(options.accountName);
+&nbsp;
+        Friendship.acceptRequest(requesterId, requestedId, function (err, friendship) {
+            if (err) {
+                done(err);
+            } else {
+                accountModel.populate(friendship, 'requester requested', done);
+            }
+        });
+    };
+&nbsp;
+    /**
+     *  cancel a friend request
+     * @function    AccountModel.cancelRequest
+     * @param       {ObjectId} requesterId  - the _id of the requester of friendship
+     * @param       {ObjectId} requestedId  - the _id of the user whose friendship was requested
+     * @param       {Function} done         - required callback, passed the denied friendship
+     * @see         [FriendshipModel.cancelRequest]{@link FriendshipModel.cancelRequest}
+     */
+    schema.statics.cancelRequest = function (requesterId, requestedId, done) {
+         Friendship.cancelRequest(requesterId, requestedId, done);
+    };
+&nbsp;
+    /**
+     *  deny a friend request
+     * @function    AccountModel.denyRequest
+     * @param       {ObjectId} requesterId  - the _id of the requester of friendship
+     * @param       {ObjectId} requestedId  - the _id of the user whose friendship was requested
+     * @param       {Function} done         - required callback, passed the denied friendship
+     * @see         [FriendshipModel.denyRequest]{@link FriendshipModel.denyRequest}
+     */
+    schema.statics.denyRequest = function (requesterId, requestedId, done) {
+         Friendship.denyRequest(requesterId, requestedId, done);
+    };
+&nbsp;
+    /**
+     * end a friendship between two accounts
+     * @function    AccountModel.endFriendship
+     * @param       {ObjectId}   accountId1 - the _id of account 1
+     * @param       {ObjectId}   accountId2 - the _id of account 2
+     * @param       {Function} done       - required callback
+     * @see         [FriendshipModel.endFriendship]{@link FriendshipModel.endFriendship}
+     */
+    schema.statics.endFriendship = function (accountId1, accountId2, done) {
+        var conditions = { 
+            '$or': [
+                { requester: accountId1, requested: accountId2 },
+                { requester: accountId2, requested: accountId1 }
+            ],
+            status: 'Accepted'
+        };
+&nbsp;
+        Friendship.remove(conditions, done)
+    };
+&nbsp;
+    /**
+     *  get all friends of an account
+     * @function    AccountModel.getFriends
+     * @param       {ObjectId} accountId    - the _id of the account
+     * @param       {Function} done         - required callback, passed an array of friends
+     * @see         [FriendshipModel.getFriends]{@link FriendshipModel.getFriends}
+     */
+    schema.statics.getFriends = function (accountId, done) {
+        debug('AccountModel.getFriends')
+&nbsp;
+        var accountModel = mongoose.model(options.accountName);
+&nbsp;
+        Friendship.getFriends(accountId, function (err, friendIds) {
+            if (err) {
+                done(err);
+            } else {
+                accountModel.find({ '_id' : { '$in': friendIds } }, done);
+            }
+        });
+    };
+&nbsp;
+    /**
+     *  get friends of an account's friends
+     * @function    AccountModel.getFriendsOfFriends
+     * @param       {ObjectId} accountId    - the _id of the account
+     * @param       {Function} done         - required callback, passed an array of friendsOfFriends
+     * @see         [FriendshipModel.getFriendsOfFriends]{@link FriendshipModel.getFriendsOfFriends}
+     */
+    schema.statics.getFriendsOfFriends = function (accountId, done) {
+        debug('AccountModel.getFriendsOfFriends')
+&nbsp;
+        var accountModel = mongoose.model(options.accountName);
+&nbsp;
+        // get the specified user's friendsOfFriends
+        Friendship.getFriendsOfFriends(accountId, function (err, friendIdsOfFriends) {
+            if (err) {
+                done(err);
+            } else {
+                accountModel.find({ '_id' : { '$in': friendIdsOfFriends } }, done);
+            }
+        });
+    };
+&nbsp;
+    /**
+     *  get friends of an account's pending friends
+     * @function    AccountModel.getPendingFriends
+     * @param       {ObjectId} accountId    - the _id of the account
+     * @param       {Function} done         - required callback, passed an array of friendsOfFriends
+     * @see         [FriendshipModel.getPendingFriends]{@link FriendshipModel.getPendingFriends}
+     */
+    schema.statics.getPendingFriends = function (accountId, done) {
+        var accountModel = mongoose.model(options.accountName);
+&nbsp;
+        Friendship.getPendingFriends(accountId, function (err, pendingFriendIds) {
+            if (err) {
+                done(err);
+            } else {
+                accountModel.find({ '_id' : { '$in': pendingFriendIds } }, done);
+            }
+        })
+    }
+&nbsp;
+    /**
+     * get all users that are not the given user's friends or friendsOfFriends
+     * @param   {ObjectId} accountId - the _id of the user 
+     * @param   {Function} done      - required callback
+     * @see     [FriendshipModel.getNonFriends]{@link FriendshipModel.getNonFriends}
+     */
+    schema.statics.getNonFriends = function (accountId, done) {
+        debug('AccountModel.getNonFriends');
+&nbsp;
+        var accountModel = mongoose.model(options.accountName),
+            self = this;
+&nbsp;
+        async.parallel({
+            friends: function (complete) {
+                Friendship.getFriends(accountId, complete);
+            },
+            friendsOfFriends: function (complete) {
+                Friendship.getFriendsOfFriends(accountId, complete);
+            },
+            pendingFriends: function (complete) {
+                Friendship.getPendingFriends(accountId, complete);
+            }
+        }, function (err, results) {
+&nbsp;
+            debug('friendIds of ' + accountId, results.friendIds)
+            debug('friendIds of ' + accountId + '\'s friends', results.friendIdsOfFriends)
+            debug('Ids of ' + accountId + '\'s friends', results.pendingFriends)
+&nbsp;
+            var conditions = {
+                '_id': { 
+                    '$ne' : accountId,
+                    '$nin': results.friends.concat(results.friendsOfFriends.concat(results.pendingFriends))
+                }
+            };
+&nbsp;
+            accountModel.find(conditions, done);
+      
+        });
+    }; 
+&nbsp;
+    /**
+     *  determine if accountId1 and accountId2 are friends
+     * @function    AccountModel.areFriends
+     * @param       {ObjectId} accountId1   - the _id of account1
+     * @param       {ObjectId} accountId2   - the _id of account2
+     * @param       {Function} done         - required callback, passed a boolean determination
+     * @see         [FriendshipModel.areFriends]{@link FriendshipModel.areFriends}
+     */
+    schema.statics.areFriends = function (accountId1, accountId2, done) {
+         Friendship.areFriends(accountId1, accountId2, done);
+    };
+&nbsp;
+    /**
+     *  determine if accountId1 and accountId2 have any common friends
+     * @function    AccountModel.areFriendsOfFriends
+     * @param       {ObjectId} accountId1   - the _id of account1
+     * @param       {ObjectId} accountId2   - the _id of account2
+     * @param       {Function} done         - required callback, passed a boolean determination
+     * @see         [FriendshipModel.areFriendsOfFriends]{@link FriendshipModel.areFriendsOfFriends}
+     */
+    schema.statics.areFriendsOfFriends = function (accountId1, accountId2, done) {
+         Friendship.areFriendsOfFriends(accountId1, accountId2, done);
+    };
+&nbsp;
+    /**
+     *  determine if accountId1 and accountId2 have a pending friendship 
+     * @param  {ObjectId}   accountId1 - the _id of account 1
+     * @param  {ObjectId}   accountId2 - the _id of account 2
+     * @param  {Function} done       - required callback, passed an error or null and a boolean determination
+     */
+    schema.statics.arePendingFriends = function (accountId1, accountId2, done) {
+        debug('AccountModel.arePendingFriends')
+        Friendship.arePendingFriends(accountId1, accountId2, done);
+    };
+&nbsp;
+    /**
+     *  get the friendship document itself
+     * @function    AccountModel.getFriendship
+     * @param       {ObjectId} accountId1   - the _id of account1
+     * @param       {ObjectId} accountId2   - the _id of account2
+     * @param       {Function} done         - required callback, passed err and a Friendship document, if found
+     * @see         [FriendshipModel.getFriendship]{@link FriendshipModel.getFriendship}
+     */
+    schema.statics.getFriendship = function (accountId1, accountId2, done) {
+        debug('AccountModel.getFriendship')
+&nbsp;
+        var accountModel = mongoose.model(options.accountName);
+&nbsp;
+        Friendship.getFriendship(accountId1, accountId2, function (err, friendship) {
+            accountModel.populate(friendship, 'requester requested', done);
+        });
+    };
+&nbsp;
+    /**
+     *  get the numeric relationship between two users
+     * @function    AccountModel.getRelationship
+     * @param       {ObjectId} accountId1   - the _id of account1
+     * @param       {ObjectId} accountId2   - the _id of account2
+     * @param       {Function} done         - required callback, passed err and a Relationship value
+     * @see         [FriendshipModel.getRelationship]{@link FriendshipModel.getRelationship}
+     */
+    schema.statics.getRelationship = function (accountId1, accountId2, done) {
+        debug('AccountModel.getRelationship');
+&nbsp;
+        Friendship.getRelationship(accountId1, accountId2, done);
+    };
+&nbsp;
+    /**
+     * check to see if the given user is the requester in a given friendship
+     * @function    AccountModel.isRequester
+     * @param       {ObjectId}   friendshipId - the _id of the friendship document
+     * @param       {ObjectId}   accountId    - the _id of the account
+     * @param       {Function}   done         - required callback
+     */
+    schema.statics.isRequester = function (friendshipId, accountId, done) {
+        debug('AccountModel.isRequester');
+        Friendship.isRequester(friendshipId, accountId, done);
+    };
+&nbsp;
+    /**
+     * check to see if the given user is the requested in a given friendship
+     * @function    AccountModel.isRequested
+     * @param       {ObjectId}   friendshipId - the _id of the friendship document
+     * @param       {ObjectId}   accountId    - the _id of the account
+     * @param       {Function}   done         - required callback
+     */
+    schema.statics.isRequested = function (friendshipId, accountId, done) {
+        debug('AccountModel.isRequested');
+        Friendship.isRequested(friendshipId, accountId, done);
+    };
+&nbsp;
+    /**
+     *  Document-accessible properties and methods
+     * 
+     * These instance methods are aliases of the Model statics as they apply to each document
+     * 
+     * example:
+     * ```javascript
+     *  var jeff = new User({ username: "Jeff" }),
+     *      zane = new User({ username: "Zane" });
+     *      
+     *  jeff.sendRequest(zane._id, function (err, request) {...});
+     * ```
+     *  
+     *  @class AccountDocument
+     */
+   
+    /**
+     *  send a request to another account
+     * @function    AccountDocument.friendRequest
+     * @param       {ObjectId} requestedId  - the _id of the account to whom the request will be sent
+     * @param       {Function} done         - required callback, passed the populated request sent 
+     * @see         [AccountModel.friendRequest]{@link AccountModel.friendRequest}
+     */
+    schema.methods.friendRequest = function (requestedId, done) {
+        debug('AccountDocument.friendRequest')
+        this.constructor.friendRequest(this._id, requestedId, done);
+    };
+&nbsp;
+    /**
+     *  get friend requests
+     * @function    AccountDocument.getRequests
+     * @param       {Function} done - required callback, passed the populated requests retrieved
+     * @see         [AccountModel.getRequests]{@link AccountModel.getRequests}
+     */
+    schema.methods.getRequests = function (done) {
+        debug('AccountDocument.getRequests');
+        this.constructor.getRequests(this._id, done);
+    };
+&nbsp;
+    /**
+     * get friend requests the user has sent
+     * @function    AccountDocument.getSentRequests
+     * @param       {Function} done - required callback, passed the populated requests retrieved
+     * @see         [AccountModel.getSentRequests]{@link AccountModel.getSentRequests}
+     */
+    schema.methods.getSentRequests = function (done) {
+        debug('AccountDocument.getSentRequests');
+        this.constructor.getSentRequests(this._id, done);
+    };
+&nbsp;
+    /**
+     *  get friend requests the user has received
+     * @function    AccountDocument.getReceivedRequests
+     * @param       {Function} done - required callback, passed the populated requests retrieved
+     * @see         [AccountModel.getReceivedRequests]{@link AccountModel.getReceivedRequests}
+     */
+    schema.methods.getReceivedRequests = function (done) {
+        debug('AccountDocument.getReceivedRequests');
+        this.constructor.getReceivedRequests(this._id, done);
+    };
+&nbsp;
+    /**
+     *  accept a friend request received from the specified user
+     * @function    AccountDocument.acceptRequest
+     * @param       {ObjectId} requesterId  - the _id of the account from whom the request was received
+     * @param       {Function} done         - required callback, passed the populated request that was accepted
+     * @see         [AccountModel.acceptRequest]{@link AccountModel.acceptRequest}
+     */
+    schema.methods.acceptRequest = function (requesterId, done) {
+        debug('AccountDocument.acceptRequest');
+        this.constructor.acceptRequest(requesterId, this._id, done);
+    };
+&nbsp;
+    /**
+     *  cancel a friend request sent to the specified user
+     * @function    AccountDocument.cancelRequest
+     * @param       {ObjectId} requestedId  - the _id of the account to whom the request was sent
+     * @param       {Function} done         - required callback, passed the populated request that was denied
+     * @see         [AccountModel.cancelRequest]{@link AccountModel.cancelRequest}
+     */
+    schema.methods.cancelRequest = function (requestedId, done) {
+        debug('AccountDocument.cancelRequest');
+        this.constructor.cancelRequest(this._id, requestedId, done);
+    };
+&nbsp;
+    /**
+     *  deny a friend request received from the specified user
+     * @function    AccountDocument.denyRequest
+     * @param       {ObjectId} requesterId  - the _id of the account from whom the request was received
+     * @param       {Function} done         - required callback, passed the populated request that was denied
+     * @see         [AccountModel.denyRequest]{@link AccountModel.denyRequest}
+     */
+    schema.methods.denyRequest = function (requesterId, done) {
+        debug('AccountDocument.denyRequest');
+        this.constructor.denyRequest(requesterId, this._id, done);
+    };
+&nbsp;
+    /**
+     * end a friendship with the specified user
+     * @param   {ObjectId}   accountId - the _id of the account 
+     * @param   {Function}   done      - required callback
+     * @see     [AccountModel.endFriendship]{@link AccountModel.endFriendship}
+     */
+    schema.methods.endFriendship = function (accountId, done) {
+        debug('AccountDocument.endFriendship');
+        this.constructor.endFriendship(this._id, accountId, done);
+    };
+&nbsp;
+    /**
+     *  get this document's friends
+     * @function    AccountDocument.getFriends
+     * @param       {Function} done - required callback, passed an array of friends
+     * @see         [AccountModel.getFriends]{@link AccountModel.getFriends}
+     */
+    schema.methods.getFriends = function (done) {
+        debug('AccountDocument.getFriends');
+        this.constructor.getFriends(this._id, done);
+    };
+&nbsp;
+    /**
+     *  get friends of this document's friends
+     * @function    AccountDocument.getFriendsOfFriends
+     * @param       {Function} done - required callback, passed an array of friendsOfFriends
+     * @see         [AccountModel.getFriendsOfFriends]{@link AccountModel.getFriendsOfFriends}
+     */
+    schema.methods.getFriendsOfFriends = function (done) {
+        debug('AccountDocument.getFriendsOfFriends');
+        this.constructor.getFriendsOfFriends(this._id, done);
+    };
+&nbsp;
+    /**
+     *  get friends of this account's pending friends
+     * @function    AccountDocument.getPendingFriends
+     * @param       {ObjectId} accountId    - the _id of the account
+     * @param       {Function} done         - required callback, passed an array of friendsOfFriends
+     * @see         [AccountModel.getPendingFriends]{@link AccountModel.getPendingFriends}
+     */
+    schema.methods.getPendingFriends = function (done) {
+        debug('AccountDocument.getPendingFriends');
+        this.constructor.getPendingFriends(this._id, done);
+    };
+&nbsp;
+    /**
+     *  get accounts which are not this document's friends
+     * @function    AccountDocument.getNonFriends
+     * @param       {Function} done - required callback, passed an array of friendsOfFriends
+     * @see         [AccountModel.getNonFriends]{@link AccountModel.getNonFriends}
+     */
+    schema.methods.getNonFriends = function (done) {
+        debug('AccountDocument.getNonFriends');
+        this.constructor.getNonFriends(this._id, done);
+    };
+&nbsp;
+    /**
+     *  determine if this document is friends with the specified account
+     * @function    AccountDocument.isFriend
+     * @param       {ObjectId} accountId    - the _id of the user to check for friendship
+     * @param       {Function} done         - required callback, passed a boolean determination
+     * @see         [AccountModel.isFriend]{@link AccountModel.isFriend}
+     */
+    schema.methods.isFriend = function (accountId, done) {
+        debug('AccountDocument.isFriend');
+        this.constructor.areFriends(this._id, accountId, done);
+    };
+&nbsp;
+    /**
+     *  determine if this document shares any friends with the specified account
+     * @function    AccountDocument.isFriendOfFriends
+     * @param       {ObjectId} accountId    - the _id of the user to check for friendship
+     * @param       {Function} done         - required callback, passed a boolean determination
+     * @see         [AccountModel.isFriendOfFriends]{@link AccountModel.isFriendOfFriends}
+     */
+    schema.methods.isFriendOfFriends = function (accountId, done) {
+        debug('AccountDocument.isFriendOfFriends');
+        this.constructor.areFriendsOfFriends(this._id, accountId, done);
+    };
+&nbsp;
+    /**
+     * determine if this document has a pending friendship with the specified account
+     * @param  {ObjectId}   accountId - the _id of the account
+     * @param  {Function} done      - required callback, passed a boolean determination
+     */
+    schema.methods.isPendingFriend = function (accountId, done) {
+        debug('AccountDocument.isPendingFriend');
+        this.constructor.arePendingFriends(this._id, accountId, done);
+    };
+&nbsp;
+    /**
+     *  get the friendship document of this document and the specified account
+     * @function    AccountDocument.getFriendship
+     * @param       {ObjectId} accountId    - the _id of the friend
+     * @param       {Function} done         - required callback, passed the populated friendship
+     * @see         [AccofuntModel.getFriendship]{@link AccountModel.getFriendship}
+     */
+    schema.methods.getFriendship = function (accountId, done) {
+        debug('AccountDocument.getFriendship');
+        this.constructor.getFriendship(this._id, accountId, done);
+    };
+&nbsp;
+    /**
+     *  get the relationship of this document and the specified account
+     * @function    AccountDocument.getRelationship
+     * @param       {ObjectId} accountId    - the _id of the friend
+     * @param       {Function} done         - required callback, passed the relationship value
+     * @see         [AccountModel.getRelationship]{@link AccountModel.getRelationship}
+     */
+    schema.methods.getRelationship = function (accountId, done) {
+        debug('AccountDocument.getRelationship');
+        this.constructor.getRelationship(this._id, accountId, done);
+    };
+&nbsp;
+    /**
+     * check to see if the given user is the requester in this relationship
+     * @function    AccountDocument.isRequester
+     * @param       {ObjectId} accountId - the _id of the account
+     * @param       {Function} done      - required callback
+     * @see         [AccountModel.isRequester]{@link AccountModel.isRequester}
+     */
+    schema.methods.isRequester = function (friendshipId, done) {
+        debug('AccountDocument.isRequester');
+        this.constructor.isRequester(friendshipId, this._id, done);
+    };
+&nbsp;
+    /**
+     * check to see if the given user is the requested in this relationship
+     * @function    AccountDocument.isRequested
+     * @param       {ObjectId} accountId - the _id of the account
+     * @param       {Function} done      - required callback
+     * @see         [AccountModel.isRequested]{@link AccountModel.isRequested}
+     */
+    schema.methods.isRequested = function (friendshipId, done) {
+        debug('AccountDocument.isRequested');
+        this.constructor.isRequested(friendshipId, this._id, done);
+    }
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Apr 14 2015 22:35:19 GMT-0700 (PDT)</div>
+</div>
+
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+
+<script src="../sorter.js"></script>
+</body>
+</html>

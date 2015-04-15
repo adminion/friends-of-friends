@@ -16,5 +16,11 @@
         "default": {
             "outputSourceFiles": true
         }
+    },
+    "opts": {
+        "destination": "./doc/",
+        "package": "package.json",
+        "readme": "./README.md",
+        "verbose": true
     }
 }

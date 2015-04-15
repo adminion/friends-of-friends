@@ -4,9 +4,9 @@
   "description": "Friendship Management for Mongoose",
   "main": "index.js",
   "scripts": {
-    "docs": "./generate_docs.sh",
-    "test": "mocha tests/",
-    "coverage": "istanbul cover --hook-run-in-context ./node_modules/mocha/bin/_mocha --report html -- -R spec tests"
+    "coverage": ".bin/coverage.sh",
+    "docs": "nodejs .bin/docs.js",
+    "test": "mocha tests/"
   },
   "repository": {
     "type": "git",
@@ -39,6 +39,8 @@
   "devDependencies": {
     "coveralls": "2.x",
     "istanbul": "0.x",
+    "jsdoc": "3.x",
+    "jsdoc-to-markdown": "0.5.x",
     "mocha": "2.x",
     "mocha-mongoose": "1.x",
     "mocha-lcov-reporter": "0.x",
