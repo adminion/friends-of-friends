@@ -3,6 +3,12 @@ CHANGES
 
 # v1.x
 
+## v1.4.1
+* Removed (outdated) API docs from README.md
+* API documentation now available in `doc/`
+* Test Coverage data now available in `coverage/`
+* Updated LICENSE copyright year
+
 ## v1.4.0
 * added `cancelRequest()` to `FriendshipModel`, `AccountModel`, and `AccountDocument`
 

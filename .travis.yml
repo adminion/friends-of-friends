@@ -10,14 +10,7 @@ services:
 install: 
   - npm install -g istanbul
   - npm install -g mocha
-  - npm install async
-  - npm install coveralls
-  - npm install debug
-  - npm install mocha-mongoose
-  - npm install mocha-lcov-reporter
-  - npm install mongoose
-  - npm install should
-  - npm install techjeffharris-utils
+  - npm install 
 before_script:
   - mocha --version
 after_script:
