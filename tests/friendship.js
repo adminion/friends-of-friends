@@ -1,30 +1,22 @@
 
 var async               = require('async'), 
-    Friendship          = require('../lib/friendship')({accountName: 'test-account'}),
     dbURI               = 'mongodb://localhost/friends-of-friends-tests',
     debug               = require('debug')('friends-of-friends:tests:friendship')
     should              = require('should'),
-    mongoose            = require('mongoose'),
     clearDB             = require('mocha-mongoose')(dbURI, { noClear: true });
 
-var ObjectId = mongoose.Schema.Types.ObjectId;
+module.exports = function (FriendsOfFriends, mongoose) {
 
-var Account,
-    AccountSchema = new mongoose.Schema({username: String});
+    var Friendship = FriendsOfFriends.Friendship;
 
-try {
-    Account = mongoose.model('Account', AccountSchema);
-}
-catch (error) {
-    Account = mongoose.model('Account');
-}
+    var AccountSchema = new mongoose.Schema({username: String});
 
-var jeff = new Account({username: 'Jeff'}),
-    zane = new Account({username: 'Zane'});
+    var Account = mongoose.model('Account', AccountSchema);
 
-var docDescriptor = {requester: jeff._id, requested: zane._id};
+    var jeff = new Account({username: 'Jeff'}),
+        zane = new Account({username: 'Zane'});
 
-module.exports = function () {
+    var docDescriptor = {requester: jeff._id, requested: zane._id};
 
     describe('statics', function () {
 

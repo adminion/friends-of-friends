@@ -1,9 +1,12 @@
 
-var debug = require('debug')('friends-of-friends:tests'),
-	mongoose = require('mongoose'),
-	should = require('should');
+var debug = require('debug')('friends-of-friends:tests');
+var	mongoose = require('mongoose');
+var should = require('should');
 
-var FriendsOfFriends = require('../lib/')();
+debug('mongoose', mongoose);
+
+var FriendsOfFriends = require('../lib/');
+var friendsOfFriends = new FriendsOfFriends(mongoose, {accountName: 'test-account'});
 
 var tests = {
 	friendship : require('./friendship'),
@@ -11,9 +14,17 @@ var tests = {
 }
 
 describe('FriendsOfFriends', function () {
+	it('should be a function called "FriendsOfFriends"', function (testComplete) {
+		FriendsOfFriends.should.be.a.Function;
+		FriendsOfFriends.should.have.a.property('name', 'FriendsOfFriends');
+		testComplete();
+	});
+});
+
+describe('friendOfFriends', function () {
 
 	describe('#options', function () {
-		var options = FriendsOfFriends.options;
+		var options = friendsOfFriends.options;
 
 		it('should be an object', function () {
 			options.should.be.an.Object;
@@ -37,7 +48,7 @@ describe('FriendsOfFriends', function () {
 	})
 
 	describe('#relationships', function () {
-		var relationships = FriendsOfFriends.relationships;
+		var relationships = friendsOfFriends.relationships;
 
 		var test = {
 		    0:                  "NOT_FRIENDS",
@@ -71,32 +82,50 @@ describe('FriendsOfFriends', function () {
 		});
 	})
 
+	describe('#Friendship', function (done) {
+		var Friendship = friendsOfFriends.Friendship;
 
-	// check to see if friendship is a model
-	describe('#friendship', function (done) {
+		it('should be a function named "model"', function (testComplete) {
+	        Friendship.should.be.a.Function;
+	        Friendship.should.have.a.property('name', 'model');
 
-		tests.friendship()
+	        testComplete();
+
+	    });
 	})
 
 	describe('#plugin', function (done) {
-		tests.plugin()
+		it('should be a function called "friendshipPlugin"', function (testComplete) {
+			Friendship.should.be.a.Function;
+	        Friendship.should.have.a.property('name', 'model');
+
+	        testComplete();	
+		});
 	})
 
 	describe('#prototype', function () {
 		describe('#get', function () {
-			it('should get the given option from FriendsOfFriends.options', function () {
-				FriendsOfFriends.get('accountName').should.equal(FriendsOfFriends.options.accountName)				
+			it('should get the given option from friendsOfFriends.options', function () {
+				friendsOfFriends.get('accountName').should.equal(friendsOfFriends.options.accountName)				
 			})
 		})
 
 		describe('#set', function () {
 
-			it('should set the given option to FriendsOfFriends.options', function () {
+			it('should set the given option to friendsOfFriends.options', function () {
 				var friendshipName = 'Friend-Records';
 
-				FriendsOfFriends.set('friendshipName', friendshipName)
-				FriendsOfFriends.options.friendshipName.should.equal(friendshipName)
+				friendsOfFriends.set('friendshipName', friendshipName)
+				friendsOfFriends.options.friendshipName.should.equal(friendshipName)
 			})
 		})
 	})
 });
+
+describe('Friendship', function () {
+	tests.friendship(friendsOfFriends, mongoose)
+});
+
+describe('Account', function () {
+	tests.plugin(friendsOfFriends, mongoose)
+})

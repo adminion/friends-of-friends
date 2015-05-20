@@ -1,6 +1,16 @@
 CHANGES
 =======
 
+# v2.x
+
+## v2.0.0
+
+### Major
+- [x] `FriendsOfFriends` constructor now requires `mongoose` parameter. fixes #27.
+- [x] `FriendsOfFriends.friendship` is now `FriendsOfFriends.Friendship` to properly signify that it is a constructor. fixes #28.
+- [ ] Updated query functions to use `model.find()` syntax. fixes #25. 
+
+
 # v1.x
 
 ## v1.4.1

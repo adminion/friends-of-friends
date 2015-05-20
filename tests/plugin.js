@@ -2,23 +2,20 @@ var async               = require('async'),
     dbURI               = 'mongodb://localhost/friends-of-friends-tests',
     debug               = require('debug')('friends-of-friends:tests:plugin')
     clearDB             = require('mocha-mongoose')(dbURI, { noClear: true })
-    mongoose            = require('mongoose'),
-    plugin              = require('../lib/plugin'),
-    relationships       = require('../lib/relationships'),
     should              = require('should');
 
-var options = { accountName: 'test-account'};
+module.exports = function (friendsOfFriends, mongoose) {
 
-var AccountModel,
-    AccountSchema = new mongoose.Schema({username: String});
+    var relationships = friendsOfFriends.relationships;
 
-AccountSchema.plugin(plugin, options);
+    var AccountSchema = new mongoose.Schema({username: String});
 
-AccountModel = mongoose.model(options.accountName, AccountSchema);
+    AccountSchema.plugin(friendsOfFriends.plugin, friendsOfFriends.options);
 
-var testUsers = {};
+    var AccountModel = mongoose.model(friendsOfFriends.get('accountName'), AccountSchema);
 
-module.exports = function () {
+    var testUsers = {};
+
     describe('statics', function () {
 
         beforeEach(function (done) {
@@ -1967,9 +1964,8 @@ module.exports = function () {
         });
         
     })
-}
 
-function insertTestUsers (done) {
+    function insertTestUsers (done) {
     async.parallel({   
         jeff: function (finished) {
             new AccountModel({username: 'Jeff'}).save(function (err, jeff) {
@@ -2004,4 +2000,5 @@ function insertTestUsers (done) {
         done()
         
     })
+}
 }
