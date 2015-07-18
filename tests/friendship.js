@@ -9,12 +9,10 @@ module.exports = function (FriendsOfFriends, mongoose) {
 
     var Friendship = FriendsOfFriends.Friendship;
 
-    var AccountSchema = new mongoose.Schema({username: String});
+    var Person = mongoose.model(FriendsOfFriends.get('personModelName'));
 
-    var Account = mongoose.model('Account', AccountSchema);
-
-    var jeff = new Account({username: 'Jeff'}),
-        zane = new Account({username: 'Zane'});
+    var jeff = new Person({username: 'Jeff'}),
+        zane = new Person({username: 'Zane'});
 
     var docDescriptor = {requester: jeff._id, requested: zane._id};
 
@@ -160,7 +158,8 @@ module.exports = function (FriendsOfFriends, mongoose) {
 
                 results.send.should.be.ok
 
-                results.cancel.should.equal(1)
+                results.cancel.result.ok.should.equal(1);
+                results.cancel.result.n.should.equal(1);
 
                 testComplete();
             });
@@ -182,13 +181,14 @@ module.exports = function (FriendsOfFriends, mongoose) {
 
                 results.send.should.be.ok
 
-                results.deny.should.equal(1)
+                results.deny.result.ok.should.equal(1);
+                results.deny.result.n.should.equal(1);
 
                 testComplete();
             });
         });
 
-        it('getFriends              - get a list of ids of friends of an account', function (testComplete) {
+        it('getFriends              - get a list of ids of friends of an person', function (testComplete) {
 
             async.series({
                 send: function (next) {
@@ -228,9 +228,9 @@ module.exports = function (FriendsOfFriends, mongoose) {
             });
         });
 
-        it('getFriendsOfFriends     - get a list of ids of this account\'s friends', function (testComplete) {
+        it('getFriendsOfFriends     - get a list of ids of this person\'s friends', function (testComplete) {
 
-            var sam = new Account({username: 'Sam'});
+            var sam = new Person({username: 'Sam'});
 
             async.parallel({
                 jeffAndZane: function (done) {
@@ -289,7 +289,7 @@ module.exports = function (FriendsOfFriends, mongoose) {
             });
         });
 
-        it('getPendingFriends       - get a list of ids of pending friends of an account', function (testComplete) {
+        it('getPendingFriends       - get a list of ids of pending friends of an person', function (testComplete) {
 
             async.series({
                 send: function (next) {
@@ -323,8 +323,8 @@ module.exports = function (FriendsOfFriends, mongoose) {
             });
         });
 
-        it('areFriends              - determine if accountId1 and accountId2 are friends', function (testComplete) {
-            var sam = new Account({username: 'Sam'})
+        it('areFriends              - determine if person 1 and person 2 are friends', function (testComplete) {
+            var sam = new Person({username: 'Sam'})
 
             async.series({
                 sent: function (next) {
@@ -372,8 +372,8 @@ module.exports = function (FriendsOfFriends, mongoose) {
             });
         });
 
-        it('areFriendsOfFriends     - determine if accountId1 and accountId2 have any common friends', function (testComplete) {
-            var sam = new Account({username: 'Sam'})
+        it('areFriendsOfFriends     - determine if person 1 and person 2 have any common friends', function (testComplete) {
+            var sam = new Person({username: 'Sam'})
 
             async.series({
                 requests: function (next) {
@@ -444,7 +444,7 @@ module.exports = function (FriendsOfFriends, mongoose) {
             });         
         });
 
-        it('arePendingFriends       - determine if accountId1 and accountId2 have a pending friendship', function (testComplete) {
+        it('arePendingFriends       - determine if person 1 and person 2 have a pending friendship', function (testComplete) {
 
             async.series({
                 pre: function (next) {
@@ -483,10 +483,10 @@ module.exports = function (FriendsOfFriends, mongoose) {
             });
         });
 
-        it('getRelationship         - get the numeric relationship of two accounts', function (testComplete) {
+        it('getRelationship         - get the numeric relationship of two people', function (testComplete) {
 
-            var sam = new Account({username: "Sam"}),
-                henry = new Account({username: "Henry"});
+            var sam = new Person({username: "Sam"}),
+                henry = new Person({username: "Henry"});
 
             async.series({
                 jeffAndZane: function (next) {
@@ -576,7 +576,7 @@ module.exports = function (FriendsOfFriends, mongoose) {
             });
         });
         
-        it('getFriendship           - get the friendship document of two accounts', function (testComplete) {
+        it('getFriendship           - get the friendship document of two people', function (testComplete) {
 
             async.series({
                 sent: function (next) {

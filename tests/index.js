@@ -6,7 +6,13 @@ var should = require('should');
 debug('mongoose', mongoose);
 
 var FriendsOfFriends = require('../lib/');
-var friendsOfFriends = new FriendsOfFriends(mongoose, {accountName: 'test-account'});
+var friendsOfFriends = new FriendsOfFriends(mongoose, {personModelName: 'test-person'});
+
+var PersonSchema = new mongoose.Schema({username: String});
+
+PersonSchema.plugin(friendsOfFriends.plugin, friendsOfFriends.options);
+
+var PersonModel = mongoose.model(friendsOfFriends.get('personModelName'), PersonSchema);
 
 var tests = {
 	friendship : require('./friendship'),
@@ -17,6 +23,16 @@ describe('FriendsOfFriends', function () {
 	it('should be a function called "FriendsOfFriends"', function (testComplete) {
 		FriendsOfFriends.should.be.a.Function;
 		FriendsOfFriends.should.have.a.property('name', 'FriendsOfFriends');
+		testComplete();
+	});
+
+	it('should work with or without new', function (testComplete) {
+		var withoutNew = FriendsOfFriends(mongoose, {personModelName: 'test-person'});
+		withoutNew.should.have.a.property('Friendship');
+
+		var withNew = new FriendsOfFriends(mongoose, {personModelName: 'test-person'});
+		withNew.should.have.a.property('Friendship');
+
 		testComplete();
 	});
 });
@@ -30,19 +46,27 @@ describe('friendOfFriends', function () {
 			options.should.be.an.Object;
 		});
 
-		describe('#accountName', function () {
-			var accountName = options.accountName;
+		describe('#personModelName', function () {
+			var personModelName = options.personModelName;
 
 			it('should a non-empty String', function () {
-				accountName.should.be.a.String.and.not.be.empty;
+				personModelName.should.be.a.String.and.not.be.empty;
 			})
 		})
 
-		describe('#friendshipName', function () {
-			var friendshipName = options.friendshipName;
+		describe('#friendshipModelName', function () {
+			var friendshipModelName = options.friendshipModelName;
 
 			it('should be a non-empty String', function () {
-				friendshipName.should.be.a.String.and.not.be.empty;
+				friendshipModelName.should.be.a.String.and.not.be.empty;
+			})
+		})
+
+		describe('#friendshipCollectionName', function () {
+			var friendshipCollectionName = options.friendshipCollectionName;
+
+			it('should be a non-empty String', function () {
+				friendshipCollectionName.should.be.a.String.and.not.be.empty;
 			})
 		})
 	})
@@ -95,9 +119,11 @@ describe('friendOfFriends', function () {
 	})
 
 	describe('#plugin', function (done) {
+		var plugin = friendsOfFriends.plugin;
+
 		it('should be a function called "friendshipPlugin"', function (testComplete) {
-			Friendship.should.be.a.Function;
-	        Friendship.should.have.a.property('name', 'model');
+			plugin.should.be.a.Function;
+	        plugin.should.have.a.property('name', 'friendshipPlugin');
 
 	        testComplete();	
 		});
@@ -106,17 +132,21 @@ describe('friendOfFriends', function () {
 	describe('#prototype', function () {
 		describe('#get', function () {
 			it('should get the given option from friendsOfFriends.options', function () {
-				friendsOfFriends.get('accountName').should.equal(friendsOfFriends.options.accountName)				
+				friendsOfFriends.get('personModelName').should.equal(friendsOfFriends.options.personModelName)
 			})
 		})
 
 		describe('#set', function () {
 
 			it('should set the given option to friendsOfFriends.options', function () {
-				var friendshipName = 'Friend-Records';
+				var defaultModelName = friendsOfFriends.get('friendshipModelName')
 
-				friendsOfFriends.set('friendshipName', friendshipName)
-				friendsOfFriends.options.friendshipName.should.equal(friendshipName)
+				var modifiedModelName = 'Friend-Records';
+
+				friendsOfFriends.set('friendshipModelName', modifiedModelName)
+				friendsOfFriends.options.friendshipModelName.should.equal(modifiedModelName)
+
+				friendsOfFriends.set('friendshipModelName', defaultModelName);
 			})
 		})
 	})
@@ -126,6 +156,6 @@ describe('Friendship', function () {
 	tests.friendship(friendsOfFriends, mongoose)
 });
 
-describe('Account', function () {
+describe('Person', function () {
 	tests.plugin(friendsOfFriends, mongoose)
 })

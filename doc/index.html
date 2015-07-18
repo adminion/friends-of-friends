@@ -45,31 +45,45 @@
     <section>
         <article><h1>friends-of-friends</h1><h2>Friendship Mangement for Mongoose</h2><p><a href="https://travis-ci.org/adminion/friends-of-friends"><img src="https://travis-ci.org/adminion/friends-of-friends.svg?branch=master" alt="Build Status"></a> 
 <a href="https://coveralls.io/r/adminion/friends-of-friends?branch=master"><img src="https://coveralls.io/repos/adminion/friends-of-friends/badge.svg?branch=master" alt="Coverage Status"></a></p>
-<h2>Installlation</h2><pre class="prettyprint source"><code>$ npm install friends-of-friends</code></pre><h2>Usage</h2><h3>Default Configuration</h3><pre class="prettyprint source lang-javascript"><code>
+<h2>Contributing</h2><p>I am open to and will happily accept contributions of bug-fixes and new features.  We'll need to discuss breaking changes.</p>
+<h3>Bugs</h3><p>If you believe you have found a bug, please create an issue describing the bug with code that reproduces the bug.  Once we verify that it is in fact a bug, please provide a fix suggest how it could be fixed.</p>
+<p>If your fix doesn't pass the tests, please either fix your code or prove to me that my tests are inadequate (and fix them, pretty please :D)</p>
+<h3>New Features</h3><p>If you would like to propose a new feature, please</p>
+<ol>
+<li>make a fork</li>
+<li>create a new branch <code>new-feature-x</code></li>
+<li>implement your new feature in <code>new-feature-x</code></li>
+<li>write tests which your new feature will pass</li>
+<li>commit and push that branch to your <code>your_repo</code></li>
+<li>make a pull request from <code>your_repo:new-feature-x</code> into <code>adminion:master</code></li>
+</ol>
+<h3>Breaking Changes</h3><p>Breaking changes will only be considered if they dramatically improve stability, performance, and/or usability with minimal code modifications for end-users.</p>
+<h2>Installlation</h2><pre class="prettyprint source"><code>$ npm install friends-of-friends</code></pre><h2>Usage</h2><h3>Create a new FriendsOfFriends Object</h3><pre class="prettyprint source lang-javascript"><code>// mongoose is required
+var mongoose = require('mongoose');
+
 var FriendsOfFriends = require('friends-of-friends');
-var fof = new FriendsOfFriends();
+var fof = new FriendsOfFriends(mongoose);
 // works with or without 'new'
-var FriendsOfFriends = require('friends-of-friends')();</code></pre><h4>Defaults</h4><pre class="prettyprint source lang-javascript"><code>var defaults = {
+var FriendsOfFriends = require('friends-of-friends')(mongoose);</code></pre><h4>Default Configuration Options</h4><pre class="prettyprint source lang-javascript"><code>var defaults = {
     // define the name for your Users model.
-    accountName: 'Account',
-    // define the name of the Users colletion. 
-    accountCollection: undefined,
+    personModelName: 'Person',
     // define the name for the Friendship model
-    friendshipName: 'Friendship',
+    friendshipModelName: 'Friendship',
     // define the name of the Friendship collection.
-    friendshipCollection: undefined
-}</code></pre><h3>Specifying Configuration Options</h3><pre class="prettyprint source lang-javascript"><code>
+    friendshipCollectionName: 'Friendships'
+}</code></pre><h3>Specifying Configuration Options</h3><pre class="prettyprint source lang-javascript"><code>var mongoose = require('mongoose');
+
 var options = { 
-     accountName:             'Player',
+     personModelName:             'Player',
      accountCollection:       'foo_userAccounts',
      friendshipName:          'Friend_Relationships', 
      friendshipCollection:    'bar_userRelationships',
  };
 
 var FriendsOfFriends = require('friends-of-friends');
-var fof = new FriendsOfFriends(options);
+var fof = new FriendsOfFriends(mongoose, options);
 // again, works with or without 'new'
-var FriendsOfFriends = require('friends-of-friends')(options);</code></pre><h3>Plugin friends-of-friends to User Schema</h3><pre class="prettyprint source lang-javascript"><code>var mongoose = require('mongoose');
+var FriendsOfFriends = require('friends-of-friends')(mongoose, options);</code></pre><h3>Plugin friends-of-friends to User Schema</h3><pre class="prettyprint source lang-javascript"><code>var mongoose = require('mongoose');
 
 // create you User schema
 var UserSchema = new mongoose.Schema({
@@ -80,7 +94,7 @@ var UserSchema = new mongoose.Schema({
 UserSchema.plugin(friendsOfFriends.plugin, options);
 
 // compile your user model
-var User = mongoose.model(options.accountName), UserSchema);
+var User = mongoose.model(options.personModelName), UserSchema);
 
 // create users
 var Jeff = new User({ username: &quot;Jeff&quot; }),
@@ -188,13 +202,13 @@ Jeff.getFriends(function (err, friends) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountDocument.html">AccountDocument</a></li><li><a href="AccountModel.html">AccountModel</a></li><li><a href="FriendshipDocument.html">FriendshipDocument</a></li><li><a href="FriendshipModel.html">FriendshipModel</a></li><li><a href="FriendsOfFriends.html">FriendsOfFriends</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="FriendshipDocument.html">FriendshipDocument</a></li><li><a href="FriendshipModel.html">FriendshipModel</a></li><li><a href="FriendsOfFriends.html">FriendsOfFriends</a></li><li><a href="PersonDocument.html">PersonDocument</a></li><li><a href="PersonModel.html">PersonModel</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue Apr 14 2015 22:42:13 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sat Jul 18 2015 12:44:21 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

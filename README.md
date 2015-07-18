@@ -4,49 +4,71 @@
 [![Build Status](https://travis-ci.org/adminion/friends-of-friends.svg?branch=master)](https://travis-ci.org/adminion/friends-of-friends) 
 [![Coverage Status](https://coveralls.io/repos/adminion/friends-of-friends/badge.svg?branch=master)](https://coveralls.io/r/adminion/friends-of-friends?branch=master)
 
+## Contributing
+I am open to and will happily accept contributions of bug-fixes and new features.  We'll need to discuss breaking changes.
+
+### Bugs
+If you believe you have found a bug, please create an issue describing the bug with code that reproduces the bug.  Once we verify that it is in fact a bug, please provide a fix suggest how it could be fixed.
+
+If your fix doesn't pass the tests, please either fix your code or prove to me that my tests are inadequate (and fix them, pretty please :D)
+
+### New Features
+If you would like to propose a new feature, please
+
+1. make a fork
+2. create a new branch `new-feature-x`
+3. implement your new feature in `new-feature-x`
+4. write tests which your new feature will pass
+4. commit and push that branch to your `your_repo`
+5. make a pull request from `your_repo:new-feature-x` into `adminion:master`
+
+### Breaking Changes
+Breaking changes will only be considered if they dramatically improve stability, performance, and/or usability with minimal code modifications for end-users.
+
 ## Installlation
 
     $ npm install friends-of-friends
 
 ## Usage
 
-### Default Configuration
+### Create a new FriendsOfFriends Object
 ```javascript
+// mongoose is required
+var mongoose = require('mongoose');
 
 var FriendsOfFriends = require('friends-of-friends');
-var fof = new FriendsOfFriends();
+var fof = new FriendsOfFriends(mongoose);
 // works with or without 'new'
-var FriendsOfFriends = require('friends-of-friends')();
+var FriendsOfFriends = require('friends-of-friends')(mongoose);
 ```
 
-#### Defaults
+#### Default Configuration Options
 ```javascript
 var defaults = {
     // define the name for your Users model.
-    accountName: 'Account',
-    // define the name of the Users colletion. 
-    accountCollection: undefined,
+    personModelName: 'Person',
     // define the name for the Friendship model
-    friendshipName: 'Friendship',
+    friendshipModelName: 'Friendship',
     // define the name of the Friendship collection.
-    friendshipCollection: undefined
+    friendshipCollectionName: 'Friendships'
 }
 ```
 
 ### Specifying Configuration Options
 ```javascript
+var mongoose = require('mongoose');
 
 var options = { 
-     accountName:             'Player',
+     personModelName:             'Player',
      accountCollection:       'foo_userAccounts',
      friendshipName:          'Friend_Relationships', 
      friendshipCollection:    'bar_userRelationships',
  };
  
 var FriendsOfFriends = require('friends-of-friends');
-var fof = new FriendsOfFriends(options);
+var fof = new FriendsOfFriends(mongoose, options);
 // again, works with or without 'new'
-var FriendsOfFriends = require('friends-of-friends')(options);
+var FriendsOfFriends = require('friends-of-friends')(mongoose, options);
 ```
 
 ### Plugin friends-of-friends to User Schema
@@ -62,7 +84,7 @@ var UserSchema = new mongoose.Schema({
 UserSchema.plugin(friendsOfFriends.plugin, options);
 
 // compile your user model
-var User = mongoose.model(options.accountName), UserSchema);
+var User = mongoose.model(options.personModelName), UserSchema);
 
 // create users
 var Jeff = new User({ username: "Jeff" }),

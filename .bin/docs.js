@@ -108,6 +108,8 @@ var async = require('async'),
 	// jsdoc2md
         function (done) {
 
+            console.log('generating markdown docs...');
+
             var tasks = {},
                 taskNames = ['index', 'friendship', 'plugin', 'relationships'];
 
@@ -116,24 +118,30 @@ var async = require('async'),
                 // add this task function to the object
                 tasks[name] = function (done) {
 
+                    var sourceFilename = 'lib/' + name + '.js';
                     var targetFilename = 'doc/'+ name +'.md';
+
+                    console.log(sourceFilename + ' -> ' + targetFilename);
+
+                    var reader = fs.createReadStream(sourceFilename);
 
                     // create a write stream to the new markdown file whose name is the task name
                     var writer = fs.createWriteStream(targetFilename, { flags: 'w+'})
                         .on('finish', done);
 
-                    // now have jsdoc2md render the respectively named source file
-                    jsdoc2md.render('lib/' + name + '.js').on('error', function (err) {
-                        done(err);
-                    // and then pipe it to the write stream which saves the file
-                    }).pipe(writer);
+                    // now pipe each file to jsdoc2md then pipe its output to 
+                    // the write stream
+                    reader.pipe(jsdoc2md()).pipe(writer);
                 };
             }); 
 
             // now run our named tasks in parallel with async
             async.parallel(tasks, function (err, results) {
                 if (err) done(err);
-                else done();
+                else {
+                    console.log('finished generating markdown docs.');
+                    done();  
+                } 
             });
         }
     ], function (err, results) {

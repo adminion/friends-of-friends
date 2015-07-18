@@ -6,10 +6,14 @@ CHANGES
 ## v2.0.0
 
 ### Major
-- [x] `FriendsOfFriends` constructor now requires `mongoose` parameter. fixes #27.
-- [x] `FriendsOfFriends.friendship` is now `FriendsOfFriends.Friendship` to properly signify that it is a constructor. fixes #28.
-- [ ] Updated query functions to use `model.find()` syntax. fixes #25. 
+* Updated `FriendsOfFriends.options` property names and default values. fixes #30
+*  `FriendsOfFriends.prototype.relationships` now uses sequential integers instead of `PENDING_FRIENDS` being `1.5`. fixes #29
+*  `FriendsOfFriends.friendship` is now `FriendsOfFriends.Friendship` to properly signify that it is a constructor. fixes #28.
+*  `FriendsOfFriends` constructor now requires `mongoose` parameter. fixes #27.
+*  Bumped Mongoose to 4.x. fixes #26
 
+## Minor
+* Updated get* methods on `AccountModel` and `AccountDocument` to accept optional parameter `findParams` with `conditions`, `projection`, and `options` properties in order to fine-tune queries. fixes #25. see [`model.find()`](http://mongoosejs.com/docs/api.html#model_Model.find)
 
 # v1.x
 
