@@ -29,7 +29,6 @@
             <pre class="prettyprint source linenums"><code>
 var async = require('async'),
     debug = require('debug')('friends-of-friends:friendship'),
-    mongoose = require('mongoose'),
     relationships = require('./relationships'),
     utils = require('techjeffharris-utils');
 
@@ -38,26 +37,20 @@ var async = require('async'),
  * @param   {Object} options - configuration options 
  * @returns {Model} - the compiled Friendship model
  */
-module.exports = function friendshipInit(options) {
+module.exports = function friendshipInit(mongoose, options) {
 
-    var defaults = {
-        accountName:    'Account',
-        friendshipName: 'Friendship'
-    };
-
-    options = utils.extend(defaults, options);
-
+    debug('mongoose', mongoose);
     debug('options', options);
 
     var ObjectId = mongoose.Schema.Types.ObjectId;
 
     var FriendshipSchema = new mongoose.Schema({
-        requester: { type: ObjectId, ref: options.accountName, required: true, index: true },
-        requested: { type: ObjectId, ref: options.accountName, required: true, index: true },
+        requester: { type: ObjectId, ref: options.personModelName, required: true, index: true },
+        requested: { type: ObjectId, ref: options.personModelName, required: true, index: true },
         status: { type: String, default: 'Pending', index: true},
         dateSent: { type: Date, default: Date.now, index: true },
         dateAccepted: { type: Date, required: false, index: true }
-    });
+    }, { collection: options.friendshipCollectionName });
 
     /** 
      * @class FriendshipModel
@@ -167,7 +160,9 @@ module.exports = function friendshipInit(options) {
             dateAccepted: Date.now()
         };
 
-        this.findOneAndUpdate(conditions, updates, function (err, friendship) {
+        var options = { 'new': true };
+
+        this.findOneAndUpdate(conditions, updates, options, function (err, friendship) {
             if (err) {
                 done(err);
             } else if (friendship) {
@@ -462,7 +457,7 @@ module.exports = function friendshipInit(options) {
     FriendshipSchema.statics.arePendingFriends = function (accountId1, accountId2, done) {
         debug('arePendingFriends')
 
-        var friendshipModel = mongoose.model(options.friendshipName);
+        var friendshipModel = mongoose.model(options.friendshipModelName);
 
         friendshipModel.getFriendship(accountId1, accountId2, function (err, friendship) {
             if (err) return done(err);
@@ -519,7 +514,7 @@ module.exports = function friendshipInit(options) {
     FriendshipSchema.statics.getFriendship = function (accountId1, accountId2, done) {
         debug('getFriendship')
 
-        var friendshipModel = mongoose.model(options.friendshipName);
+        var friendshipModel = mongoose.model(options.friendshipModelName);
 
         var conditions = {
             '$or': [
@@ -541,7 +536,7 @@ module.exports = function friendshipInit(options) {
     FriendshipSchema.statics.isRequester = function (friendshipId, accountId, done) {
         debug('isRequester')
 
-        var friendshipModel = mongoose.model(options.friendshipName);
+        var friendshipModel = mongoose.model(options.friendshipModelName);
 
         friendshipModel.findById(friendshipId, function (err, friendship) {
             if (err) return done(err);
@@ -564,7 +559,7 @@ module.exports = function friendshipInit(options) {
     FriendshipSchema.statics.isRequested = function (friendshipId, accountId, done) {
         debug('isRequested')
 
-        var friendshipModel = mongoose.model(options.friendshipName);
+        var friendshipModel = mongoose.model(options.friendshipModelName);
 
         friendshipModel.findById(friendshipId, function (err, friendship) {
             if (err) return done(err);
@@ -607,9 +602,9 @@ module.exports = function friendshipInit(options) {
 
     // build model if not already built
     try {
-        model = mongoose.model(options.friendshipName, FriendshipSchema);
+        model = mongoose.model(options.friendshipModelName, FriendshipSchema);
     } catch (error) {
-        model = mongoose.model(options.friendshipName);
+        model = mongoose.model(options.friendshipModelName);
     }
 
     // return the model
@@ -625,13 +620,13 @@ module.exports = function friendshipInit(options) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountDocument.html">AccountDocument</a></li><li><a href="AccountModel.html">AccountModel</a></li><li><a href="FriendshipDocument.html">FriendshipDocument</a></li><li><a href="FriendshipModel.html">FriendshipModel</a></li><li><a href="FriendsOfFriends.html">FriendsOfFriends</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="FriendshipDocument.html">FriendshipDocument</a></li><li><a href="FriendshipModel.html">FriendshipModel</a></li><li><a href="FriendsOfFriends.html">FriendsOfFriends</a></li><li><a href="PersonDocument.html">PersonDocument</a></li><li><a href="PersonModel.html">PersonModel</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue Apr 14 2015 22:42:13 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Tue Jul 21 2015 13:50:40 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

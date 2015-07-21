@@ -1,6 +1,6 @@
 {
   "name": "friends-of-friends",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "Friendship Management for Mongoose",
   "main": "index.js",
   "scripts": {
@@ -40,11 +40,11 @@
     "coveralls": "2.x",
     "istanbul": "0.x",
     "jsdoc": "3.x",
-    "jsdoc-to-markdown": "0.5.x",
+    "jsdoc-to-markdown": "1.x",
     "mocha": "2.x",
     "mocha-mongoose": "1.x",
     "mocha-lcov-reporter": "0.x",
-    "mongoose": "3.8.x",
+    "mongoose": "4.x",
     "should": "4.x"
   }
 }

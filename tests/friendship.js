@@ -1,30 +1,20 @@
 
 var async               = require('async'), 
-    Friendship          = require('../lib/friendship')({accountName: 'test-account'}),
     dbURI               = 'mongodb://localhost/friends-of-friends-tests',
     debug               = require('debug')('friends-of-friends:tests:friendship')
     should              = require('should'),
-    mongoose            = require('mongoose'),
     clearDB             = require('mocha-mongoose')(dbURI, { noClear: true });
 
-var ObjectId = mongoose.Schema.Types.ObjectId;
+module.exports = function (FriendsOfFriends, mongoose) {
 
-var Account,
-    AccountSchema = new mongoose.Schema({username: String});
+    var Friendship = FriendsOfFriends.Friendship;
 
-try {
-    Account = mongoose.model('Account', AccountSchema);
-}
-catch (error) {
-    Account = mongoose.model('Account');
-}
+    var Person = mongoose.model(FriendsOfFriends.get('personModelName'));
 
-var jeff = new Account({username: 'Jeff'}),
-    zane = new Account({username: 'Zane'});
+    var jeff = new Person({username: 'Jeff'}),
+        zane = new Person({username: 'Zane'});
 
-var docDescriptor = {requester: jeff._id, requested: zane._id};
-
-module.exports = function () {
+    var docDescriptor = {requester: jeff._id, requested: zane._id};
 
     describe('statics', function () {
 
@@ -168,7 +158,8 @@ module.exports = function () {
 
                 results.send.should.be.ok
 
-                results.cancel.should.equal(1)
+                results.cancel.result.ok.should.equal(1);
+                results.cancel.result.n.should.equal(1);
 
                 testComplete();
             });
@@ -190,13 +181,14 @@ module.exports = function () {
 
                 results.send.should.be.ok
 
-                results.deny.should.equal(1)
+                results.deny.result.ok.should.equal(1);
+                results.deny.result.n.should.equal(1);
 
                 testComplete();
             });
         });
 
-        it('getFriends              - get a list of ids of friends of an account', function (testComplete) {
+        it('getFriends              - get a list of ids of friends of an person', function (testComplete) {
 
             async.series({
                 send: function (next) {
@@ -236,9 +228,9 @@ module.exports = function () {
             });
         });
 
-        it('getFriendsOfFriends     - get a list of ids of this account\'s friends', function (testComplete) {
+        it('getFriendsOfFriends     - get a list of ids of this person\'s friends', function (testComplete) {
 
-            var sam = new Account({username: 'Sam'});
+            var sam = new Person({username: 'Sam'});
 
             async.parallel({
                 jeffAndZane: function (done) {
@@ -297,7 +289,7 @@ module.exports = function () {
             });
         });
 
-        it('getPendingFriends       - get a list of ids of pending friends of an account', function (testComplete) {
+        it('getPendingFriends       - get a list of ids of pending friends of an person', function (testComplete) {
 
             async.series({
                 send: function (next) {
@@ -331,8 +323,8 @@ module.exports = function () {
             });
         });
 
-        it('areFriends              - determine if accountId1 and accountId2 are friends', function (testComplete) {
-            var sam = new Account({username: 'Sam'})
+        it('areFriends              - determine if person 1 and person 2 are friends', function (testComplete) {
+            var sam = new Person({username: 'Sam'})
 
             async.series({
                 sent: function (next) {
@@ -380,8 +372,8 @@ module.exports = function () {
             });
         });
 
-        it('areFriendsOfFriends     - determine if accountId1 and accountId2 have any common friends', function (testComplete) {
-            var sam = new Account({username: 'Sam'})
+        it('areFriendsOfFriends     - determine if person 1 and person 2 have any common friends', function (testComplete) {
+            var sam = new Person({username: 'Sam'})
 
             async.series({
                 requests: function (next) {
@@ -452,7 +444,7 @@ module.exports = function () {
             });         
         });
 
-        it('arePendingFriends       - determine if accountId1 and accountId2 have a pending friendship', function (testComplete) {
+        it('arePendingFriends       - determine if person 1 and person 2 have a pending friendship', function (testComplete) {
 
             async.series({
                 pre: function (next) {
@@ -491,10 +483,10 @@ module.exports = function () {
             });
         });
 
-        it('getRelationship         - get the numeric relationship of two accounts', function (testComplete) {
+        it('getRelationship         - get the numeric relationship of two people', function (testComplete) {
 
-            var sam = new Account({username: "Sam"}),
-                henry = new Account({username: "Henry"});
+            var sam = new Person({username: "Sam"}),
+                henry = new Person({username: "Henry"});
 
             async.series({
                 jeffAndZane: function (next) {
@@ -584,7 +576,7 @@ module.exports = function () {
             });
         });
         
-        it('getFriendship           - get the friendship document of two accounts', function (testComplete) {
+        it('getFriendship           - get the friendship document of two people', function (testComplete) {
 
             async.series({
                 sent: function (next) {

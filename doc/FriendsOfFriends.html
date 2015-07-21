@@ -42,41 +42,40 @@
 
     
 
-    <h4 class="name" id="FriendsOfFriends"><span class="type-signature"></span>new FriendsOfFriends<span class="signature">(options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="FriendsOfFriends"><span class="type-signature"></span>new FriendsOfFriends<span class="signature">(mongoose, options)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Creates a new FriendsOfFriends Object with or without new</p>
-<pre class="prettyprint source lang-javascript"><code>
+    <p>Create a new FriendsOfFriends Object with or without new</p>
+<pre class="prettyprint source lang-javascript"><code>// mongoose is required
+var mongoose = require('mongoose');
+
 var FriendsOfFriends = require('friends-of-friends');
-var fof = new FriendsOfFriends();
+var fof = new FriendsOfFriends(mongoose);
 // works with or without 'new'
-var FriendsOfFriends = require('friends-of-friends')();</code></pre><p> Default Configuration </p>
+var FriendsOfFriends = require('friends-of-friends')(mongoose);</code></pre><p> Default Configuration Options</p>
 <pre class="prettyprint source lang-javascript"><code>var defaults = {
     // define the name for your Users model.
-    accountName: 'Account',
-    // define the name of the Users colletion. 
-    accountCollection: undefined,
+    personModelName: 'Person',
     // define the name for the Friendship model
-    friendshipName: 'Friendship',
+    friendshipModelName: 'Friendship',
     // define the name of the Friendship collection.
-    friendshipCollection: undefined
+    friendshipCollectionName: 'Friendships'
 }</code></pre><p> Specifying Configuration Options</p>
 <pre class="prettyprint source lang-javascript"><code>
 var options = { 
-     accountName:             'Player',
-     accountCollection:       'foo_userAccounts',
-     friendshipName:          'Friend_Relationships', 
-     friendshipCollection:    'bar_userRelationships',
+     personModelName:            'Player',
+     friendshipModelName:        'Friend_Relationships', 
+     friendshipCollectionName:   'bar_userRelationships',
  };
 
 var FriendsOfFriends = require('friends-of-friends');
-var fof = new FriendsOfFriends(options);
+var fof = new FriendsOfFriends(mongoose, options);
 // again, works with or without 'new'
-var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
+var FriendsOfFriends = require('friends-of-friends')(mongoose, options);</code></pre>
 </div>
 
 
@@ -108,6 +107,29 @@ var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>mongoose</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>required: mongoose instance used in your application</p></td>
+        </tr>
+
     
 
         <tr>
@@ -267,7 +289,7 @@ var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line82">line 82</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line83">line 83</a>
     </li></ul></dd>
     
 
@@ -345,7 +367,7 @@ var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
 
         <tr>
             
-                <td class="name"><code>accountName</code></td>
+                <td class="name"><code>personModelName</code></td>
             
 
             <td class="type">
@@ -361,37 +383,14 @@ var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
 
             
 
-            <td class="description last"><p>The name to call the model to be compiled from the Account Schema. Default: <code>'Account'</code></p></td>
+            <td class="description last"><p>The modelName of the Person Schema. Default: <code>'Person'</code></p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>accountCollection</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The name to use for the Account Collection. Default: <code>undefined</code>.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>friendshipName</code></td>
+                <td class="name"><code>friendshipModelName</code></td>
             
 
             <td class="type">
@@ -414,7 +413,7 @@ var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
 
         <tr>
             
-                <td class="name"><code>friendshipCollection</code></td>
+                <td class="name"><code>friendshipCollectionName</code></td>
             
 
             <td class="type">
@@ -430,7 +429,7 @@ var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
 
             
 
-            <td class="description last"><p>The name to use for the Account Collection. Default: <code>undefined</code>.</p></td>
+            <td class="description last"><p>The name to use for the Friendship Collection. Default: <code>'Friendships'</code>.</p></td>
         </tr>
 
     
@@ -469,7 +468,7 @@ var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line71">line 71</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -754,7 +753,7 @@ var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line102">line 102</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line103">line 103</a>
     </li></ul></dd>
     
 
@@ -904,7 +903,7 @@ var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line91">line 91</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line92">line 92</a>
     </li></ul></dd>
     
 
@@ -914,7 +913,7 @@ var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="AccountModel.html">AccountModel</a></li>
+            <li>AccountModel</li>
         </ul>
     </dd>
     
@@ -1042,7 +1041,7 @@ var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line124">line 124</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
@@ -1221,7 +1220,7 @@ var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line135">line 135</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line136">line 136</a>
     </li></ul></dd>
     
 
@@ -1288,13 +1287,13 @@ var FriendsOfFriends = require('friends-of-friends')(options);</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountDocument.html">AccountDocument</a></li><li><a href="AccountModel.html">AccountModel</a></li><li><a href="FriendshipDocument.html">FriendshipDocument</a></li><li><a href="FriendshipModel.html">FriendshipModel</a></li><li><a href="FriendsOfFriends.html">FriendsOfFriends</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="FriendshipDocument.html">FriendshipDocument</a></li><li><a href="FriendshipModel.html">FriendshipModel</a></li><li><a href="FriendsOfFriends.html">FriendsOfFriends</a></li><li><a href="PersonDocument.html">PersonDocument</a></li><li><a href="PersonModel.html">PersonModel</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue Apr 14 2015 22:42:13 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Tue Jul 21 2015 13:50:40 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

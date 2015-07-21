@@ -1,38 +1,40 @@
 <a name="FriendsOfFriends"></a>
-#class: FriendsOfFriends
-**Members**
+## FriendsOfFriends
+**Kind**: global class  
 
-* [class: FriendsOfFriends](#FriendsOfFriends)
-  * [new FriendsOfFriends(options)](#new_FriendsOfFriends)
-  * [FriendsOfFriends.options](#FriendsOfFriends.options)
-  * [FriendsOfFriends.friendship](#FriendsOfFriends.friendship)
-  * [FriendsOfFriends.relationships](#FriendsOfFriends.relationships)
-  * [FriendsOfFriends.plugin(schema, options)](#FriendsOfFriends.plugin)
-  * [friendsOfFriends.get(property)](#FriendsOfFriends#get)
-  * [friendsOfFriends.set(property, value)](#FriendsOfFriends#set)
+* [FriendsOfFriends](#FriendsOfFriends)
+  * [new FriendsOfFriends(mongoose, options)](#new_FriendsOfFriends_new)
+  * _instance_
+    * [.get(property)](#FriendsOfFriends+get) ⇒ <code>Mixed</code>
+    * [.set(property, value)](#FriendsOfFriends+set) ⇒ <code>Mixed</code>
+  * _static_
+    * [.options](#FriendsOfFriends.options) : <code>Object</code>
+    * [.friendship](#FriendsOfFriends.friendship) : <code>Model</code>
+    * [.relationships](#FriendsOfFriends.relationships) : <code>Object</code>
+    * [.plugin(schema, options)](#FriendsOfFriends.plugin)
 
-<a name="new_FriendsOfFriends"></a>
-##new FriendsOfFriends(options)
-Creates a new FriendsOfFriends Object with or without new
+<a name="new_FriendsOfFriends_new"></a>
+### new FriendsOfFriends(mongoose, options)
+Create a new FriendsOfFriends Object with or without new
 ```javascript
+// mongoose is required
+var mongoose = require('mongoose');
 
 var FriendsOfFriends = require('friends-of-friends');
-var fof = new FriendsOfFriends();
+var fof = new FriendsOfFriends(mongoose);
 // works with or without 'new'
-var FriendsOfFriends = require('friends-of-friends')();
+var FriendsOfFriends = require('friends-of-friends')(mongoose);
 ```
 
- Default Configuration 
+ Default Configuration Options
 ```javascript
 var defaults = {
     // define the name for your Users model.
-    accountName: 'Account',
-    // define the name of the Users colletion. 
-    accountCollection: undefined,
+    personModelName: 'Person',
     // define the name for the Friendship model
-    friendshipName: 'Friendship',
+    friendshipModelName: 'Friendship',
     // define the name of the Friendship collection.
-    friendshipCollection: undefined
+    friendshipCollectionName: 'Friendships'
 }
 ```
 
@@ -40,80 +42,96 @@ var defaults = {
 ```javascript
 
 var options = { 
-     accountName:             'Player',
-     accountCollection:       'foo_userAccounts',
-     friendshipName:          'Friend_Relationships', 
-     friendshipCollection:    'bar_userRelationships',
+     personModelName:            'Player',
+     friendshipModelName:        'Friend_Relationships', 
+     friendshipCollectionName:   'bar_userRelationships',
  };
  
 var FriendsOfFriends = require('friends-of-friends');
-var fof = new FriendsOfFriends(options);
+var fof = new FriendsOfFriends(mongoose, options);
 // again, works with or without 'new'
-var FriendsOfFriends = require('friends-of-friends')(options);
+var FriendsOfFriends = require('friends-of-friends')(mongoose, options);
 ```
 
-**Params**
 
-- options `Object` - optional object containing configurable options  
+| Param | Type | Description |
+| --- | --- | --- |
+| mongoose | <code>Object</code> | required: mongoose instance used in your application |
+| options | <code>Object</code> | optional object containing configurable options |
 
-<a name="FriendsOfFriends.options"></a>
-##FriendsOfFriends.options
-The options defined for the module instance
-
-**Properties**
-
-- accountName `String` - The name to call the model to be compiled from the Account Schema. Default: `'Account'`  
-- accountCollection `String` - The name to use for the Account Collection. Default: `undefined`.  
-- friendshipName `String` - The name to call the model to be compiled from the Friendship Schema. Default: `'Friendship'`  
-- friendshipCollection `String` - The name to use for the Account Collection. Default: `undefined`.  
-
-**Type**: `Object`  
-<a name="FriendsOfFriends.friendship"></a>
-##FriendsOfFriends.friendship
-The Friendship model
-
-**Type**: `Model`  
-<a name="FriendsOfFriends.relationships"></a>
-##FriendsOfFriends.relationships
-Relationship constants
-
-**Properties**
-
-- '0' `String` - Value: `'NOT_FRIENDS'`  
-- '1' `String` - Value: `'FRIENDS_OF_FRIENDS'`  
-  - '1.5' `String` - Value: `'PENDING_FRIENDS'`  
-- '2' `String` - Value: `'FRIENDS'`  
-- NOT_FRIENDS `Number` - Value: `0`  
-- FRIENDS_OF_FRIENDS `Number` - Value: `1`  
-- PENDING_FRIENDS `Number` - Value: `1.5`  
-- FRIENDS `Number` - Value: `2`  
-
-**Type**: `Object`  
-<a name="FriendsOfFriends.plugin"></a>
-##FriendsOfFriends.plugin(schema, options)
-Adds friends-of-friends functionality to an existing Schema
-
-**Params**
-
-- schema `Schema` - The mongoose Schema that gets plugged  
-- options `Object` - Options passed to the plugin  
-
-<a name="FriendsOfFriends#get"></a>
-##friendsOfFriends.get(property)
+<a name="FriendsOfFriends+get"></a>
+### friendsOfFriends.get(property) ⇒ <code>Mixed</code>
 Return the value of a property of `this.options`
 
-**Params**
+**Kind**: instance method of <code>[FriendsOfFriends](#FriendsOfFriends)</code>  
+**See**: [options](#FriendsOfFriends.options)  
 
-- property `String` - The property to get  
+| Param | Type | Description |
+| --- | --- | --- |
+| property | <code>String</code> | The property to get |
 
-**Returns**: `Mixed`  
-<a name="FriendsOfFriends#set"></a>
-##friendsOfFriends.set(property, value)
+<a name="FriendsOfFriends+set"></a>
+### friendsOfFriends.set(property, value) ⇒ <code>Mixed</code>
 Set the value of a property of `this.options`
 
-**Params**
+**Kind**: instance method of <code>[FriendsOfFriends](#FriendsOfFriends)</code>  
+**See**: [options](#FriendsOfFriends.options)  
 
-- property `String` - The name of the Property  
-- value `Mixed` - The new value of the property  
+| Param | Type | Description |
+| --- | --- | --- |
+| property | <code>String</code> | The name of the Property |
+| value | <code>Mixed</code> | The new value of the property |
 
-**Returns**: `Mixed`  
+<a name="FriendsOfFriends.options"></a>
+### FriendsOfFriends.options : <code>Object</code>
+The options defined for the module instance
+
+**Kind**: static property of <code>[FriendsOfFriends](#FriendsOfFriends)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| personModelName | <code>String</code> | The modelName of the Person Schema. Default: `'Person'` |
+| friendshipModelName | <code>String</code> | The name to call the model to be compiled from the Friendship Schema. Default: `'Friendship'` |
+| friendshipCollectionName | <code>String</code> | The name to use for the Friendship Collection. Default: `'Friendships'`. |
+
+<a name="FriendsOfFriends.friendship"></a>
+### FriendsOfFriends.friendship : <code>Model</code>
+The Friendship model
+
+**Kind**: static property of <code>[FriendsOfFriends](#FriendsOfFriends)</code>  
+**See**
+
+- [FriendshipModel](FriendshipModel)
+- [moongoose models](http://mongoosejs.com/docs/models.html)
+
+<a name="FriendsOfFriends.relationships"></a>
+### FriendsOfFriends.relationships : <code>Object</code>
+Relationship constants
+
+**Kind**: static property of <code>[FriendsOfFriends](#FriendsOfFriends)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| &#x27;0&#x27; | <code>String</code> | Value: `'NOT_FRIENDS'` |
+| &#x27;1&#x27; | <code>String</code> | Value: `'FRIENDS_OF_FRIENDS'` |
+| &#x27;1.5&#x27; | <code>String</code> | Value: `'PENDING_FRIENDS'` |
+| &#x27;2&#x27; | <code>String</code> | Value: `'FRIENDS'` |
+| NOT_FRIENDS | <code>Number</code> | Value: `0` |
+| FRIENDS_OF_FRIENDS | <code>Number</code> | Value: `1` |
+| PENDING_FRIENDS | <code>Number</code> | Value: `1.5` |
+| FRIENDS | <code>Number</code> | Value: `2` |
+
+<a name="FriendsOfFriends.plugin"></a>
+### FriendsOfFriends.plugin(schema, options)
+Adds friends-of-friends functionality to an existing Schema
+
+**Kind**: static method of <code>[FriendsOfFriends](#FriendsOfFriends)</code>  
+**See**: [AccountModel](AccountModel)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| schema | <code>Schema</code> | The mongoose Schema that gets plugged |
+| options | <code>Object</code> | Options passed to the plugin |
+

@@ -1,9 +1,18 @@
 
-var debug = require('debug')('friends-of-friends:tests'),
-	mongoose = require('mongoose'),
-	should = require('should');
+var debug = require('debug')('friends-of-friends:tests');
+var	mongoose = require('mongoose');
+var should = require('should');
 
-var FriendsOfFriends = require('../lib/')();
+debug('mongoose', mongoose);
+
+var FriendsOfFriends = require('../lib/');
+var friendsOfFriends = new FriendsOfFriends(mongoose, {personModelName: 'test-person'});
+
+var PersonSchema = new mongoose.Schema({username: String});
+
+PersonSchema.plugin(friendsOfFriends.plugin, friendsOfFriends.options);
+
+var PersonModel = mongoose.model(friendsOfFriends.get('personModelName'), PersonSchema);
 
 var tests = {
 	friendship : require('./friendship'),
@@ -11,43 +20,69 @@ var tests = {
 }
 
 describe('FriendsOfFriends', function () {
+	it('should be a function called "FriendsOfFriends"', function (testComplete) {
+		FriendsOfFriends.should.be.a.Function;
+		FriendsOfFriends.should.have.a.property('name', 'FriendsOfFriends');
+		testComplete();
+	});
+
+	it('should work with or without new', function (testComplete) {
+		var withoutNew = FriendsOfFriends(mongoose, {personModelName: 'test-person'});
+		withoutNew.should.have.a.property('Friendship');
+
+		var withNew = new FriendsOfFriends(mongoose, {personModelName: 'test-person'});
+		withNew.should.have.a.property('Friendship');
+
+		testComplete();
+	});
+});
+
+describe('friendOfFriends', function () {
 
 	describe('#options', function () {
-		var options = FriendsOfFriends.options;
+		var options = friendsOfFriends.options;
 
 		it('should be an object', function () {
 			options.should.be.an.Object;
 		});
 
-		describe('#accountName', function () {
-			var accountName = options.accountName;
+		describe('#personModelName', function () {
+			var personModelName = options.personModelName;
 
 			it('should a non-empty String', function () {
-				accountName.should.be.a.String.and.not.be.empty;
+				personModelName.should.be.a.String.and.not.be.empty;
 			})
 		})
 
-		describe('#friendshipName', function () {
-			var friendshipName = options.friendshipName;
+		describe('#friendshipModelName', function () {
+			var friendshipModelName = options.friendshipModelName;
 
 			it('should be a non-empty String', function () {
-				friendshipName.should.be.a.String.and.not.be.empty;
+				friendshipModelName.should.be.a.String.and.not.be.empty;
+			})
+		})
+
+		describe('#friendshipCollectionName', function () {
+			var friendshipCollectionName = options.friendshipCollectionName;
+
+			it('should be a non-empty String', function () {
+				friendshipCollectionName.should.be.a.String.and.not.be.empty;
 			})
 		})
 	})
 
 	describe('#relationships', function () {
-		var relationships = FriendsOfFriends.relationships;
+		var relationships = friendsOfFriends.relationships;
 
 		var test = {
-		    0:                      "NOT_FRIENDS",
-		    1:                      "FRIENDS_OF_FRIENDS",
-			1.5: 					"PENDING_FRIENDS",
-			2: 						"FRIENDS",
-		    NOT_FRIENDS:            0,
-		    FRIENDS_OF_FRIENDS:     1,
-		    PENDING_FRIENDS: 		1.5,
-		    FRIENDS:                2
+		    0:                  "NOT_FRIENDS",
+		    1:                  "FRIENDS_OF_FRIENDS",
+			2: 					"PENDING_FRIENDS",
+			3: 					"FRIENDS",
+		    NOT_FRIENDS:        0,
+		    FRIENDS_OF_FRIENDS: 1,
+		    PENDING_FRIENDS: 	2,
+		    FRIENDS:            3
 		};
 
 		var testStr = '{ ';
@@ -71,32 +106,56 @@ describe('FriendsOfFriends', function () {
 		});
 	})
 
+	describe('#Friendship', function (done) {
+		var Friendship = friendsOfFriends.Friendship;
 
-	// check to see if friendship is a model
-	describe('#friendship', function (done) {
+		it('should be a function named "model"', function (testComplete) {
+	        Friendship.should.be.a.Function;
+	        Friendship.should.have.a.property('name', 'model');
 
-		tests.friendship()
+	        testComplete();
+
+	    });
 	})
 
 	describe('#plugin', function (done) {
-		tests.plugin()
+		var plugin = friendsOfFriends.plugin;
+
+		it('should be a function called "friendshipPlugin"', function (testComplete) {
+			plugin.should.be.a.Function;
+	        plugin.should.have.a.property('name', 'friendshipPlugin');
+
+	        testComplete();	
+		});
 	})
 
 	describe('#prototype', function () {
 		describe('#get', function () {
-			it('should get the given option from FriendsOfFriends.options', function () {
-				FriendsOfFriends.get('accountName').should.equal(FriendsOfFriends.options.accountName)				
+			it('should get the given option from friendsOfFriends.options', function () {
+				friendsOfFriends.get('personModelName').should.equal(friendsOfFriends.options.personModelName)
 			})
 		})
 
 		describe('#set', function () {
 
-			it('should set the given option to FriendsOfFriends.options', function () {
-				var friendshipName = 'Friend-Records';
+			it('should set the given option to friendsOfFriends.options', function () {
+				var defaultModelName = friendsOfFriends.get('friendshipModelName')
 
-				FriendsOfFriends.set('friendshipName', friendshipName)
-				FriendsOfFriends.options.friendshipName.should.equal(friendshipName)
+				var modifiedModelName = 'Friend-Records';
+
+				friendsOfFriends.set('friendshipModelName', modifiedModelName)
+				friendsOfFriends.options.friendshipModelName.should.equal(modifiedModelName)
+
+				friendsOfFriends.set('friendshipModelName', defaultModelName);
 			})
 		})
 	})
 });
+
+describe('Friendship', function () {
+	tests.friendship(friendsOfFriends, mongoose)
+});
+
+describe('Person', function () {
+	tests.plugin(friendsOfFriends, mongoose)
+})

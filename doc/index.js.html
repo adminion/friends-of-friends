@@ -39,26 +39,26 @@ var debug = require('debug')('friends-of-friends'),
 module.exports = FriendsOfFriends
 
 /**
- * Creates a new FriendsOfFriends Object with or without new
+ * Create a new FriendsOfFriends Object with or without new
  * ```javascript
+ * // mongoose is required
+ * var mongoose = require('mongoose');
  * 
  * var FriendsOfFriends = require('friends-of-friends');
- * var fof = new FriendsOfFriends();
+ * var fof = new FriendsOfFriends(mongoose);
  * // works with or without 'new'
- * var FriendsOfFriends = require('friends-of-friends')();
+ * var FriendsOfFriends = require('friends-of-friends')(mongoose);
  * ```
  * 
- *  Default Configuration 
+ *  Default Configuration Options
  * ```javascript
  * var defaults = {
  *     // define the name for your Users model.
- *     accountName: 'Account',
- *     // define the name of the Users colletion. 
- *     accountCollection: undefined,
+ *     personModelName: 'Person',
  *     // define the name for the Friendship model
- *     friendshipName: 'Friendship',
+ *     friendshipModelName: 'Friendship',
  *     // define the name of the Friendship collection.
- *     friendshipCollection: undefined
+ *     friendshipCollectionName: 'Friendships'
  * }
  * ```
  * 
@@ -66,44 +66,45 @@ module.exports = FriendsOfFriends
  * ```javascript
  * 
  * var options = { 
- *      accountName:             'Player',
- *      accountCollection:       'foo_userAccounts',
- *      friendshipName:          'Friend_Relationships', 
- *      friendshipCollection:    'bar_userRelationships',
+ *      personModelName:            'Player',
+ *      friendshipModelName:        'Friend_Relationships', 
+ *      friendshipCollectionName:   'bar_userRelationships',
  *  };
  *  
  * var FriendsOfFriends = require('friends-of-friends');
- * var fof = new FriendsOfFriends(options);
+ * var fof = new FriendsOfFriends(mongoose, options);
  * // again, works with or without 'new'
- * var FriendsOfFriends = require('friends-of-friends')(options);
+ * var FriendsOfFriends = require('friends-of-friends')(mongoose, options);
  * ```
  * @class FriendsOfFriends
- * @param {Object} options - optional object containing configurable options
+ * @param {Object} mongoose - required: mongoose instance used in your application
+ * @param {Object} options  - optional object containing configurable options
  */
-function FriendsOfFriends(options) {
+function FriendsOfFriends(mongoose, options) {
 
-    debug('options', options)
+    debug('mongoose', mongoose);
+    debug('options', options);
 
     if (!(this instanceof FriendsOfFriends)) {
-      return new FriendsOfFriends(options);
+      return new FriendsOfFriends(mongoose, options);
     } 
 
     var friendship = require('./friendship'),
         plugin = require('./plugin');
 
-    var defaults = {
-        accountName:    'Account',
-        friendshipName: 'Friendship',
+    var defaults = { 
+        personModelName:            'Person',
+        friendshipModelName:        'Friendship', 
+        friendshipCollectionName:   'Friendships',
     };
 
     /**
      * The options defined for the module instance
      * @member      {Object} options
      * @memberOf    FriendsOfFriends
-     * @property    {String} accountName            - The name to call the model to be compiled from the Account Schema. Default: `'Account'`
-     * @property    {String} accountCollection      - The name to use for the Account Collection. Default: `undefined`.
-     * @property    {String} friendshipName         - The name to call the model to be compiled from the Friendship Schema. Default: `'Friendship'`
-     * @property    {String} friendshipCollection   - The name to use for the Account Collection. Default: `undefined`.
+     * @property    {String} personModelName            - The modelName of the Person Schema. Default: `'Person'`
+     * @property    {String} friendshipModelName        - The name to call the model to be compiled from the Friendship Schema. Default: `'Friendship'`
+     * @property    {String} friendshipCollectionName   - The name to use for the Friendship Collection. Default: `'Friendships'`.
      */
     this.options = utils.extend(defaults, options);
 
@@ -114,7 +115,7 @@ function FriendsOfFriends(options) {
      * @see         {@link FriendshipModel}
      * @see         [moongoose models]{@link http://mongoosejs.com/docs/models.html}
      */
-    this.friendship = friendship(this.options);
+    this.Friendship = friendship(mongoose, this.options);
 
     /**
      * Adds friends-of-friends functionality to an existing Schema
@@ -123,7 +124,7 @@ function FriendsOfFriends(options) {
      * @param       {Object} options    - Options passed to the plugin
      * @see         {@link AccountModel}
      */
-    this.plugin = plugin;
+    this.plugin = plugin(mongoose);
 
 };
 
@@ -173,13 +174,13 @@ FriendsOfFriends.prototype.set = function (property, value) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountDocument.html">AccountDocument</a></li><li><a href="AccountModel.html">AccountModel</a></li><li><a href="FriendshipDocument.html">FriendshipDocument</a></li><li><a href="FriendshipModel.html">FriendshipModel</a></li><li><a href="FriendsOfFriends.html">FriendsOfFriends</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="FriendshipDocument.html">FriendshipDocument</a></li><li><a href="FriendshipModel.html">FriendshipModel</a></li><li><a href="FriendsOfFriends.html">FriendsOfFriends</a></li><li><a href="PersonDocument.html">PersonDocument</a></li><li><a href="PersonModel.html">PersonModel</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue Apr 14 2015 22:42:13 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Tue Jul 21 2015 13:50:40 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

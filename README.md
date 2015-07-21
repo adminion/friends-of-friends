@@ -1,68 +1,83 @@
 # friends-of-friends 
-## Friendship Mangement for Mongoose 
-
 [![Build Status](https://travis-ci.org/adminion/friends-of-friends.svg?branch=master)](https://travis-ci.org/adminion/friends-of-friends) 
 [![Coverage Status](https://coveralls.io/repos/adminion/friends-of-friends/badge.svg?branch=master)](https://coveralls.io/r/adminion/friends-of-friends?branch=master)
 
-## Installlation
+## Add Friendship Management to any Mongoose Schema
+Use friends-of-friends to add friend relationships to any existing mongoose schema.  Let's say you already have a collection of users and you want them to be able to setup friend relationships for use in building an ACL: friends-of-friends is your new best friend! 
+
+For details, see [API](#api) and [Usage](#usage) below.
+
+## Contributing
+I will happily accept contributions of bug-fixes and new features, but we'll need to discuss breaking changes.  If you make valuable contributions, I'll make you a collaborator :)
+
+See the [Contribution Guide](/CONTRIBUTING.md) for more information on how to contribute, run tests, and generate coverage reports.
+
+## API
+
+API documentation is located in `doc/`
+
+## Installation
 
     $ npm install friends-of-friends
 
 ## Usage
 
-### Default Configuration
+### Create a new FriendsOfFriends Object
 ```javascript
+// mongoose is required
+var mongoose = require('mongoose');
 
 var FriendsOfFriends = require('friends-of-friends');
-var fof = new FriendsOfFriends();
+var fof = new FriendsOfFriends(mongoose);
 // works with or without 'new'
-var FriendsOfFriends = require('friends-of-friends')();
+var FriendsOfFriends = require('friends-of-friends')(mongoose);
 ```
 
-#### Defaults
+#### Default Configuration Options
 ```javascript
 var defaults = {
     // define the name for your Users model.
-    accountName: 'Account',
-    // define the name of the Users colletion. 
-    accountCollection: undefined,
+    personModelName: 'Person',
     // define the name for the Friendship model
-    friendshipName: 'Friendship',
+    friendshipModelName: 'Friendship',
     // define the name of the Friendship collection.
-    friendshipCollection: undefined
+    friendshipCollectionName: 'Friendships'
 }
 ```
 
 ### Specifying Configuration Options
 ```javascript
-
-var options = { 
-     accountName:             'Player',
-     accountCollection:       'foo_userAccounts',
-     friendshipName:          'Friend_Relationships', 
-     friendshipCollection:    'bar_userRelationships',
- };
- 
-var FriendsOfFriends = require('friends-of-friends');
-var fof = new FriendsOfFriends(options);
-// again, works with or without 'new'
-var FriendsOfFriends = require('friends-of-friends')(options);
-```
-
-### Plugin friends-of-friends to User Schema
-```javascript
 var mongoose = require('mongoose');
 
-// create you User schema
+var options = { 
+    personModelName:        'Player',
+    friendshipName:         'Friend_Relationships', 
+    friendshipCollection:   'foo_bar_userRelationships',
+};
+ 
+var FriendsOfFriends = require('friends-of-friends');
+var fof = new FriendsOfFriends(mongoose, options);
+// again, works with or without 'new'
+var FriendsOfFriends = require('friends-of-friends')(mongoose, options);
+
+// ...
+
+```
+
+### Plug-in friends-of-friends to User Schema
+```javascript
+// ...
+
+// you User schema
 var UserSchema = new mongoose.Schema({
-    username: { type: String, unique: true }
+    username: String
 });
 
-// apply friends-of-friends plugin to your User schema
+// apply the friends-of-friends mongoose plugin to your User schema
 UserSchema.plugin(friendsOfFriends.plugin, options);
 
 // compile your user model
-var User = mongoose.model(options.accountName), UserSchema);
+var User = mongoose.model(options.personModelName), UserSchema);
 
 // create users
 var Jeff = new User({ username: "Jeff" }),
@@ -117,13 +132,13 @@ Zane.acceptRequest(Jeff._id, function (err, friendship) {
     if (err) throw err;
 
     console.log('friendship', friendship);
-        // friendship { __v: 0,
-        //   _id: 54c6eb7cf2f9fe9672b90ba4,
-        //   dateAccepted: Mon Jan 26 2015 17:35:57 GMT-0800 (PST),
-        //   requested: { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 },
-        //   requester: { username: 'Jeff', _id: 54c6eb7cf2f9fe9672b90ba2, __v: 0 },
-        //   dateSent: Mon Jan 26 2015 17:35:56 GMT-0800 (PST),
-        //   status: 'Accepted' }
+    // friendship { __v: 0,
+    //   _id: 54c6eb7cf2f9fe9672b90ba4,
+    //   dateAccepted: Mon Jan 26 2015 17:35:57 GMT-0800 (PST),
+    //   requested: { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 },
+    //   requester: { username: 'Jeff', _id: 54c6eb7cf2f9fe9672b90ba2, __v: 0 },
+    //   dateSent: Mon Jan 26 2015 17:35:56 GMT-0800 (PST),
+    //   status: 'Accepted' }
 });
 ```
 
@@ -175,16 +190,6 @@ Zane.friendRequest(Sam._id, function (err, request) {
     });
 });
 ```
-
-## Tests
-
-You can run the tests with `npm test`
-
-    $ npm test
-
-## API
-
-API documentation is located in `doc/`
 
 ## License
 
