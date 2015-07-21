@@ -6,6 +6,8 @@ CHANGES
 ## v2.0.0
 
 ### Major
+* `getNonFriends` now includes `pendingFriends` and `friendsOfFriends`.  fixes #32
+* Changed `AccountModel` and `AccountDocument` to `PersonModel` and `PersonDocument`, respectively. fixes #31
 * Updated `FriendsOfFriends.options` property names and default values. fixes #30
 *  `FriendsOfFriends.prototype.relationships` now uses sequential integers instead of `PENDING_FRIENDS` being `1.5`. fixes #29
 *  `FriendsOfFriends.friendship` is now `FriendsOfFriends.Friendship` to properly signify that it is a constructor. fixes #28.
@@ -13,7 +15,7 @@ CHANGES
 *  Bumped Mongoose to 4.x. fixes #26
 
 ## Minor
-* Updated get* methods on `AccountModel` and `AccountDocument` to accept optional parameter `findParams` with `conditions`, `projection`, and `options` properties in order to fine-tune queries. fixes #25. see [`model.find()`](http://mongoosejs.com/docs/api.html#model_Model.find)
+* Updated `getFriends`, `getFriendsOfFriends`, `getPendingFriends`, and `getNonFriends` on `PersonModel` and `PersonDocument` to accept optional parameter `findParams` with `conditions`, `projection`, and `options` properties in order to fine-tune queries. fixes #25. see [`model.find()`](http://mongoosejs.com/docs/api.html#model_Model.find)
 
 # v1.x
 

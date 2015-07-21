@@ -1,31 +1,22 @@
 # friends-of-friends 
-## Friendship Mangement for Mongoose 
-
 [![Build Status](https://travis-ci.org/adminion/friends-of-friends.svg?branch=master)](https://travis-ci.org/adminion/friends-of-friends) 
 [![Coverage Status](https://coveralls.io/repos/adminion/friends-of-friends/badge.svg?branch=master)](https://coveralls.io/r/adminion/friends-of-friends?branch=master)
 
+## Add Friendship Management to any Mongoose Schema
+Use friends-of-friends to add friend relationships to any existing mongoose schema.  Let's say you already have a collection of users and you want them to be able to setup friend relationships for use in building an ACL: friends-of-friends is your new best friend! 
+
+For details, see [API](#api) and [Usage](#usage) below.
+
 ## Contributing
-I am open to and will happily accept contributions of bug-fixes and new features.  We'll need to discuss breaking changes.
+I will happily accept contributions of bug-fixes and new features, but we'll need to discuss breaking changes.  If you make valuable contributions, I'll make you a collaborator :)
 
-### Bugs
-If you believe you have found a bug, please create an issue describing the bug with code that reproduces the bug.  Once we verify that it is in fact a bug, please provide a fix suggest how it could be fixed.
+See the [Contribution Guide](/CONTRIBUTING.md) for more information on how to contribute, run tests, and generate coverage reports.
 
-If your fix doesn't pass the tests, please either fix your code or prove to me that my tests are inadequate (and fix them, pretty please :D)
+## API
 
-### New Features
-If you would like to propose a new feature, please
+API documentation is located in `doc/`
 
-1. make a fork
-2. create a new branch `new-feature-x`
-3. implement your new feature in `new-feature-x`
-4. write tests which your new feature will pass
-4. commit and push that branch to your `your_repo`
-5. make a pull request from `your_repo:new-feature-x` into `adminion:master`
-
-### Breaking Changes
-Breaking changes will only be considered if they dramatically improve stability, performance, and/or usability with minimal code modifications for end-users.
-
-## Installlation
+## Installation
 
     $ npm install friends-of-friends
 
@@ -59,28 +50,30 @@ var defaults = {
 var mongoose = require('mongoose');
 
 var options = { 
-     personModelName:             'Player',
-     accountCollection:       'foo_userAccounts',
-     friendshipName:          'Friend_Relationships', 
-     friendshipCollection:    'bar_userRelationships',
- };
+    personModelName:        'Player',
+    friendshipName:         'Friend_Relationships', 
+    friendshipCollection:   'foo_bar_userRelationships',
+};
  
 var FriendsOfFriends = require('friends-of-friends');
 var fof = new FriendsOfFriends(mongoose, options);
 // again, works with or without 'new'
 var FriendsOfFriends = require('friends-of-friends')(mongoose, options);
+
+// ...
+
 ```
 
-### Plugin friends-of-friends to User Schema
+### Plug-in friends-of-friends to User Schema
 ```javascript
-var mongoose = require('mongoose');
+// ...
 
-// create you User schema
+// you User schema
 var UserSchema = new mongoose.Schema({
-    username: { type: String, unique: true }
+    username: String
 });
 
-// apply friends-of-friends plugin to your User schema
+// apply the friends-of-friends mongoose plugin to your User schema
 UserSchema.plugin(friendsOfFriends.plugin, options);
 
 // compile your user model
@@ -139,13 +132,13 @@ Zane.acceptRequest(Jeff._id, function (err, friendship) {
     if (err) throw err;
 
     console.log('friendship', friendship);
-        // friendship { __v: 0,
-        //   _id: 54c6eb7cf2f9fe9672b90ba4,
-        //   dateAccepted: Mon Jan 26 2015 17:35:57 GMT-0800 (PST),
-        //   requested: { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 },
-        //   requester: { username: 'Jeff', _id: 54c6eb7cf2f9fe9672b90ba2, __v: 0 },
-        //   dateSent: Mon Jan 26 2015 17:35:56 GMT-0800 (PST),
-        //   status: 'Accepted' }
+    // friendship { __v: 0,
+    //   _id: 54c6eb7cf2f9fe9672b90ba4,
+    //   dateAccepted: Mon Jan 26 2015 17:35:57 GMT-0800 (PST),
+    //   requested: { username: 'Zane', _id: 54c6eb7cf2f9fe9672b90ba3, __v: 0 },
+    //   requester: { username: 'Jeff', _id: 54c6eb7cf2f9fe9672b90ba2, __v: 0 },
+    //   dateSent: Mon Jan 26 2015 17:35:56 GMT-0800 (PST),
+    //   status: 'Accepted' }
 });
 ```
 
@@ -197,16 +190,6 @@ Zane.friendRequest(Sam._id, function (err, request) {
     });
 });
 ```
-
-## Tests
-
-You can run the tests with `npm test`
-
-    $ npm test
-
-## API
-
-API documentation is located in `doc/`
 
 ## License
 
