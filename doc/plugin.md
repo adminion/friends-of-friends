@@ -151,7 +151,7 @@ end a friendship between two persons
 
 <a name="PersonModel.getFriends"></a>
 ### PersonModel.getFriends(personId, findParams, done)
-get all friends of an person
+get all friends of a person
 
 **Kind**: static method of <code>[PersonModel](#PersonModel)</code>  
 **See**: [FriendshipModel.getFriends](FriendshipModel.getFriends)  
@@ -164,7 +164,7 @@ get all friends of an person
 
 <a name="PersonModel.getFriendsOfFriends"></a>
 ### PersonModel.getFriendsOfFriends(personId, findParams, done)
-get friends of an person's friends
+get friends of a person's friends
 
 **Kind**: static method of <code>[PersonModel](#PersonModel)</code>  
 **See**: [FriendshipModel.getFriendsOfFriends](FriendshipModel.getFriendsOfFriends)  
@@ -177,7 +177,7 @@ get friends of an person's friends
 
 <a name="PersonModel.getPendingFriends"></a>
 ### PersonModel.getPendingFriends(personId, findParams, done)
-get friends of an person's pending friends
+get friends of a person's pending friends
 
 **Kind**: static method of <code>[PersonModel](#PersonModel)</code>  
 **See**: [FriendshipModel.getPendingFriends](FriendshipModel.getPendingFriends)  
