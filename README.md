@@ -47,7 +47,7 @@ var defaults = {
     // define the name for the Friendship model
     friendshipModelName:        'Friendship',
     // define the name of the Friendship collection.
-    friendshipCollectionName:   'Friendships'
+    friendshipCollectionName:   undefined
 }
 ```
 
