@@ -1,24 +1,30 @@
 # friends-of-friends 
+
 [![Build Status](https://travis-ci.org/adminion/friends-of-friends.svg?branch=master)](https://travis-ci.org/adminion/friends-of-friends) 
 [![Coverage Status](https://coveralls.io/repos/adminion/friends-of-friends/badge.svg?branch=master)](https://coveralls.io/r/adminion/friends-of-friends?branch=master)
 
 ## Add Friendship Management to any Mongoose Schema
-Use friends-of-friends to add friend relationships to any existing mongoose schema.  Let's say you already have a collection of users and you want them to be able to setup friend relationships for use in building an ACL: friends-of-friends is your new best friend! 
 
-For details, see [API](#api) and [Usage](#usage) below.
+### How does it work?
+friends-of-friends defines a `friendships` collection that is used to store 1-to-1 friendships with pending/accepted status between users and provides a mongoose-plugin to add functionality to your existing user model to allow sending/getting/accepting/denying friendship requests as well as querying for friends/non-friends/pending-friends/friends-of-friends using mongoose's rich [Model.find()](http://mongoosejs.com/docs/api.html#model_Model.find) syntax.  
+
+### Do I need to modify my user schema to use friends-of-friends?
+friends-of-friends currently depends on the `_id` field to be an [`ObjectId`](http://mongoosejs.com/docs/api.html#types_objectid_ObjectId) to track who is friends with who, but is otherwise unopinionated and leaves all design decisions up to you.  So long as you have not implemented fields/properties with the same name as any of the static/instance methods provided by the plugin, all functionality should work out-of-box.  
+
+For details, see [API](#api) and [Usage](#usage) examples below.
 
 ## Contributing
 I will happily accept contributions of bug-fixes and new features, but we'll need to discuss breaking changes.  If you make valuable contributions, I'll make you a collaborator :)
 
-See the [Contribution Guide](/CONTRIBUTING.md) for more information on how to contribute, run tests, and generate coverage reports.
+See the [Contribution Guide](CONTRIBUTING.md) for more information on how to contribute, run tests, and generate coverage reports.
 
 ## API
 
-API documentation is located in `doc/`
+API documentation is located in [`doc/`](doc/)
 
 ## Installation
 
-    $ npm install friends-of-friends
+    $ npm install --save friends-of-friends
 
 ## Usage
 
