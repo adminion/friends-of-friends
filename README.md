@@ -37,31 +37,26 @@ var FriendsOfFriends = require('friends-of-friends')(mongoose);
 ```javascript
 var defaults = {
     // define the name for your Users model.
-    personModelName: 'Person',
+    personModelName:            'Person',
     // define the name for the Friendship model
-    friendshipModelName: 'Friendship',
+    friendshipModelName:        'Friendship',
     // define the name of the Friendship collection.
-    friendshipCollectionName: 'Friendships'
+    friendshipCollectionName:   'Friendships'
 }
 ```
 
 ### Specifying Configuration Options
 ```javascript
-var mongoose = require('mongoose');
-
 var options = { 
-    personModelName:        'Player',
-    friendshipName:         'Friend_Relationships', 
-    friendshipCollection:   'foo_bar_userRelationships',
+    personModelName:            'Player',
+    friendshipModelName:        'Friend_Relationships', 
+    friendshipCollectionName:   'foo_bar_userRelationships',
 };
  
 var FriendsOfFriends = require('friends-of-friends');
 var fof = new FriendsOfFriends(mongoose, options);
 // again, works with or without 'new'
 var FriendsOfFriends = require('friends-of-friends')(mongoose, options);
-
-// ...
-
 ```
 
 ### Plug-in friends-of-friends to User Schema
