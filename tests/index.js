@@ -65,8 +65,13 @@ describe('friendOfFriends', function () {
 		describe('#friendshipCollectionName', function () {
 			var friendshipCollectionName = options.friendshipCollectionName;
 
-			it('should be a non-empty String', function () {
-				friendshipCollectionName.should.be.a.String.and.not.be.empty;
+			it('should be a non-empty String or undefined', function () {
+
+				if (!friendshipCollectionName) {
+					(friendshipCollectionName === undefined).should.be.true;
+				} else {
+					friendshipCollectionName.should.be.a.String.and.not.be.empty;
+				}
 			})
 		})
 	})
