@@ -23,6 +23,7 @@
   * [.getFriends(personId, findParams, done)](#PersonModel.getFriends)
   * [.getFriendsOfFriends(personId, findParams, done)](#PersonModel.getFriendsOfFriends)
   * [.getPendingFriends(personId, findParams, done)](#PersonModel.getPendingFriends)
+  * [.getNonFriends(personId, findParams, done)](#PersonModel.getNonFriends)
   * [.areFriends(personId1, personId2, done)](#PersonModel.areFriends)
   * [.areFriendsOfFriends(personId1, personId2, done)](#PersonModel.areFriendsOfFriends)
   * [.getFriendship(personId1, personId2, done)](#PersonModel.getFriendship)
@@ -151,7 +152,7 @@ end a friendship between two persons
 
 <a name="PersonModel.getFriends"></a>
 ### PersonModel.getFriends(personId, findParams, done)
-get all friends of an person
+get a perons's friends
 
 **Kind**: static method of <code>[PersonModel](#PersonModel)</code>  
 **See**: [FriendshipModel.getFriends](FriendshipModel.getFriends)  
@@ -164,7 +165,7 @@ get all friends of an person
 
 <a name="PersonModel.getFriendsOfFriends"></a>
 ### PersonModel.getFriendsOfFriends(personId, findParams, done)
-get friends of an person's friends
+get a person's friends-of-friends.  friends-of-friends are non-friends with whom this person has at least one mutual friend.
 
 **Kind**: static method of <code>[PersonModel](#PersonModel)</code>  
 **See**: [FriendshipModel.getFriendsOfFriends](FriendshipModel.getFriendsOfFriends)  
@@ -177,7 +178,7 @@ get friends of an person's friends
 
 <a name="PersonModel.getPendingFriends"></a>
 ### PersonModel.getPendingFriends(personId, findParams, done)
-get friends of an person's pending friends
+get a person's pending friends
 
 **Kind**: static method of <code>[PersonModel](#PersonModel)</code>  
 **See**: [FriendshipModel.getPendingFriends](FriendshipModel.getPendingFriends)  
@@ -187,6 +188,19 @@ get friends of an person's pending friends
 | personId | <code>ObjectId</code> | the _id of the person |
 | findParams | <code>Object</code> | optional mongoose find params. @see [Model.find](http://mongoosejs.com/docs/api.html#model_Model.find) |
 | done | <code>function</code> | required callback, passed an array of friendsOfFriends |
+
+<a name="PersonModel.getNonFriends"></a>
+### PersonModel.getNonFriends(personId, findParams, done)
+get all users that are not the given user's friends
+
+**Kind**: static method of <code>[PersonModel](#PersonModel)</code>  
+**See**: [FriendshipModel.getNonFriends](FriendshipModel.getNonFriends)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| personId | <code>ObjectId</code> | the _id of the user |
+| findParams | <code>Object</code> | optional mongoose find params. @see [Model.find](http://mongoosejs.com/docs/api.html#model_Model.find) |
+| done | <code>function</code> | required callback |
 
 <a name="PersonModel.areFriends"></a>
 ### PersonModel.areFriends(personId1, personId2, done)
@@ -407,7 +421,7 @@ get friends of this document's friends
 
 <a name="PersonDocument.getPendingFriends"></a>
 ### PersonDocument.getPendingFriends(personId, done)
-get friends of this person's pending friends
+get this person's pending friends
 
 **Kind**: static method of <code>[PersonDocument](#PersonDocument)</code>  
 **See**: [getPendingFriends](#PersonModel.getPendingFriends)  
@@ -422,7 +436,7 @@ get friends of this person's pending friends
 get persons which are not this document's friends
 
 **Kind**: static method of <code>[PersonDocument](#PersonDocument)</code>  
-**See**: [PersonModel.getNonFriends](PersonModel.getNonFriends)  
+**See**: [getNonFriends](#PersonModel.getNonFriends)  
 
 | Param | Type | Description |
 | --- | --- | --- |

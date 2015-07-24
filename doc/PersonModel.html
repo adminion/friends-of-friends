@@ -561,7 +561,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line345">line 345</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line346">line 346</a>
     </li></ul></dd>
     
 
@@ -745,7 +745,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line357">line 357</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line358">line 358</a>
     </li></ul></dd>
     
 
@@ -1519,7 +1519,7 @@
 
 
 <div class="description">
-    <p>get all friends of an person</p>
+    <p>get a perons's friends</p>
 </div>
 
 
@@ -1842,7 +1842,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line380">line 380</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line381">line 381</a>
     </li></ul></dd>
     
 
@@ -1887,7 +1887,7 @@
 
 
 <div class="description">
-    <p>get friends of an person's friends</p>
+    <p>get a person's friends-of-friends.  friends-of-friends are non-friends with whom this person has at least one mutual friend.</p>
 </div>
 
 
@@ -2064,6 +2064,190 @@
 
     
 
+    <h4 class="name" id=".getNonFriends"><span class="type-signature">(static) </span>getNonFriends<span class="signature">(personId, findParams, done)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>get all users that are not the given user's friends</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>personId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ObjectId</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the _id of the user</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>findParams</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>optional mongoose find params. @see <a href="http://mongoosejs.com/docs/api.html#model_Model.find">Model.find</a></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>done</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>required callback</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line304">line 304</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><p>FriendshipModel.getNonFriends</p></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id=".getPendingFriends"><span class="type-signature">(static) </span>getPendingFriends<span class="signature">(personId, findParams, done)</span><span class="type-signature"></span></h4>
 
     
@@ -2071,7 +2255,7 @@
 
 
 <div class="description">
-    <p>get friends of an person's pending friends</p>
+    <p>get a person's pending friends</p>
 </div>
 
 
@@ -2555,7 +2739,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line398">line 398</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line399">line 399</a>
     </li></ul></dd>
     
 
@@ -3061,7 +3245,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line424">line 424</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line425">line 425</a>
     </li></ul></dd>
     
 
@@ -3238,7 +3422,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line412">line 412</a>
+        <a href="plugin.js.html">plugin.js</a>, <a href="plugin.js.html#line413">line 413</a>
     </li></ul></dd>
     
 
@@ -3286,7 +3470,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Tue Jul 21 2015 16:05:42 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Fri Jul 24 2015 12:41:55 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>
