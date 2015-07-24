@@ -80,7 +80,7 @@ The options defined for the module instance
 | --- | --- | --- |
 | personModelName | <code>String</code> | The modelName of the Person Schema. Default: `'Person'` |
 | friendshipModelName | <code>String</code> | The name to call the model to be compiled from the Friendship Schema. Default: `'Friendship'` |
-| friendshipCollectionName | <code>String</code> | The name to use for the Friendship Collection. Default: `undefined`. |
+| friendshipCollectionName | <code>String</code> &#124; <code>undefined</code> | The name to use for the Friendship Collection. Default: `undefined`. |
 
 <a name="FriendsOfFriends.friendship"></a>
 ### FriendsOfFriends.friendship : <code>Model</code>
