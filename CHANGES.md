@@ -1,7 +1,16 @@
 CHANGES
 =======
 
+# v3.x
+
+## v3.0.0
+* set default `friendshipCollectionName` to `undefined`. fixes #33
+* Fixed: PersonModel.getNonFriends() missing from API docs #34
+
 # v2.x
+
+## v2.0.1
+* Documentation was incomplete for v2.0.0, this fixed that.
 
 ## v2.0.0
 

@@ -696,7 +696,20 @@
 669
 670
 671
-672</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+672
+673
+674
+675
+676
+677
+678
+679
+680
+681
+682
+683
+684
+685</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -913,6 +926,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">7</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -932,6 +949,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6</span>
 <span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -976,6 +997,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">7</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -995,6 +1020,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6</span>
 <span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1577,7 +1603,11 @@ module.exports = function pluginInit (mongoose) {
         };
 &nbsp;
         /**
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+         *  get a perons's friends
+=======
          *  get all friends of a person
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; 211fd9255be6b3b3ac3a5fc3f545dc2b54da9954
          * @function    PersonModel.getFriends
          * @param       {ObjectId}  personId       - the _id of the person
          * @param       {Object}    findParams     - optional mongoose `Model.find()` parameters. @see [Model.find](http://mongoosejs.com/docs/api.html#model_Model.find)
@@ -1608,7 +1638,11 @@ module.exports = function pluginInit (mongoose) {
         };
 &nbsp;
         /**
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+         *  get a person's friends-of-friends.  friends-of-friends are non-friends with whom this person has at least one mutual friend.
+=======
          *  get friends of a person's friends
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; 211fd9255be6b3b3ac3a5fc3f545dc2b54da9954
          * @function    PersonModel.getFriendsOfFriends
          * @param       {ObjectId}  personId       - the _id of the person
          * @param       {Object}    findParams     - optional mongoose find params. @see [Model.find](http://mongoosejs.com/docs/api.html#model_Model.find)
@@ -1640,7 +1674,11 @@ module.exports = function pluginInit (mongoose) {
         };
 &nbsp;
         /**
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+         *  get a person's pending friends
+=======
          *  get friends of a person's pending friends
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; 211fd9255be6b3b3ac3a5fc3f545dc2b54da9954
          * @function    PersonModel.getPendingFriends
          * @param       {ObjectId}  personId       - the _id of the person
          * @param       {Object}    findParams     - optional mongoose find params. @see [Model.find](http://mongoosejs.com/docs/api.html#model_Model.find)
@@ -1672,10 +1710,11 @@ module.exports = function pluginInit (mongoose) {
 &nbsp;
         /**
          * get all users that are not the given user's friends
-         * @param   {ObjectId}  personId   - the _id of the user 
-         * @param   {Object}    findParams - optional mongoose find params. @see [Model.find](http://mongoosejs.com/docs/api.html#model_Model.find)
-         * @param   {Function}  done        - required callback
-         * @see     [FriendshipModel.getNonFriends]{@link FriendshipModel.getNonFriends}
+         * @function    PersonModel.getNonFriends
+         * @param       {ObjectId}  personId   - the _id of the user 
+         * @param       {Object}    findParams - optional mongoose find params. @see [Model.find](http://mongoosejs.com/docs/api.html#model_Model.find)
+         * @param       {Function}  done        - required callback
+         * @see         [FriendshipModel.getNonFriends]{@link FriendshipModel.getNonFriends}
          */
         schema.statics.getNonFriends = function (personId, findParams, done) {
             debug('PersonModel.getNonFriends');
@@ -1933,7 +1972,7 @@ module.exports = function pluginInit (mongoose) {
         };
 &nbsp;
         /**
-         *  get friends of this person's pending friends
+         *  get this person's pending friends
          * @function    PersonDocument.getPendingFriends
          * @param       {ObjectId} personId    - the _id of the person
          * @param       {Function} done         - required callback, passed an array of friendsOfFriends
@@ -2043,7 +2082,7 @@ module.exports = function pluginInit (mongoose) {
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Jul 23 2015 14:28:27 GMT-0700 (PDT)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jul 24 2015 14:08:14 GMT-0700 (PDT)</div>
 </div>
 <script src="../prettify.js"></script>
 <script>
