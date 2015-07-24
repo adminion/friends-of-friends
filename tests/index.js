@@ -126,7 +126,7 @@ describe('friendOfFriends', function () {
 	describe('#plugin', function (done) {
 		var plugin = friendsOfFriends.plugin;
 
-		it('should be a function called "friendshipPlugin"', function (testComplete) {
+		it('should be a function named "friendshipPlugin"', function (testComplete) {
 			plugin.should.be.a.Function;
 	        plugin.should.have.a.property('name', 'friendshipPlugin');
 
