@@ -26,8 +26,10 @@ var fof = new FriendsOfFriends(mongoose);
 var FriendsOfFriends = require('friends-of-friends')(mongoose);
 ```
 
- Default Configuration Options
+Specifying Configuration Options
 ```javascript
+<<<<<<< HEAD
+=======
 var defaults = {
     // define the name for your Users model.
     personModelName:             'Person',
@@ -40,6 +42,7 @@ var defaults = {
 
  Specifying Configuration Options
 ```javascript
+>>>>>>> 211fd9255be6b3b3ac3a5fc3f545dc2b54da9954
 var options = { 
     personModelName:             'Player',
     friendshipModelName:         'Friend_Relationships', 
