@@ -152,11 +152,7 @@ end a friendship between two persons
 
 <a name="PersonModel.getFriends"></a>
 ### PersonModel.getFriends(personId, findParams, done)
-<<<<<<< HEAD
- get a perons's friends
-=======
- get all friends of a person
->>>>>>> 211fd9255be6b3b3ac3a5fc3f545dc2b54da9954
+get a perons's friends
 
 **Kind**: static method of <code>[PersonModel](#PersonModel)</code>  
 **See**: [FriendshipModel.getFriends](FriendshipModel.getFriends)  
@@ -169,11 +165,8 @@ end a friendship between two persons
 
 <a name="PersonModel.getFriendsOfFriends"></a>
 ### PersonModel.getFriendsOfFriends(personId, findParams, done)
-<<<<<<< HEAD
- get a person's friends-of-friends.  friends-of-friends are non-friends with whom this person has at least one mutual friend.
-=======
+get a person's friends-of-friends.  friends-of-friends are non-friends with whom this person has at least one mutual friend.
  get friends of a person's friends
->>>>>>> 211fd9255be6b3b3ac3a5fc3f545dc2b54da9954
 
 **Kind**: static method of <code>[PersonModel](#PersonModel)</code>  
 **See**: [FriendshipModel.getFriendsOfFriends](FriendshipModel.getFriendsOfFriends)  
@@ -186,11 +179,8 @@ end a friendship between two persons
 
 <a name="PersonModel.getPendingFriends"></a>
 ### PersonModel.getPendingFriends(personId, findParams, done)
-<<<<<<< HEAD
- get a person's pending friends
-=======
+get a person's pending friends
  get friends of a person's pending friends
->>>>>>> 211fd9255be6b3b3ac3a5fc3f545dc2b54da9954
 
 **Kind**: static method of <code>[PersonModel](#PersonModel)</code>  
 **See**: [FriendshipModel.getPendingFriends](FriendshipModel.getPendingFriends)  
