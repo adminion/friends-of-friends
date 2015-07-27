@@ -6,29 +6,28 @@ All are encouraged to contribute by way of submitting new Issues and Pull-Reques
 PRs with failing tests will not be merged; furthermore, PRs that decrease the project's test coverage will likely not be merged.  See [Testing and Coverage](#testing-and-coverage).
 
 ## Bugs
-If you believe you have found a bug, please create an issue describing the bug, code that reproduces it, and the version of friends-of-friends you are using.  If possible, please provide a fix or suggest how the bug may be resolved.  
+If you believe you have found a bug, please create an issue describing the bug, code that reproduces it, and the version of friends-of-friends you are using.  If possible, please provide a pull request to fix or suggest how the bug may be resolved.  
 
-Please follow the [Pull Request Guidelines](#pull-request-guidelines) when submitting bugfixes.
+Please follow the [Pull Request Guidelines](#pull-request-guidelines).
 
 ## New Features
-Please follow the [Pull Request Guidelines](#pull-request-guidelines) when proposing a new *semver-minor* feature.
+Please follow the [Pull Request Guidelines](#pull-request-guidelines).
 
 ## Breaking Changes
-Breaking *semver-major* changes will only be considered if they dramatically improve stability, performance, and/or usability with minimal code modifications for end-users.  These changes should follow the [Pull Request Guidelines](#pull-request-guidelines), except that branches, rebases, and pull-requests should originate from, be based upon, and directed to the `next` branch.
+Breaking *semver-major* changes will only be considered if they dramatically improve stability, performance, and/or usability with minimal code modifications for end-users.  Please follow the [Pull Request Guidelines](#pull-request-guidelines).
 
 ## Pull Request Guidelines
 
-1. Fork into `your_repo`.
-2. Create a new branch `your-branch-x` from `master` (for new features, replace `x` with a meaningful name for the feature; for bugfixes, replace `x` with the respective GitHub issue number).
-3. Implement your feature/bugfix in `your-branch-x`.  Please provide [jsdoc](http://usejsdoc.org/) compatible API documentation for new features (don't forget to credit yourself with the @author tag!).
-4. Verify your feature/bugfix passes all *existing* tests. If it doesn't pass *existing* tests, please either fix your code or prove that the tests are inadequate/invalid so someone else can fix them.
-5. Write/improve tests for your new feature/bugfix
-6. Verify your feature/bugfix passes all of *your* tests as well as all *existing* tests.
-7. *Rebase* `your-branch-x` onto `adminion:master`.
-8. Again, verify your feature/bugfix passes all of *your* tests as well as all *existing* tests after rebasing.
-9. Regenerate API Documentation and run a Coverage Report: `npm run docs && npm run coverage`.
-10. Commit and push `your-branch-x` to `your_repo`.
-11. Make a pull request from `your_repo:your-branch-x` into `adminion:master`.
+1. Fork this repo
+2. Create a new branch from `master`.  Use a meaningful name for new features and use `fix-for-#`, replacing `#` with the respective GitHub issue number, for bug fixes.
+3. Implement your feature/bugfix in that branch and please provide [jsdoc](http://usejsdoc.org/) compatible API documentation for new features (don't forget to credit yourself with the @author tag!).
+4. Write/improve tests for your new feature/bugfix.
+5. Verify your feature/bugfix passes all of *your* tests as well as all *existing* tests.
+6. *Rebase* your branch on top of `adminion:master` to include others' changes.
+7. Again, verify your feature/bugfix *still* passes *all* tests after rebasing.
+8. Regenerate API Documentation and run a Coverage Report: `npm run docs && npm run coverage`.
+9. Commit and push your branch to your repo.
+10. Make a pull request from your branch into `adminion:master`.
 
 
 If myself or others incorporate bugfixes/minor changes before reviewing your PR, you may be asked to rebase *again* prior to merging your PR.  
