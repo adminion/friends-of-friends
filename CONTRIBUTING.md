@@ -19,7 +19,7 @@ Breaking *semver-major* changes will only be considered if they dramatically imp
 ## Pull Request Guidelines
 
 1. Fork this repo
-2. Create a new branch from `master`.  Use a meaningful name for new features and use `fix-for-#`, replacing `#` with the respective GitHub issue number, for bug fixes.
+2. Create a new branch from `master`.  
 3. Implement your feature/bugfix in that branch and please provide [jsdoc](http://usejsdoc.org/) compatible API documentation for new features (don't forget to credit yourself with the @author tag!).
 4. Write/improve tests for your new feature/bugfix.
 5. Verify your feature/bugfix passes all of *your* tests as well as all *existing* tests.
