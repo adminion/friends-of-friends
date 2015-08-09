@@ -25,7 +25,7 @@
   "author": "Jeff Harris <techjeffharris@gmail.com>",
   "license": {
     "type": "BSD-3-Clause",
-    "file:": "LICENSE"
+    "file": "LICENSE"
   },
   "bugs": {
     "url": "https://github.com/adminion/friends-of-friends/issues"
@@ -45,6 +45,7 @@
     "mocha-mongoose": "1.x",
     "mocha-lcov-reporter": "0.x",
     "mongoose": "4.x",
+    "release-helper": "0.x",
     "should": "4.x"
   }
 }
