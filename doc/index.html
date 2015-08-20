@@ -26,7 +26,7 @@
     
 
 
-    <h3>friends-of-friends 3.0.0</h3>
+    <h3>friends-of-friends 3.0.2</h3>
 
 
 
@@ -43,12 +43,15 @@
 
 
     <section>
-        <article><h1>friends-of-friends</h1><p><a href="https://travis-ci.org/adminion/friends-of-friends"><img src="https://travis-ci.org/adminion/friends-of-friends.svg?branch=master" alt="Build Status"></a> 
+        <article><h1>friends-of-friends</h1><h2>Add Friendship Management to any Mongoose Schema</h2><p>friends-of-friends makes it nearly painless to develop custom social-networking applications by allowing you send/accept/deny friend requests, and search for friends, pending friends, friends of friends, and non-friends from a Model or Document.  </p>
+<p>For details, see the <a href="#api">API</a> and <a href="#usage">Usage</a> sections below.</p>
+<p><a href="https://travis-ci.org/adminion/friends-of-friends"><img src="https://travis-ci.org/adminion/friends-of-friends.svg?branch=master" alt="Build Status"></a> 
 <a href="https://coveralls.io/r/adminion/friends-of-friends?branch=master"><img src="https://coveralls.io/repos/adminion/friends-of-friends/badge.svg?branch=master" alt="Coverage Status"></a></p>
-<h2>Add Friendship Management to any Mongoose Schema</h2><h3>How does it work?</h3><p>friends-of-friends defines a <code>friendships</code> collection that is used to store 1-to-1 friendships with pending/accepted status between users and provides a mongoose-plugin to add functionality to your existing user model to allow sending/getting/accepting/denying friendship requests as well as querying for friends/non-friends/pending-friends/friends-of-friends using mongoose's rich <a href="http://mongoosejs.com/docs/api.html#model_Model.find">Model.find()</a> syntax.  </p>
-<h3>Do I need to modify my user schema to use friends-of-friends?</h3><p>friends-of-friends currently depends on the <code>_id</code> field to be an <a href="http://mongoosejs.com/docs/api.html#types_objectid_ObjectId"><code>ObjectId</code></a> to track who is friends with who, but is otherwise unopinionated and leaves all design decisions up to you.  So long as you have not implemented fields/properties with the same name as any of the static/instance methods provided by the plugin, all functionality should work out-of-box.  </p>
-<p>For details, see <a href="#api">API</a> and <a href="#usage">Usage</a> examples below.</p>
-<h2>Contributing</h2><p>I will happily accept contributions of bug-fixes and new features, but we'll need to discuss breaking changes.  If you make valuable contributions, I'll make you a collaborator :)</p>
+<p><a href="https://nodei.co/npm/friends-of-friends/"><img src="https://nodei.co/npm/friends-of-friends.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM"></a></p>
+<p><a href="https://nodei.co/npm/friends-of-friends/"><img src="https://nodei.co/npm-dl/friends-of-friends.png?months=6" alt="NPM"></a></p>
+<h3>How does it work?</h3><p>friends-of-friends defines a <code>friendships</code> collection that is used to store 1-to-1 friendships with pending/accepted status between users.  It also provides a mongoose plugin to add functionality to your existing user model providing support to send/get/accept/deny friendship requests as well as query for friends/non-friends/pending-friends/friends-of-friends using mongoose's rich <a href="http://mongoosejs.com/docs/api.html#model_Model.find">Model.find()</a> syntax.  </p>
+<h3>Do I need to modify my user schema to use friends-of-friends?</h3><p>friends-of-friends currently (in the future, this will be configurable) depends on the <code>_id</code> field to be an <a href="http://mongoosejs.com/docs/api.html#types_objectid_ObjectId"><code>ObjectId</code></a> to track who is friends with who, but is otherwise unopinionated and leaves all design decisions up to you.  So long as you have not implemented fields/properties with the same name as any of the static/instance methods provided by the plugin, all functionality should work out-of-box.  </p>
+<h2>Contributing</h2><p>I'm sure there are bugs, please help me find/fix them!  If you make valuable contributions, I'll make you a collaborator :)</p>
 <p>See the <a href="CONTRIBUTING.md">Contribution Guide</a> for more information on how to contribute, run tests, and generate coverage reports.</p>
 <h2>API</h2><p>API documentation is located in <a href="doc/"><code>doc/</code></a></p>
 <h2>Installation</h2><pre class="prettyprint source"><code>$ npm install --save friends-of-friends</code></pre><h2>Usage</h2><h3>Create a new FriendsOfFriends Object</h3><pre class="prettyprint source lang-javascript"><code>// mongoose is required
@@ -75,7 +78,7 @@ var fof = new FriendsOfFriends(mongoose, options);
 // again, works with or without 'new'
 var FriendsOfFriends = require('friends-of-friends')(mongoose, options);</code></pre><h3>Plug-in friends-of-friends to User Schema</h3><pre class="prettyprint source lang-javascript"><code>// ...
 
-// you User schema
+// your User schema
 var UserSchema = new mongoose.Schema({
     username: String
 });
@@ -84,7 +87,7 @@ var UserSchema = new mongoose.Schema({
 UserSchema.plugin(friendsOfFriends.plugin, options);
 
 // compile your user model
-var User = mongoose.model(options.personModelName), UserSchema);
+var User = mongoose.model(options.personModelName, UserSchema);
 
 // create users
 var Jeff = new User({ username: &quot;Jeff&quot; }),
@@ -196,7 +199,7 @@ Jeff.getFriends(function (err, friends) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Fri Jul 24 2015 14:56:10 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Thu Aug 20 2015 02:33:56 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>
