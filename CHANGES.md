@@ -3,6 +3,10 @@ CHANGES
 
 # v3.x
 
+## v3.0.2
+* [[`c4d89f61b4`](https://github.com/adminion/friends-of-friends/commit/c4d89f61b4)] - updated coverage report for v3.0.2 (Jeff Harris) 
+* [[`ab78d04ec9`](https://github.com/adminion/friends-of-friends/commit/ab78d04ec9)] - generating new docs to fix #39 (Jeff Harris) 
+
 ## v3.0.1
 * [[`10b43550b9`](https://github.com/adminion/friends-of-friends/commit/10b43550b9)] - updated CHANGES.md with current proposed changes (Jeff Harris) 
 * [[`afb445fa25`](https://github.com/adminion/friends-of-friends/commit/afb445fa25)] - findParams.projection now properly handles strings (Jeff Harris) 
