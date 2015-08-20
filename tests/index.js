@@ -8,7 +8,10 @@ debug('mongoose', mongoose);
 var FriendsOfFriends = require('../lib/');
 var friendsOfFriends = new FriendsOfFriends(mongoose, {personModelName: 'test-person'});
 
-var PersonSchema = new mongoose.Schema({username: String});
+var PersonSchema = new mongoose.Schema({
+	username: String,
+	created: { type: Date, default: Date.now() }
+});
 
 PersonSchema.plugin(friendsOfFriends.plugin, friendsOfFriends.options);
 

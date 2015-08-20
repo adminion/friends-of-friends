@@ -408,7 +408,7 @@ module.exports = function (friendsOfFriends, mongoose) {
                         zane: function (done) {
                             PersonModel.getFriends(testUsers.zane._id, done);
                         },
-                        jeffValidParams: function (done) {
+                        jeffValidConditions: function (done) {
                             var findParams = { 
                                 conditions: { 
                                     username: 'Zane'
@@ -416,8 +416,34 @@ module.exports = function (friendsOfFriends, mongoose) {
                             };
                             PersonModel.getFriends(testUsers.jeff._id, findParams, done);
                         },
+                        jeffValidProjectionString: function (done) {
+                            var findParams = { 
+                                projection: 'username'
+                            };
+                            PersonModel.getFriends(testUsers.jeff._id, findParams, done);
+                        },
+                        jeffValidProjectionObject: function (done) {
+                            var findParams = { 
+                                projection: { username: 1 }
+                            };
+                            PersonModel.getFriends(testUsers.jeff._id, findParams, done);
+                        },
                         jeffInvalidParams: function (done) {
-                            var findParams = true;
+                            var findParams = false;
+
+                            PersonModel.getFriends(testUsers.jeff._id, findParams, done);  
+                        },
+                        jeffInvalidConditions: function (done) {
+                            var findParams = {
+                                conditions: false
+                            };
+
+                            PersonModel.getFriends(testUsers.jeff._id, findParams, done);  
+                        },
+                        jeffInvalidProjection: function (done) {
+                            var findParams = {
+                                projection: false
+                            };
 
                             PersonModel.getFriends(testUsers.jeff._id, findParams, done);  
                         }
@@ -441,8 +467,22 @@ module.exports = function (friendsOfFriends, mongoose) {
                 results.friends.jeff.should.be.an.Array.with.length(1);
                 results.friends.jeff[0].should.have.a.property('_id', testUsers.zane._id);
 
-                results.friends.jeffValidParams.should.be.an.Array.with.length(1);
+                results.friends.jeffValidConditions.should.be.an.Array.with.length(1);
+                results.friends.jeffValidConditions[0].should.have.a.property('username', 'Zane');
+                results.friends.jeffValidConditions[0].toObject().should.have.a.property('created');
+                results.friends.jeffValidConditions[0].created.should.be.a.Date;
+
+                results.friends.jeffValidProjectionString.should.be.an.Array.with.length(1);
+                results.friends.jeffValidProjectionString[0].should.have.a.property('username', 'Zane');
+                results.friends.jeffValidProjectionString[0].toObject().should.not.have.a.property('created');
+
+                results.friends.jeffValidProjectionObject.should.be.an.Array.with.length(1);
+                results.friends.jeffValidProjectionObject[0].should.have.a.property('username', 'Zane');
+                results.friends.jeffValidProjectionObject[0].toObject().should.not.have.a.property('created');                
+ 
                 results.friends.jeffInvalidParams.should.be.an.Array.with.length(1);
+                results.friends.jeffInvalidConditions.should.be.an.Array.with.length(1);
+                results.friends.jeffInvalidProjection.should.be.an.Array.with.length(1);
 
                 results.friends.zane.should.be.an.Array.with.length(1);
                 results.friends.zane[0].should.have.a.property('_id', testUsers.jeff._id);
@@ -491,16 +531,42 @@ module.exports = function (friendsOfFriends, mongoose) {
                         henry: function (done) {
                             PersonModel.getFriendsOfFriends(testUsers.henry._id, done);
                         },
-                        jeffValidParams: function (done) {
+                        jeffValidConditions: function (done) {
                             var findParams = { 
                                 conditions: { 
-                                    username: 'Sam'
+                                    username: testUsers.sam.username
                                 }
                             };
                             PersonModel.getFriendsOfFriends(testUsers.jeff._id, findParams, done);
                         },
+                        jeffValidProjectionString: function (done) {
+                            var findParams = { 
+                                projection: 'username'
+                            };
+                            PersonModel.getFriendsOfFriends(testUsers.jeff._id, findParams, done);
+                        },
+                        jeffValidProjectionObject: function (done) {
+                            var findParams = { 
+                                projection: { username: 1 }
+                            };
+                            PersonModel.getFriendsOfFriends(testUsers.jeff._id, findParams, done);
+                        },
                         jeffInvalidParams: function (done) {
-                            var findParams = true;
+                            var findParams = false
+
+                            PersonModel.getFriendsOfFriends(testUsers.jeff._id, findParams, done);  
+                        },
+                        jeffInvalidConditions: function (done) {
+                            var findParams = {
+                                conditions: false
+                            };
+
+                            PersonModel.getFriendsOfFriends(testUsers.jeff._id, findParams, done);  
+                        },
+                        jeffInvalidProjection: function (done) {
+                            var findParams = {
+                                projection: false
+                            };
 
                             PersonModel.getFriendsOfFriends(testUsers.jeff._id, findParams, done);  
                         }
@@ -540,11 +606,29 @@ module.exports = function (friendsOfFriends, mongoose) {
                 results.friendsOfFriends.zane.should.be.an.empty.Array;
                 results.friendsOfFriends.henry.should.be.and.empty.Array;
 
-                results.friendsOfFriends.jeffValidParams.should.be.an.Array.with.length(1);
-                results.friendsOfFriends.jeffValidParams[0].should.have.a.property('_id', testUsers.sam._id);
+                results.friendsOfFriends.jeffValidConditions.should.be.an.Array.with.length(1);
+                results.friendsOfFriends.jeffValidConditions[0].should.have.a.property('username', 'Sam');
+                results.friendsOfFriends.jeffValidConditions[0].toObject().should.have.a.property('created');
+                results.friendsOfFriends.jeffValidConditions[0].should.have.a.property('_id', testUsers.sam._id);
+
+                results.friendsOfFriends.jeffValidProjectionString.should.be.an.Array.with.length(1);
+                results.friendsOfFriends.jeffValidProjectionString[0].should.have.a.property('username', 'Sam');
+                results.friendsOfFriends.jeffValidProjectionString[0].toObject().should.not.have.a.property('created');
+                results.friendsOfFriends.jeffValidProjectionString[0].should.have.a.property('_id', testUsers.sam._id);
+
+                results.friendsOfFriends.jeffValidProjectionObject.should.be.an.Array.with.length(1);
+                results.friendsOfFriends.jeffValidProjectionObject[0].should.have.a.property('username', 'Sam');
+                results.friendsOfFriends.jeffValidProjectionObject[0].toObject().should.not.have.a.property('created');
+                results.friendsOfFriends.jeffValidProjectionObject[0].should.have.a.property('_id', testUsers.sam._id);
 
                 results.friendsOfFriends.jeffInvalidParams.should.be.an.Array.with.length(1);
                 results.friendsOfFriends.jeffInvalidParams[0].should.have.a.property('_id', testUsers.sam._id);
+
+                results.friendsOfFriends.jeffInvalidConditions.should.be.an.Array.with.length(1);
+                results.friendsOfFriends.jeffInvalidConditions[0].should.have.a.property('_id', testUsers.sam._id);
+
+                results.friendsOfFriends.jeffInvalidProjection.should.be.an.Array.with.length(1);
+                results.friendsOfFriends.jeffInvalidProjection[0].should.have.a.property('_id', testUsers.sam._id);
 
                 PersonModel.getFriendsOfFriends('abc', function (err, request) {
                     err.should.be.an.Object;
@@ -572,7 +656,7 @@ module.exports = function (friendsOfFriends, mongoose) {
                         zane: function (done) {
                             PersonModel.getPendingFriends(testUsers.zane._id, done);
                         },
-                        jeffValidParams: function (done) {
+                        jeffValidConditions: function (done) {
                             var findParams = { 
                                 conditions: { 
                                     username: 'Zane'
@@ -580,8 +664,34 @@ module.exports = function (friendsOfFriends, mongoose) {
                             };
                             PersonModel.getPendingFriends(testUsers.jeff._id, findParams, done);
                         },
+                        jeffValidProjectionString: function (done) {
+                            var findParams = { 
+                                projection: 'username'
+                            };
+                            PersonModel.getPendingFriends(testUsers.jeff._id, findParams, done);
+                        },
+                        jeffValidProjectionObject: function (done) {
+                            var findParams = { 
+                                projection: { username: 1 }
+                            };
+                            PersonModel.getPendingFriends(testUsers.jeff._id, findParams, done);
+                        },
                         jeffInvalidParams: function (done) {
-                            var findParams = true;
+                            var findParams = false
+
+                            PersonModel.getPendingFriends(testUsers.jeff._id, findParams, done);  
+                        },
+                        jeffInvalidConditions: function (done) {
+                            var findParams = {
+                                conditions: false
+                            };
+
+                            PersonModel.getPendingFriends(testUsers.jeff._id, findParams, done);  
+                        },
+                        jeffInvalidProjection: function (done) {
+                            var findParams = {
+                                projection: false
+                            };
 
                             PersonModel.getPendingFriends(testUsers.jeff._id, findParams, done);  
                         }
@@ -603,11 +713,29 @@ module.exports = function (friendsOfFriends, mongoose) {
                 results.pendingFriends.zane.should.be.an.Array.with.length(1);
                 results.pendingFriends.zane[0].should.have.a.property('_id', testUsers.jeff._id);
 
-                results.pendingFriends.jeffValidParams.should.be.an.Array.with.length(1);
-                results.pendingFriends.jeffValidParams[0].should.have.a.property('_id', testUsers.zane._id);
+                results.pendingFriends.jeffValidConditions.should.be.an.Array.with.length(1);
+                results.pendingFriends.jeffValidConditions[0].should.have.a.property('_id', testUsers.zane._id);
+                results.pendingFriends.jeffValidConditions[0].should.have.a.property('username', 'Zane');
+                results.pendingFriends.jeffValidConditions[0].toObject().should.have.a.property('created');
+
+                results.pendingFriends.jeffValidProjectionString.should.be.an.Array.with.length(1);
+                results.pendingFriends.jeffValidProjectionString[0].should.have.a.property('_id', testUsers.zane._id);
+                results.pendingFriends.jeffValidProjectionString[0].should.have.a.property('username', 'Zane');
+                results.pendingFriends.jeffValidProjectionString[0].toObject().should.not.have.a.property('created');
+
+                results.pendingFriends.jeffValidProjectionObject.should.be.an.Array.with.length(1);
+                results.pendingFriends.jeffValidProjectionObject[0].should.have.a.property('_id', testUsers.zane._id);
+                results.pendingFriends.jeffValidProjectionObject[0].should.have.a.property('username', 'Zane');
+                results.pendingFriends.jeffValidProjectionObject[0].toObject().should.not.have.a.property('created');
 
                 results.pendingFriends.jeffInvalidParams.should.be.an.Array.with.length(1);
                 results.pendingFriends.jeffInvalidParams[0].should.have.a.property('_id', testUsers.zane._id);
+
+                results.pendingFriends.jeffInvalidConditions.should.be.an.Array.with.length(1);
+                results.pendingFriends.jeffInvalidConditions[0].should.have.a.property('_id', testUsers.zane._id);
+
+                results.pendingFriends.jeffInvalidProjection.should.be.an.Array.with.length(1);
+                results.pendingFriends.jeffInvalidProjection[0].should.have.a.property('_id', testUsers.zane._id);
 
                 PersonModel.getPendingFriends('abc', function (err, request) {
                     err.should.be.an.Object;
@@ -644,16 +772,44 @@ module.exports = function (friendsOfFriends, mongoose) {
                         henry: function (done) {
                             PersonModel.getNonFriends(testUsers.henry._id, done)
                         },
-                        jeffValidParams: function (done) {
+                        jeffValidConditions: function (done) {
                             var findParams = { 
                                 conditions: { 
-                                    username: 'Henry'
+                                    username: testUsers.henry.username
                                 }
                             };
                             PersonModel.getNonFriends(testUsers.jeff._id, findParams, done);
                         },
+                        jeffValidProjectionString: function (done) {
+                            var findParams = { 
+                                conditions: { username: testUsers.henry.username },
+                                projection: 'username'
+                            };
+                            PersonModel.getNonFriends(testUsers.jeff._id, findParams, done);
+                        },
+                        jeffValidProjectionObject: function (done) {
+                            var findParams = { 
+                                conditions: { username: testUsers.henry.username },
+                                projection: { username: 1 }
+                            };
+                            PersonModel.getNonFriends(testUsers.jeff._id, findParams, done);
+                        },
                         jeffInvalidParams: function (done) {
-                            var findParams = true;
+                            var findParams = false
+
+                            PersonModel.getNonFriends(testUsers.jeff._id, findParams, done);  
+                        },
+                        jeffInvalidConditions: function (done) {
+                            var findParams = {
+                                conditions: false
+                            };
+
+                            PersonModel.getNonFriends(testUsers.jeff._id, findParams, done);  
+                        },
+                        jeffInvalidProjection: function (done) {
+                            var findParams = {
+                                projection: false
+                            };
 
                             PersonModel.getNonFriends(testUsers.jeff._id, findParams, done);  
                         }
@@ -692,12 +848,32 @@ module.exports = function (friendsOfFriends, mongoose) {
                 results.nonFriends.henry.should.containDeep([ {"_doc": { username: testUsers.zane.username } } ])
                 results.nonFriends.henry.should.containDeep([ {"_doc": { username: testUsers.sam.username } } ])
 
-                results.nonFriends.jeffValidParams.should.be.an.Array.with.length(1);
-                results.nonFriends.jeffValidParams[0].should.have.a.property('_id', testUsers.henry._id)
+                results.nonFriends.jeffValidConditions.should.be.an.Array.with.length(1);
+                results.nonFriends.jeffValidConditions[0].should.have.a.property('_id', testUsers.henry._id)
+                results.nonFriends.jeffValidConditions[0].should.have.a.property('username', 'Henry');
+                results.nonFriends.jeffValidConditions[0].toObject().should.have.a.property('created');
+
+                results.nonFriends.jeffValidProjectionObject.should.be.an.Array.with.length(1);
+                results.nonFriends.jeffValidProjectionObject[0].should.have.a.property('_id', testUsers.henry._id)
+                results.nonFriends.jeffValidProjectionObject[0].should.have.a.property('username', 'Henry');
+                results.nonFriends.jeffValidProjectionObject[0].toObject().should.not.have.a.property('created');
+
+                results.nonFriends.jeffValidProjectionObject.should.be.an.Array.with.length(1);
+                results.nonFriends.jeffValidProjectionObject[0].should.have.a.property('_id', testUsers.henry._id)
+                results.nonFriends.jeffValidProjectionObject[0].should.have.a.property('username', 'Henry');
+                results.nonFriends.jeffValidProjectionObject[0].toObject().should.not.have.a.property('created');
                 
                 results.nonFriends.jeffInvalidParams.should.be.an.Array.with.length(2);
                 results.nonFriends.jeffInvalidParams[0].should.not.have.a.property('_id', testUsers.zane._id)
                 results.nonFriends.jeffInvalidParams[1].should.not.have.a.property('_id', testUsers.zane._id)
+
+                results.nonFriends.jeffInvalidConditions.should.be.an.Array.with.length(2);
+                results.nonFriends.jeffInvalidConditions[0].should.not.have.a.property('_id', testUsers.zane._id)
+                results.nonFriends.jeffInvalidConditions[1].should.not.have.a.property('_id', testUsers.zane._id)
+
+                results.nonFriends.jeffInvalidProjection.should.be.an.Array.with.length(2);
+                results.nonFriends.jeffInvalidProjection[0].should.not.have.a.property('_id', testUsers.zane._id)
+                results.nonFriends.jeffInvalidProjection[1].should.not.have.a.property('_id', testUsers.zane._id)
 
                 testComplete()
             })
@@ -2037,39 +2213,39 @@ module.exports = function (friendsOfFriends, mongoose) {
     })
 
     function insertTestUsers (done) {
-    async.parallel({   
-        jeff: function (finished) {
-            new PersonModel({username: 'Jeff'}).save(function (err, jeff) {
-                finished(err, jeff)
-            })
-        },
-        zane: function (finished) {
-            new PersonModel({username: 'Zane'}).save(function (err, zane) {
-                finished(err, zane)
-            })
-        },
-        sam: function (finished) {
-            new PersonModel({username: 'Sam'}).save(function (err, sam) {
-                finished(err, sam)
-            })
-        },
-        henry: function (finished) {
-            new PersonModel({username: 'Henry'}).save(function (err, henry) {
-                finished(err, henry);
-            })
-        }
-    }, function (err, people) {
-        if (err) return done(err)
+        async.parallel({   
+            jeff: function (finished) {
+                new PersonModel({username: 'Jeff'}).save(function (err, jeff) {
+                    finished(err, jeff)
+                })
+            },
+            zane: function (finished) {
+                new PersonModel({username: 'Zane'}).save(function (err, zane) {
+                    finished(err, zane)
+                })
+            },
+            sam: function (finished) {
+                new PersonModel({username: 'Sam'}).save(function (err, sam) {
+                    finished(err, sam)
+                })
+            },
+            henry: function (finished) {
+                new PersonModel({username: 'Henry'}).save(function (err, henry) {
+                    finished(err, henry);
+                })
+            }
+        }, function (err, people) {
+            if (err) return done(err)
 
-        people.jeff.should.be.ok
-        people.zane.should.be.ok
-        people.sam.should.be.ok
-        people.henry.should.be.ok
+            people.jeff.should.be.ok
+            people.zane.should.be.ok
+            people.sam.should.be.ok
+            people.henry.should.be.ok
 
-        testUsers = people
+            testUsers = people
 
-        done()
-        
-    })
-}
+            done()
+            
+        })
+    }
 }
