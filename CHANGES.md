@@ -3,6 +3,16 @@ CHANGES
 
 # v3.x
 
+## v3.0.1
+* [[`10b43550b9`](https://github.com/adminion/friends-of-friends/commit/10b43550b9)] - updated CHANGES.md with current proposed changes (Jeff Harris) 
+* [[`afb445fa25`](https://github.com/adminion/friends-of-friends/commit/afb445fa25)] - findParams.projection now properly handles strings (Jeff Harris) 
+* [[`dcf5ad8378`](https://github.com/adminion/friends-of-friends/commit/dcf5ad8378)] - fix package.json LICENSE, add npm badge to README.md (Jeff Harris) 
+* [[`052f159b1d`](https://github.com/adminion/friends-of-friends/commit/052f159b1d)] - i really don't care what you name your branch (Jeff Harris) 
+* [[`c4cf88198e`](https://github.com/adminion/friends-of-friends/commit/c4cf88198e)] - fixes #37 (Jeff Harris) 
+* [[`ccdae8f529`](https://github.com/adminion/friends-of-friends/commit/ccdae8f529)] - **doc**: fix erroneous (v1.x) documentation or relationship (Jeff Harris) 
+* [[`d71e7fea09`](https://github.com/adminion/friends-of-friends/commit/d71e7fea09)] - **doc**: another small change to README.md (Jeff Harris) 
+* [[`4da1424697`](https://github.com/adminion/friends-of-friends/commit/4da1424697)] - **doc**: a few minor changes to README.md (Jeff Harris) 
+
 ## v3.0.0
 * set default `friendshipCollectionName` to `undefined`. fixes #33
 * Fixed: PersonModel.getNonFriends() missing from API docs #34
