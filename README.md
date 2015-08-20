@@ -20,7 +20,7 @@ friends-of-friends defines a `friendships` collection that is used to store 1-to
 friends-of-friends currently (in the future, this will be configurable) depends on the `_id` field to be an [`ObjectId`](http://mongoosejs.com/docs/api.html#types_objectid_ObjectId) to track who is friends with who, but is otherwise unopinionated and leaves all design decisions up to you.  So long as you have not implemented fields/properties with the same name as any of the static/instance methods provided by the plugin, all functionality should work out-of-box.  
 
 ## Contributing
-I will happily accept contributions of bug-fixes and new features, but we'll need to discuss breaking changes.  If you make valuable contributions, I'll make you a collaborator :)
+I'm sure there are bugs, please help me find/fix them!  If you make valuable contributions, I'll make you a collaborator :)
 
 See the [Contribution Guide](CONTRIBUTING.md) for more information on how to contribute, run tests, and generate coverage reports.
 
