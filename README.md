@@ -4,7 +4,7 @@
 
 friends-of-friends makes it nearly painless to develop custom social-networking applications by allowing you send/accept/deny friend requests, and search for friends, pending friends, friends of friends, and non-friends from a Model or Document.  
 
-For details, see [API](#api) and [Usage](#usage) examples below.
+For details, see the [API](#api) and [Usage](#usage) sections below.
 
 [![Build Status](https://travis-ci.org/adminion/friends-of-friends.svg?branch=master)](https://travis-ci.org/adminion/friends-of-friends) 
 [![Coverage Status](https://coveralls.io/repos/adminion/friends-of-friends/badge.svg?branch=master)](https://coveralls.io/r/adminion/friends-of-friends?branch=master)
@@ -14,10 +14,10 @@ For details, see [API](#api) and [Usage](#usage) examples below.
 [![NPM](https://nodei.co/npm-dl/friends-of-friends.png?months=6)](https://nodei.co/npm/friends-of-friends/)
 
 ### How does it work?
-friends-of-friends defines a `friendships` collection that is used to store 1-to-1 friendships with pending/accepted status between users and provides a mongoose-plugin to add functionality to your existing user model to allow sending/getting/accepting/denying friendship requests as well as querying for friends/non-friends/pending-friends/friends-of-friends using mongoose's rich [Model.find()](http://mongoosejs.com/docs/api.html#model_Model.find) syntax.  
+friends-of-friends defines a `friendships` collection that is used to store 1-to-1 friendships with pending/accepted status between users.  It also provides a mongoose plugin to add functionality to your existing user model providing support to send/get/accept/deny friendship requests as well as query for friends/non-friends/pending-friends/friends-of-friends using mongoose's rich [Model.find()](http://mongoosejs.com/docs/api.html#model_Model.find) syntax.  
 
 ### Do I need to modify my user schema to use friends-of-friends?
-friends-of-friends currently depends on the `_id` field to be an [`ObjectId`](http://mongoosejs.com/docs/api.html#types_objectid_ObjectId) to track who is friends with who, but is otherwise unopinionated and leaves all design decisions up to you.  So long as you have not implemented fields/properties with the same name as any of the static/instance methods provided by the plugin, all functionality should work out-of-box.  
+friends-of-friends currently (in the future, this will be configurable) depends on the `_id` field to be an [`ObjectId`](http://mongoosejs.com/docs/api.html#types_objectid_ObjectId) to track who is friends with who, but is otherwise unopinionated and leaves all design decisions up to you.  So long as you have not implemented fields/properties with the same name as any of the static/instance methods provided by the plugin, all functionality should work out-of-box.  
 
 ## Contributing
 I will happily accept contributions of bug-fixes and new features, but we'll need to discuss breaking changes.  If you make valuable contributions, I'll make you a collaborator :)
@@ -75,7 +75,7 @@ var FriendsOfFriends = require('friends-of-friends')(mongoose, options);
 ```javascript
 // ...
 
-// you User schema
+// your User schema
 var UserSchema = new mongoose.Schema({
     username: String
 });
@@ -84,7 +84,7 @@ var UserSchema = new mongoose.Schema({
 UserSchema.plugin(friendsOfFriends.plugin, options);
 
 // compile your user model
-var User = mongoose.model(options.personModelName), UserSchema);
+var User = mongoose.model(options.personModelName, UserSchema);
 
 // create users
 var Jeff = new User({ username: "Jeff" }),
