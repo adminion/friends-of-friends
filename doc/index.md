@@ -103,12 +103,12 @@ Relationship constants
 | --- | --- | --- |
 | &#x27;0&#x27; | <code>String</code> | Value: `'NOT_FRIENDS'` |
 | &#x27;1&#x27; | <code>String</code> | Value: `'FRIENDS_OF_FRIENDS'` |
-| &#x27;1.5&#x27; | <code>String</code> | Value: `'PENDING_FRIENDS'` |
-| &#x27;2&#x27; | <code>String</code> | Value: `'FRIENDS'` |
+| &#x27;2&#x27; | <code>String</code> | Value: `'PENDING_FRIENDS'` |
+| &#x27;3&#x27; | <code>String</code> | Value: `'FRIENDS'` |
 | NOT_FRIENDS | <code>Number</code> | Value: `0` |
 | FRIENDS_OF_FRIENDS | <code>Number</code> | Value: `1` |
-| PENDING_FRIENDS | <code>Number</code> | Value: `1.5` |
-| FRIENDS | <code>Number</code> | Value: `2` |
+| PENDING_FRIENDS | <code>Number</code> | Value: `2` |
+| FRIENDS | <code>Number</code> | Value: `3` |
 
 <a name="FriendsOfFriends.plugin"></a>
 ### FriendsOfFriends.plugin(schema, options)
