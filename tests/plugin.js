@@ -14,6 +14,9 @@ module.exports = function (friendsOfFriends, mongoose) {
 
     describe('statics', function () {
 
+        // give the test machine a 5 second timeout
+        this.timeout(5000)
+
         beforeEach(function (done) {
             if (!mongoose.connection.db) {
                 mongoose.connect(dbURI, function () {
