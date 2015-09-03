@@ -3,6 +3,9 @@ CHANGES
 
 # v3.x
 
+## 2015-09-03, v3.1.0. @techjeffharris
+* [[`26344898e5`](https://github.com/adminion/friends-of-friends/commit/26344898e5)] - give PersonModel static access to Friendship model (Jeff Harris) 
+
 ## v3.0.2
 * [[`c4d89f61b4`](https://github.com/adminion/friends-of-friends/commit/c4d89f61b4)] - updated coverage report for v3.0.2 (Jeff Harris) 
 * [[`ab78d04ec9`](https://github.com/adminion/friends-of-friends/commit/ab78d04ec9)] - generating new docs to fix #39 (Jeff Harris) 
