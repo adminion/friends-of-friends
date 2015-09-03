@@ -3,7 +3,10 @@ CHANGES
 
 # v3.x
 
-## 2015-09-03, v3.1.0. @techjeffharris
+## 2015-09-03, v3.1.1, @techjeffharris
+* [[`c6e0d9c268`](https://github.com/adminion/friends-of-friends/commit/c6e0d9c268)] - removing experimental friends reference path (Jeff Harris) 
+
+## 2015-09-03, v3.1.0, @techjeffharris
 * [[`26344898e5`](https://github.com/adminion/friends-of-friends/commit/26344898e5)] - give PersonModel static access to Friendship model (Jeff Harris) 
 
 ## v3.0.2
