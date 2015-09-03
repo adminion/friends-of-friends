@@ -31,6 +31,15 @@ module.exports = function (friendsOfFriends, mongoose) {
             clearDB(done);
         });
 
+        var Friendship = friendsOfFriends.Friendship;
+
+        it('Friendship              - should be a function named "model"', function (testComplete) {
+            Friendship.should.be.a.Function;
+            Friendship.should.have.a.property('name', 'model');
+
+            testComplete();
+        });
+
         it('friendRequest           - send a friend request to a another user', function (testComplete) {
             PersonModel.friendRequest(testUsers.jeff._id, testUsers.zane._id, function (err, pendingFriendship) {
                 if (err) return testComplete(err);
